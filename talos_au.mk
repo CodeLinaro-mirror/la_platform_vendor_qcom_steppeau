@@ -14,12 +14,15 @@ PRODUCT_BRAND := Android
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
 #Initial bringup flags
-TARGET_USES_AOSP := true
+TARGET_USES_AOSP := false
 TARGET_USES_AOSP_FOR_AUDIO := false
 TARGET_USES_QCOM_BSP := false
 
 # Default A/B configuration.
 ENABLE_AB ?= true
+
+# RRO configuration
+TARGET_USES_RRO := true
 
 TARGET_KERNEL_VERSION := 4.14
 # default is nosdcard, S/W button enabled in resource
@@ -52,6 +55,10 @@ TARGET_DISABLE_QTI_VPP := true
 
 ifneq ($(TARGET_DISABLE_DASH), true)
     PRODUCT_BOOT_JARS += qcmediaplayer
+endif
+
+ifneq ($(strip $(QCPATH)),)
+    PRODUCT_BOOT_JARS += WfdCommon
 endif
 
 # Video platform properties file
@@ -91,8 +98,17 @@ AUDIO_DLKM += audio_mbhc.ko
 #AUDIO_DLKM += audio_wcd9360.ko
 AUDIO_DLKM += audio_wcd_spi.ko
 AUDIO_DLKM += audio_native.ko
-AUDIO_DLKM += audio_machine_msmnile.ko
+AUDIO_DLKM += audio_machine_talos.ko
 AUDIO_DLKM += audio_wcd934x.ko
+AUDIO_DLKM += audio_pinctrl_lpi.ko
+AUDIO_DLKM += audio_wcd937x.ko
+AUDIO_DLKM += audio_wcd937x_slave.ko
+AUDIO_DLKM += audio_bolero_cdc.ko
+AUDIO_DLKM += audio_wsa_macro.ko
+AUDIO_DLKM += audio_va_macro.ko
+AUDIO_DLKM += audio_rx_macro.ko
+AUDIO_DLKM += audio_tx_macro.ko
+
 PRODUCT_PACKAGES += $(AUDIO_DLKM)
 
 PRODUCT_PACKAGES += fs_config_files
@@ -123,6 +139,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:system/etc/permissions/android.hardware.fingerprint.xml \
 
 # Adding vendor manifest
+PRODUCT_COPY_FILES += \
+    device/qcom/$(MSMSTEPPE)_au/manifest.xml:$(TARGET_COPY_OUT_VENDOR)/manifest.xml
 
 #ANT+ stack
 PRODUCT_PACKAGES += \
@@ -211,7 +229,22 @@ PRODUCT_COPY_FILES += \
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 PRODUCT_VENDOR_MOVE_ENABLED := true
 
-KMGK_USE_QTI_SERVICE := false
+#Enable QTI KEYMASTER and GATEKEEPER HIDLs
+KMGK_USE_QTI_SERVICE := true
+
+#Enable KEYMASTER 4.0
+ENABLE_KM_4_0 := true
 
 # Enable flag to support slow devices
 TARGET_PRESIL_SLOW_BOARD := true
+
+# dm-verity definitions
+ifneq ($(BOARD_AVB_ENABLE), true)
+ PRODUCT_SUPPORTS_VERITY := true
+endif
+
+# Enable vndk-sp Librarie
+PRODUCT_PACKAGES += vndk_package
+
+PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE:=true
+TARGET_MOUNT_POINTS_SYMLINKS := false

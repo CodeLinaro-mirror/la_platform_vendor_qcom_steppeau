@@ -133,6 +133,15 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </interface>
     </hal>
     <hal format="hidl">
+        <name>vendor.display.postproc</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IDisplayPostproc</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.configstore</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -196,24 +205,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>default</instance>
        </interface>
     </hal>
-    <hal format="hidl">
-        <name>android.hardware.sensors</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ISensors</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.camera.provider</name>
-        <transport>hwbinder</transport>
-        <version>2.4</version>
-        <interface>
-            <name>ICameraProvider</name>
-            <instance>legacy/0</instance>
-        </interface>
-    </hal>
     <!-- fingerprint hal: using remote service instead of Google's default service-->
     <hal format="hidl">
         <name>android.hardware.biometrics.fingerprint</name>
@@ -242,6 +233,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            <name>IKeymasterDevice</name>
            <instance>default</instance>
        </interface>
+    </hal>
+    <!--  Soter service -->
+    <hal format="hidl">
+        <name>vendor.qti.hardware.soter</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISoter</name>
+            <instance>default</instance>
+        </interface>
     </hal>
     <!-- gatekeeper -->
     <hal format="hidl">
@@ -362,7 +363,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <hal format="hidl">
         <name>vendor.qti.hardware.radio.uim</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
+        <version>1.1</version>
         <interface>
             <name>IUim</name>
             <instance>Uim0</instance>
@@ -467,7 +468,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>default</instance>
         </interface>
     </hal>
-     <hal format="hidl">
+    <hal format="hidl">
+        <name>android.hardware.wifi.hostapd</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IHostapd</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>com.quicinc.cne.api</name>
         <transport>hwbinder</transport>
         <version>1.1</version>
@@ -540,17 +550,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            <instance>SIM2</instance>
        </interface>
     </hal>
-    <!-- RIL OEM HOOK -->
-    <hal format="hidl">
-        <name>android.hardware.radio.deprecated</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IOemHook</name>
-            <instance>slot1</instance>
-            <instance>slot2</instance>
-        </interface>
-    </hal>
     <!-- VPP Service -->
     <hal format="hidl">
         <name>vendor.qti.hardware.vpp</name>
@@ -559,6 +558,20 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IHidlVppService</name>
             <instance>vppService</instance>
+        </interface>
+    </hal>
+    <!-- WFD HAL Service -->
+    <hal format="hidl">
+        <name>com.qualcomm.qti.wifidisplayhal</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IHDCPSession</name>
+            <instance>wifidisplayhdcphal</instance>
+        </interface>
+        <interface>
+            <name>IDSManager</name>
+            <instance>wifidisplaydshal</instance>
         </interface>
     </hal>
     <!-- Alarm HAL service -->
@@ -602,12 +615,33 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </interface>
     </hal>
     <!-- Vibrator -->
+    <!-- Factory HAL service  -->
     <hal format="hidl">
-        <name>android.hardware.vibrator</name>
+        <name>vendor.qti.hardware.factory</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>IVibrator</name>
+            <name>IFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- SensorCal HAL service -->
+    <hal format="hidl">
+        <name>vendor.qti.hardware.sensorscalibrate</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISensorsCalibrate</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Naural Network HAL -->
+    <hal format="hidl">
+        <name>android.hardware.neuralnetworks</name>
+        <transport>hwbinder</transport>
+        <version>1.1</version>
+        <interface>
+            <name>IDevice</name>
             <instance>default</instance>
         </interface>
     </hal>
