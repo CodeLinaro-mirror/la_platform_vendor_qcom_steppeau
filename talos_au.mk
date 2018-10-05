@@ -201,6 +201,28 @@ PRODUCT_PACKAGES += \
     wificond \
     wifilogd
 
+PRODUCT_PACKAGES += candump \
+                    cansend \
+                    bcmserver \
+                    can-calc-bit-timing \
+                    canbusload \
+                    canfdtest \
+                    cangen \
+                    cangw \
+                    canlogserver \
+                    canplayer \
+                    cansniffer \
+                    isotpdump \
+                    isotprecv \
+                    isotpsend \
+                    isotpserver \
+                    isotptun \
+                    log2asc \
+                    log2long \
+                    slcan_attach \
+                    slcand \
+                    slcanpty
+
 # Sensor conf files
 PRODUCT_COPY_FILES += \
     device/qcom/$(MSMSTEPPE)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
