@@ -69,6 +69,8 @@ ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_vendor.xml
 
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml
+PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_vendor.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_vendor.xml
+PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_vendor_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_vendor_audio.xml
 
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
 endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
@@ -79,6 +81,7 @@ PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 -include $(TOPDIR)hardware/qcom/audio/configs/msmsteppe/msmsteppe.mk
 #Audio DLKM
 AUDIO_DLKM := audio_apr.ko
+#AUDIO_DLKM += audio_snd_event.ko
 AUDIO_DLKM += audio_wglink.ko
 AUDIO_DLKM += audio_q6_pdr.ko
 AUDIO_DLKM += audio_q6_notifier.ko
@@ -170,6 +173,9 @@ PRODUCT_COPY_FILES += \
 # MSM IRQ Balancer configuration file
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
 
+# Powerhint configuration file
+PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/powerhint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.xml
+
 # Camera configuration file. Shared by passthrough/binderized camera HAL
 #PRODUCT_PACKAGES += camera.device@3.2-impl
 #PRODUCT_PACKAGES += camera.device@1.0-impl
@@ -248,6 +254,9 @@ PRODUCT_PACKAGES += \
 KERNEL_MODULES_INSTALL := dlkm
 KERNEL_MODULES_OUT := out/target/product/$(PRODUCT_NAME)/$(KERNEL_MODULES_INSTALL)/lib/modules
 
+#Disabling Vulkan version 1.1
+TARGET_SUPPORT_VULKAN_VERSION_1_1 := false
+
 #FEATURE_OPENGLES_EXTENSION_PACK support string config file
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml
@@ -275,3 +284,5 @@ PRODUCT_PACKAGES += vndk_package
 
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE:=true
 TARGET_MOUNT_POINTS_SYMLINKS := false
+
+ENABLE_VENDOR_RIL_SERVICE := true

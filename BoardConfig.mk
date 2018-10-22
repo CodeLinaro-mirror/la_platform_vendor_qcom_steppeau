@@ -95,6 +95,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 
 BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/audio_apr.ko \
+    $(KERNEL_MODULES_OUT)/audio_snd_event.ko \
     $(KERNEL_MODULES_OUT)/audio_wglink.ko \
     $(KERNEL_MODULES_OUT)/audio_q6_pdr.ko \
     $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
@@ -112,6 +113,13 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/audio_wcd9xxx.ko \
     $(KERNEL_MODULES_OUT)/audio_mbhc.ko \
     $(KERNEL_MODULES_OUT)/audio_wcd934x.ko \
+    $(KERNEL_MODULES_OUT)/audio_wcd937x.ko \
+    $(KERNEL_MODULES_OUT)/audio_wcd937x_slave.ko \
+    $(KERNEL_MODULES_OUT)/audio_bolero_cdc.ko \
+    $(KERNEL_MODULES_OUT)/audio_wsa_macro.ko \
+    $(KERNEL_MODULES_OUT)/audio_va_macro.ko \
+    $(KERNEL_MODULES_OUT)/audio_rx_macro.ko \
+    $(KERNEL_MODULES_OUT)/audio_tx_macro.ko \
     $(KERNEL_MODULES_OUT)/audio_wcd_spi.ko \
     $(KERNEL_MODULES_OUT)/audio_native.ko \
     $(KERNEL_MODULES_OUT)/audio_machine_$(MSMSTEPPE).ko \
@@ -163,6 +171,9 @@ TARGET_PD_SERVICE_ENABLED := true
 #Enable peripheral manager
 TARGET_PER_MGR_ENABLED := true
 
+TARGET_HW_DISK_ENCRYPTION := true
+TARGET_HW_DISK_ENCRYPTION_PERF := true
+
 # Enable dex pre-opt to speed up initial boot
 ifeq ($(HOST_OS),linux)
     ifeq ($(WITH_DEXPREOPT),)
@@ -189,7 +200,17 @@ ADD_RADIO_FILES := true
 #Generate DTBO image
 BOARD_KERNEL_SEPARATED_DTBO := true
 
-#Disable LM
-TARGET_USES_LM := false
+#Enable LM
+TARGET_USES_LM := true
 
+# Enable QG user space
+PMIC_QG_SUPPORT := true
 
+ifeq ($(ENABLE_VENDOR_IMAGE), false)
+$(error "Vendor Image is mandatory !!")
+endif
+
+#Flag to enable System SDK Requirements.
+#All vendor APK will be compiled against system_current API set.
+BOARD_SYSTEMSDK_VERSIONS:=28
+BOARD_VNDK_VERSION:= current
