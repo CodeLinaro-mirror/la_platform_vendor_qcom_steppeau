@@ -3,7 +3,7 @@ BOARD_AVB_ENABLE := true
 TARGET_BOARD_AUTO := true
 
 #target name, shall be used in all makefiles
-MSMSTEPPE = talos
+MSMSTEPPE = sm6150
 
 $(call inherit-product, device/qcom/common/common64.mk)
 $(call inherit-product, packages/services/Car/car_product/build/car.mk)

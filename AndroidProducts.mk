@@ -1,2 +1,2 @@
 PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/talos_au.mk
+	$(LOCAL_DIR)/sm6150_au.mk
