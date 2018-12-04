@@ -101,7 +101,7 @@ AUDIO_DLKM += audio_mbhc.ko
 #AUDIO_DLKM += audio_wcd9360.ko
 AUDIO_DLKM += audio_wcd_spi.ko
 AUDIO_DLKM += audio_native.ko
-AUDIO_DLKM += audio_machine_talos.ko
+AUDIO_DLKM += audio_machine_$(MSMSTEPPE).ko
 AUDIO_DLKM += audio_wcd934x.ko
 AUDIO_DLKM += audio_pinctrl_lpi.ko
 AUDIO_DLKM += audio_wcd937x.ko
@@ -192,7 +192,7 @@ endif
 
 # WLAN driver configuration file
 PRODUCT_COPY_FILES += \
-    device/qcom/$(MSMSTEPPE)/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
+    device/qcom/$(MSMSTEPPE)_au/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
 # MIDI feature
 PRODUCT_COPY_FILES += \
