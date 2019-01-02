@@ -1,6 +1,14 @@
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
 TARGET_BOARD_AUTO := true
+TARGET_USES_AOSP := true
+TARGET_USES_AOSP_FOR_AUDIO := false
+TARGET_USES_QCOM_BSP := false
+TARGET_NO_TELEPHONY := true
+TARGET_NO_QC_PARSER := true
+TARGET_NO_QTI_MPGEN := true
+TARGET_USES_QTIC := false
+TARGET_USES_QTIC_EXTENSION := false
 
 #target name, shall be used in all makefiles
 MSMSTEPPE = sm6150
@@ -13,10 +21,6 @@ PRODUCT_DEVICE := $(MSMSTEPPE)_au
 PRODUCT_BRAND := Android
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
-#Initial bringup flags
-TARGET_USES_AOSP := false
-TARGET_USES_AOSP_FOR_AUDIO := false
-TARGET_USES_QCOM_BSP := false
 
 # Default A/B configuration.
 ENABLE_AB ?= true
@@ -57,7 +61,7 @@ ifneq ($(TARGET_DISABLE_DASH), true)
     PRODUCT_BOOT_JARS += qcmediaplayer
 endif
 
-ifneq ($(strip $(QCPATH)),)
+ifeq ($(TARGET_NO_QTI_WFD),)
     PRODUCT_BOOT_JARS += WfdCommon
 endif
 
@@ -228,21 +232,6 @@ PRODUCT_PACKAGES += candump \
                     slcan_attach \
                     slcand \
                     slcanpty
-
-# Sensor conf files
-PRODUCT_COPY_FILES += \
-    device/qcom/$(MSMSTEPPE)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
-    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
-    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:system/etc/permissions/android.hardware.sensor.barometer.xml \
-    frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:system/etc/permissions/android.hardware.sensor.stepcounter.xml \
-    frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:system/etc/permissions/android.hardware.sensor.stepdetector.xml \
-    frameworks/native/data/etc/android.hardware.sensor.ambient_temperature.xml:system/etc/permissions/android.hardware.sensor.ambient_temperature.xml \
-    frameworks/native/data/etc/android.hardware.sensor.relative_humidity.xml:system/etc/permissions/android.hardware.sensor.relative_humidity.xml \
-    frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:system/etc/permissions/android.hardware.sensor.hifi_sensors.xml
 
 
 PRODUCT_PACKAGES += \
