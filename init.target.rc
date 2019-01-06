@@ -219,10 +219,10 @@ service adsprpcd /vendor/bin/adsprpcd audiopd
    user media
    group media
 
-service adsprpcd_sensorspd /vendor/bin/adsprpcd sensorspd
-   class main
-   user system
-   group system
+#service adsprpcd_sensorspd /vendor/bin/adsprpcd sensorspd
+#   class main
+#   user system
+#   group system
 
 service cdsprpcd /vendor/bin/cdsprpcd
    class main
