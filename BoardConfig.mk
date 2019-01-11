@@ -35,6 +35,11 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
 
 USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
+
+# Set Header version for bootimage
+BOARD_BOOTIMG_HEADER_VERSION := 1
+BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+
 TARGET_RECOVERY_PIXEL_FORMAT:= RGBX_8888
 ifeq ($(ENABLE_AB), true)
 # Defines for enabling A/B builds
@@ -62,6 +67,8 @@ ifeq ($(BOARD_AVB_ENABLE), true)
    BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
    BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
 endif
+# Enable DTBO for recovery image
+BOARD_INCLUDE_RECOVERY_DTBO := true
 endif
 
 ifeq ($(ENABLE_AB), true)
