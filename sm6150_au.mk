@@ -9,6 +9,7 @@ TARGET_NO_QC_PARSER := true
 TARGET_NO_QTI_MPGEN := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
+ENABLE_HYP := false
 
 #target name, shall be used in all makefiles
 MSMSTEPPE = sm6150
