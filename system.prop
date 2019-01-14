@@ -90,6 +90,7 @@ persist.fuse_sdcard=true
 vendor.qcom.bluetooth.soc=rome
 #ro.bluetooth.library_name=libbluetooth_qti.so
 persist.vendor.service.bt.a2dp.sink=true
+persist.vendor.service.bdroid.sibs=false
 
 #system prop for wipower support
 ro.bluetooth.emb_wp_mode=false
