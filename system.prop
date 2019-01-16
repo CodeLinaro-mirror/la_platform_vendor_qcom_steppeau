@@ -95,6 +95,9 @@ persist.vendor.service.bt.a2dp.sink=true
 ro.bluetooth.emb_wp_mode=false
 ro.bluetooth.wipower=false
 
+#system prop for Hardware type Automotive
+ro.hardware.type=automotive
+
 #
 #snapdragon value add features
 #
