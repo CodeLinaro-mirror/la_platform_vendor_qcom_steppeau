@@ -34,6 +34,7 @@ on early-init
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     symlink /data/tombstones /tombstones
+    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
 
 on init
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
@@ -109,6 +110,21 @@ on boot
 
 #Load WLAN driver
     insmod /vendor/lib/modules/qca_cld3_wlan.ko
+
+on property:init.svc.zygote=running
+    write /sys/kernel/debug/bootkpi/kpi_values "M - USER Zygote Start"
+
+on property:init.svc.bootanim=running
+    write /sys/kernel/debug/bootkpi/kpi_values "K - USER Boot Animation Start"
+
+on property:init.svc.media=running
+    write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
+
+on property:sys.boot_completed=1
+    write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
+
+on property:init.svc.surfaceflinger=running
+    write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"
 
 #USB controller configuration
     setprop vendor.usb.rndis.func.name "gsi"
