@@ -126,6 +126,10 @@ on property:sys.boot_completed=1
 on property:init.svc.surfaceflinger=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"
 
+#Load emac driver
+    insmod /vendor/lib/modules/emac_dwc_eqos.ko
+    ifup eth0
+
 #USB controller configuration
     setprop vendor.usb.rndis.func.name "gsi"
     setprop vendor.usb.rmnet.func.name "gsi"
