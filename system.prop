@@ -1,5 +1,5 @@
 #
-# system.prop for sm6150
+# system.prop for sm6150_au
 #
 
 rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so
@@ -185,3 +185,8 @@ vendor.display.disable_hw_recovery=1
 
 #Display mirroring
 vendor.display.builtin_mirroring=true
+
+#Display hwcId allocation
+vendor.display.builtin_baseid_and_size=5,3
+vendor.display.pluggable_baseid_and_size=1,4
+vendor.display.virtual_baseid_and_size=8,1
