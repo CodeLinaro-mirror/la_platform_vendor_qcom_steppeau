@@ -6,10 +6,12 @@ TARGET_USES_AOSP_FOR_AUDIO := false
 TARGET_USES_QCOM_BSP := false
 TARGET_NO_TELEPHONY := true
 TARGET_NO_QC_PARSER := true
-TARGET_NO_QTI_MPGEN := true
+TARGET_NO_QTI_MPGEN := false
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
+ENABLE_CAR_POWER_MANAGER := true
+BOARD_HAS_QCOM_WLAN := true
 
 #target name, shall be used in all makefiles
 MSMSTEPPE = sm6150
