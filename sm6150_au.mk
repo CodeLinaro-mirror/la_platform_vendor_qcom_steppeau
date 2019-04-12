@@ -27,7 +27,7 @@ PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 ENABLE_AB ?= true
 
 # RRO configuration
-TARGET_USES_RRO := true
+#TARGET_USES_RRO := true
 
 TARGET_KERNEL_VERSION := 4.14
 # default is nosdcard, S/W button enabled in resource
@@ -254,6 +254,10 @@ KMGK_USE_QTI_SERVICE := true
 
 #Enable KEYMASTER 4.0
 ENABLE_KM_4_0 := true
+
+ifneq ($(strip $(TARGET_USES_RRO)),true)
+DEVICE_PACKAGE_OVERLAYS += device/qcom/sm6150_au/overlay
+endif
 
 # Enable flag to support slow devices
 TARGET_PRESIL_SLOW_BOARD := true
