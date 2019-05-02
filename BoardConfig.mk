@@ -201,3 +201,6 @@ endif
 #All vendor APK will be compiled against system_current API set.
 BOARD_SYSTEMSDK_VERSIONS:=28
 BOARD_VNDK_VERSION:= current
+
+#Flag for Early Ethernet
+IS_EARLY_ETH_ENABLED := 1
