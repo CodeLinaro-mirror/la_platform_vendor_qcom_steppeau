@@ -215,3 +215,5 @@ BOARD_VNDK_VERSION:= current
 
 #Flag for Early Ethernet
 IS_EARLY_ETH_ENABLED := 1
+
+include $(TOPDIR)device/qcom/sm6150_au/early_eth.mk
