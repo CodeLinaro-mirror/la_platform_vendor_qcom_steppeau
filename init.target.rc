@@ -249,11 +249,11 @@ service cdsprpcd /vendor/bin/cdsprpcd
    user system
    group system
 
-#service audiod /vendor/bin/audiod
-#   class late_start
-#   user system
-#   group system
-#
+service audiod /vendor/bin/audiod
+    class main
+    user system
+    group system
+
 #service usf_tester /vendor/bin/usf_tester
 #    user system
 #    group system inet
