@@ -709,4 +709,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>EvsEnumeratorHw</instance>
         </interface>
     </hal>
+    <hal format="hidl">
+        <name>vendor.qti.automotive.qcarcam</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IQcarCamera</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
 </manifest>
