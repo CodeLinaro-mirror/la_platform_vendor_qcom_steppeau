@@ -3,8 +3,10 @@
 # Product-specific compile-time definitions.
 #
 
+# TODO(b/124534788): Temporarily allow eng and debug LOCAL_MODULE_TAGS
+BUILD_BROKEN_ENG_DEBUG_TAGS:=true
+
 TARGET_BOARD_PLATFORM := $(MSMSTEPPE)
-TARGET_SEPOLICY_DIR := msmsteppe
 TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
 TARGET_BOARD_TYPE := auto
 TARGET_BOARD_SUFFIX := _au
@@ -25,11 +27,18 @@ BOARD_SECCOMP_POLICY := device/qcom/$(TARGET_BOARD_PLATFORM)/seccomp
 TARGET_NO_BOOTLOADER := false
 TARGET_USES_UEFI := true
 TARGET_NO_KERNEL := false
-BOARD_PRESIL_BUILD := true
--include $(QCPATH)/common/$(MSMSTEPPE)_au/BoardConfigVendor.mk
+
+TARGET_USES_IOPHAL := true
+
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_DUP_COPY_HEADERS=true
+BUILD_BROKEN_ANDROIDMK_EXPORTS=true
+BUILD_BROKEN_PHONY_TARGETS := true
+
+-include $(QCPATH)/common/msmnile_au/BoardConfigVendor.mk
 
 # Some framework code requires this to enable BT
-BOARD_HAVE_BLUETOOTH := false
+BOARD_HAVE_BLUETOOTH := true
 BOARD_USES_WIPOWER := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
 
@@ -41,7 +50,7 @@ BOARD_BOOTIMG_HEADER_VERSION := 1
 BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 
 TARGET_RECOVERY_PIXEL_FORMAT:= RGBX_8888
-ifeq ($(ENABLE_AB), true)
+
 # Defines for enabling A/B builds
 AB_OTA_UPDATER := true
 # Full A/B partition update set
@@ -54,28 +63,6 @@ AB_OTA_PARTITIONS ?= boot system
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 TARGET_NO_RECOVERY := true
 BOARD_USES_RECOVERY_AS_BOOT := true
-else
-# Non-A/B section. Define cache and recovery partition variables.
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x04000000
-BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-# Enable System As Root even for non-A/B
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-ifeq ($(BOARD_AVB_ENABLE), true)
-   BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
-   BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
-   BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
-   BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
-endif
-# Enable DTBO for recovery image
-BOARD_INCLUDE_RECOVERY_DTBO := true
-endif
-
-ifeq ($(ENABLE_AB), true)
-    TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)/recovery_AB_variant.fstab
-else
-    TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)/recovery_non-AB_variant.fstab
-endif
 
 #Enable compilation of oem-extensions to recovery
 #These need to be explicitly
@@ -83,39 +70,59 @@ ifneq ($(AB_OTA_UPDATER),true)
     TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_msm
 endif
 
+TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)_au/fstab.qcom
+
 #Enable split vendor image
 ENABLE_VENDOR_IMAGE := true
+ifeq ($(ENABLE_VENDOR_IMAGE), true)
 BOARD_VENDORIMAGE_PARTITION_SIZE := 1073741824
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
+endif
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
-BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x06000000
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
+BOARD_METADATAIMAGE_PARTITION_SIZE := 16777216
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/$(MSMSTEPPE)_au/prebuilt_dtbo.img
 BOARD_DTBOIMG_PARTITION_SIZE := 0x0800000
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 
+#----------------------------------------------------------------------
+# Compile Linux Kernel
+#----------------------------------------------------------------------
+ifeq ($(KERNEL_DEFCONFIG),)
+     KERNEL_DEFCONFIG := $(shell ls ./kernel/msm-4.14/arch/arm64/configs/vendor/ | grep sdmsteppe-auto_defconfig)
+endif
+
 BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/audio_apr.ko \
+    $(KERNEL_MODULES_OUT)/audio_snd_event.ko \
+    $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
     $(KERNEL_MODULES_OUT)/audio_adsp_loader.ko \
     $(KERNEL_MODULES_OUT)/audio_q6.ko \
     $(KERNEL_MODULES_OUT)/audio_platform.ko \
     $(KERNEL_MODULES_OUT)/audio_hdmi.ko \
+    $(KERNEL_MODULES_OUT)/audio_stub.ko \
     $(KERNEL_MODULES_OUT)/audio_native.ko \
     $(KERNEL_MODULES_OUT)/audio_machine_talos.ko \
     $(KERNEL_MODULES_OUT)/wil6210.ko \
-    $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko \
-    $(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
-    $(KERNEL_MODULES_OUT)/qca_cld3_wlan.ko \
-    $(KERNEL_MODULES_OUT)/audio_stub.ko \
-    $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
-#    $(KERNEL_MODULES_OUT)/rdbg.ko
+    $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko
+    #$(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
+    $(KERNEL_MODULES_OUT)/rdbg.ko
 
+# install lkdtm only for userdebug and eng build variants
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+    ifeq (,$(findstring perf_defconfig, $(KERNEL_DEFCONFIG)))
+        BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULES_OUT)/lkdtm.ko
+    endif
+endif
+
+BOARD_VENDOR_KERNEL_MODULES += $(shell ls $(KERNEL_MODULES_OUT)/*.ko)
 TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
@@ -132,7 +139,8 @@ BOARD_RAMDISK_OFFSET     := 0x02000000
 
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(shell pwd)/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-androidkernel-
+
 KERN_CONF_PATH := kernel/msm-4.14/arch/arm64/configs/vendor/
 KERN_CONF_FILE := $(shell ls $(KERN_CONF_PATH) | grep sdmsteppe-auto_defconfig)
 KERNEL_UNCOMPRESSED_DEFCONFIG := $(shell grep "CONFIG_BUILD_ARM64_UNCOMPRESSED_KERNEL=y" $(KERN_CONF_PATH)$(KERN_CONF_FILE))
@@ -145,9 +153,6 @@ endif
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 
-TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
-MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
-
 BOARD_USES_GENERIC_AUDIO := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
 TARGET_NO_RPC := true
@@ -155,7 +160,6 @@ TARGET_NO_RPC := true
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_INIT_VENDOR_LIB := libinit_msm
 
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 2
 TARGET_KERNEL_APPEND_DTB := true
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
@@ -164,9 +168,6 @@ TARGET_PD_SERVICE_ENABLED := true
 
 #Enable peripheral manager
 TARGET_PER_MGR_ENABLED := true
-
-TARGET_HW_DISK_ENCRYPTION := true
-TARGET_HW_DISK_ENCRYPTION_PERF := true
 
 # Enable dex pre-opt to speed up initial boot
 ifeq ($(HOST_OS),linux)
@@ -181,9 +182,6 @@ ifeq ($(HOST_OS),linux)
 endif
 
 TARGET_USES_GRALLOC1 := true
-TARGET_USES_HWC2 := true
-TARGET_USES_QCOM_DISPLAY_BSP := true
-TARGET_USES_COLOR_METADATA := true
 
 # Enable sensor multi HAL
 USE_SENSOR_MULTI_HAL := false
@@ -194,17 +192,32 @@ ADD_RADIO_FILES := true
 #Generate DTBO image
 BOARD_KERNEL_SEPARATED_DTBO := true
 
-#Enable LM
-TARGET_USES_LM := true
+#Enable INTERACTION_BOOST
+TARGET_USES_INTERACTION_BOOST := true
 
-# Enable QG user space
-PMIC_QG_SUPPORT := true
+#Enable DRM plugins 64 bit compilation
+TARGET_ENABLE_MEDIADRM_64 := true
 
-ifeq ($(ENABLE_VENDOR_IMAGE), false)
-$(error "Vendor Image is mandatory !!")
+#----------------------------------------------------------------------
+# wlan specific
+#----------------------------------------------------------------------
+ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
+include device/qcom/wlan/msmnile/BoardConfigWlan.mk
 endif
+
 
 #Flag to enable System SDK Requirements.
 #All vendor APK will be compiled against system_current API set.
 BOARD_SYSTEMSDK_VERSIONS:=28
-BOARD_VNDK_VERSION:= current
+
+#Enable VNDK Compliance
+BOARD_VNDK_VERSION:=current
+
+#################################################################################
+# This is the End of BoardConfig.mk file.
+# Now, Pickup other split Board.mk files:
+#################################################################################
+# TODO: Relocate the system Board.mk files pickup into qssi lunch, once it is up.
+-include vendor/qcom/defs/board-defs/system/*.mk
+-include vendor/qcom/defs/board-defs/vendor/*.mk
+#################################################################################
