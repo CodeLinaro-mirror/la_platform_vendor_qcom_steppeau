@@ -221,7 +221,8 @@ service vendor.cdsprpcd /vendor/bin/cdsprpcd
 service audiod /vendor/bin/audiod
     class main
     user system
-    group system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
 
 ## imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
 service vendor.imsqmidaemon /vendor/bin/imsqmidaemon
