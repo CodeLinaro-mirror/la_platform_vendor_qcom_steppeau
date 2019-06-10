@@ -252,7 +252,8 @@ service cdsprpcd /vendor/bin/cdsprpcd
 service audiod /vendor/bin/audiod
     class main
     user system
-    group system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
 
 #service usf_tester /vendor/bin/usf_tester
 #    user system
