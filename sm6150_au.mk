@@ -168,29 +168,14 @@ PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/powerhint.xml:$(TARGET_COPY_OUT_V
 # Enable binderized camera HAL
 #PRODUCT_PACKAGES += android.hardware.camera.provider@2.4-service
 
-
-
-# WLAN host driver
-ifneq ($(WLAN_CHIPSET),)
-PRODUCT_PACKAGES += $(WLAN_CHIPSET)_wlan.ko
-endif
-
-# WLAN driver configuration file
-PRODUCT_COPY_FILES += \
-    device/qcom/$(MSMSTEPPE)_au/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
-
 # MIDI feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
 
-PRODUCT_PACKAGES += \
-    wpa_supplicant_overlay.conf \
-    p2p_supplicant_overlay.conf
-
 #for wlan
-PRODUCT_PACKAGES += \
-    wificond \
-    wifilogd
+# Multiple chips
+TARGET_WLAN_CHIP := qca6174 qca6390
+include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
 PRODUCT_PACKAGES += candump \
                     cansend \
@@ -259,7 +244,3 @@ PRODUCT_PACKAGES += vndk_package
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE:=true
 
 ENABLE_VENDOR_RIL_SERVICE := true
-
-# Enable STA+SAP+P2P
-WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
-QC_WIFI_HIDL_FEATURE_STA_SAP_P2P := true
