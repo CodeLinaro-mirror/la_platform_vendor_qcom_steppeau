@@ -62,7 +62,7 @@ on post-fs
     start vendor.sec_nvm
 
 on post-fs-data
-    mkdir /data/tombstones 0771 system system
+    mkdir /vendor/data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system

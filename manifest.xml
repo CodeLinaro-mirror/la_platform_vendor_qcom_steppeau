@@ -154,7 +154,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <hal format="hidl">
         <name>vendor.display.color</name>
         <transport>hwbinder</transport>
-        <version>1.1</version>
+        <version>1.3</version>
         <interface>
             <name>IDisplayColor</name>
             <instance>default</instance>
@@ -207,24 +207,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.qti.hardware.improvetouch.gesturemanager</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IGestureManager</name>
-            <instance>GestureManagerService</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.qti.hardware.improvetouch.blobmanager</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IBlobManager</name>
-            <instance>BlobManagerService</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.power</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -232,25 +214,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>IPower</name>
             <instance>default</instance>
        </interface>
-    </hal>
-    <!-- fingerprint hal: using remote service instead of Google's default service-->
-    <hal format="hidl">
-        <name>android.hardware.biometrics.fingerprint</name>
-        <transport>hwbinder</transport>
-        <version>2.1</version>
-        <interface>
-            <name>IBiometricsFingerprint</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.qti.hardware.fingerprint</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IQtiExtendedFingerprint</name>
-            <instance>default</instance>
-        </interface>
     </hal>
     <!-- keymaster -->
     <hal format="hidl">
@@ -260,16 +223,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        <interface>
            <name>IKeymasterDevice</name>
            <instance>default</instance>
-       </interface>
-    </hal>
-    <!--  Soter service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.soter</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ISoter</name>
-            <instance>default</instance>
+           <instance>strongbox</instance>
         </interface>
     </hal>
     <!-- gatekeeper -->
