@@ -41,6 +41,7 @@ WLAN_CHIPSET := qca_cld3
 
 #Android EGL implementation
 PRODUCT_PACKAGES += libGLES_android
+PRODUCT_PACKAGES += libgui_vendor
 
 -include $(QCPATH)/common/config/qtic-config.mk
 
