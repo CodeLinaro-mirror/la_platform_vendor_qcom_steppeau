@@ -107,10 +107,9 @@ PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
 #Audio DLKM
 AUDIO_DLKM := audio_apr.ko
-#AUDIO_DLKM += audio_snd_event.ko
+AUDIO_DLKM += audio_snd_event.ko
 AUDIO_DLKM += audio_q6_notifier.ko
 AUDIO_DLKM += audio_adsp_loader.ko
-AUDIO_DLKM += audio_snd_event.ko
 AUDIO_DLKM += audio_q6.ko
 AUDIO_DLKM += audio_platform.ko
 AUDIO_DLKM += audio_hdmi.ko
@@ -184,10 +183,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service
 
-#PRODUCT_PACKAGES += \
-#       openavb_harness \
-#       gptp \
-#       mrpd
+PRODUCT_PACKAGES += \
+       openavb_harness \
+       gptp \
+       mrpd
 
 # Kernel modules install path
 KERNEL_MODULES_INSTALL := dlkm
