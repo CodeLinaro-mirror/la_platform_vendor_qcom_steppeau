@@ -37,6 +37,8 @@ on early-init
     write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
 
 on init
+    write /sys/kernel/debug/bootkpi/kpi_values "K - Start audiod"
+    start audiod
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
     write /dev/stune/top-app/schedtune.sched_boost_no_override 1
     write /dev/stune/schedtune.colocate 0
@@ -61,6 +63,13 @@ on post-fs
     start vendor.qseecomd
     exec - system system -- /vendor/bin/init.qti.qseecomd.sh
     write /dev/ipa 1
+
+service audiod /vendor/bin/audiod
+    class core
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    disabled
 
 service sec_nvm /vendor/bin/sec_nvm
     class core
@@ -249,10 +258,11 @@ service cdsprpcd /vendor/bin/cdsprpcd
    user system
    group system
 
-service audiod /vendor/bin/audiod
-    class main
-    user system
-    group system
+#service audiod /vendor/bin/audiod
+#    class main
+#   user system
+#  group system wakelock
+#    capabilities BLOCK_SUSPEND
 
 #service usf_tester /vendor/bin/usf_tester
 #    user system
