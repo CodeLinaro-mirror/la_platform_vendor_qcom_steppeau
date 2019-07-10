@@ -190,3 +190,6 @@ vendor.display.builtin_mirroring=true
 vendor.display.builtin_baseid_and_size=5,3
 vendor.display.pluggable_baseid_and_size=1,4
 vendor.display.virtual_baseid_and_size=8,1
+
+# Enable car power manager for LPM(LowPowerMode)
+persist.car.lpm=true
