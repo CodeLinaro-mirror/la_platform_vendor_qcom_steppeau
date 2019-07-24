@@ -10,7 +10,7 @@ TARGET_NO_QTI_MPGEN := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
-BOARD_HAS_QCOM_WLAN := false
+BOARD_HAS_QCOM_WLAN := true
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 TARGET_DISABLE_PERF_OPTIMIATIONS := true
@@ -225,7 +225,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 #----------------------------------------------------------------------
 # Multiple chips
 TARGET_WLAN_CHIP := qca6174 qca6390
-#include device/qcom/wlan/msmnile_au/wlan.mk
+include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
 
 
@@ -262,9 +262,6 @@ PRODUCT_PACKAGES += canflasher \
 PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
                     android.hardware.thermal@1.0-service
 
-# Enable STA+SAP+P2P
-WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
-QC_WIFI_HIDL_FEATURE_STA_SAP_P2P := true
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
 ###################################################################################
