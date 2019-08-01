@@ -11,7 +11,6 @@ TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
 ENABLE_CAR_POWER_MANAGER := true
 BOARD_HAS_QCOM_WLAN := true
-BOARD_SUPPORTS_EARLY_INIT := true
 
 #target name, shall be used in all makefiles
 MSMSTEPPE = sm6150
