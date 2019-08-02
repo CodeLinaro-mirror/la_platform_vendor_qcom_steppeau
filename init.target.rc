@@ -37,8 +37,6 @@ on early-init
     write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
 
 on init
-    write /sys/kernel/debug/bootkpi/kpi_values "K - Start audiod"
-    start audiod
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
     write /dev/stune/top-app/schedtune.sched_boost_no_override 1
     write /dev/stune/schedtune.colocate 0
@@ -47,6 +45,18 @@ on init
     write /dev/stune/foreground/schedtune.colocate 0
     write /dev/stune/top-app/schedtune.colocate 1
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+    write /sys/kernel/debug/bootkpi/kpi_values "K - Start audiod"
+    start audiod
+    write /sys/kernel/debug/bootkpi/kpi_values "K - Start adsp"
+    write /sys/kernel/boot_adsp/boot 1
+
+service audio-nxp-auto /vendor/bin/audio-nxp-auto
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
 
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
@@ -71,6 +81,15 @@ service audiod /vendor/bin/audiod
     capabilities BLOCK_SUSPEND
     disabled
 
+# Hardcoded file path, will be modified
+service audio_chime /vendor/bin/audio_chime /vendor/etc/car2-chime.wav
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
+
 service sec_nvm /vendor/bin/sec_nvm
     class core
     user system
@@ -79,6 +98,11 @@ service sec_nvm /vendor/bin/sec_nvm
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
+    write /sys/kernel/boot_cdsp/boot 1
+    #write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-Chime Start"
+    #exec u:object_r:vendor_file:s0 -- /vendor/bin/audio_chime /vendor/etc/Wave_Stereo_3072kbps_16bit_96kHz.wav
+    #start audio_chime
+    #write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-Chime End"
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system
     mkdir /tombstones/dsps 0771 system system
@@ -94,6 +118,10 @@ on post-fs-data
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
+    write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-Chime Start"
+    start audio-nxp-auto
+    start audio_chime
+    write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-Chime End"
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
