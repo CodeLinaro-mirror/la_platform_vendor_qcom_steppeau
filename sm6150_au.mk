@@ -177,7 +177,7 @@ PRODUCT_COPY_FILES += \
 
 #for wlan
 # Multiple chips
-TARGET_WLAN_CHIP := qca6174 qca6390
+TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
 include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
 PRODUCT_PACKAGES += candump \
