@@ -71,6 +71,8 @@ endif
 # Video platform properties file
 PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmsteppe/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
 
+PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/car2-chime.wav:$(TARGET_COPY_OUT_VENDOR)/etc/car2-chime.wav
+
 # Video codec configuration files
 ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_vendor.xml
