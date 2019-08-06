@@ -154,6 +154,7 @@ ro.hwui.text_small_cache_width=1024
 ro.hwui.text_small_cache_height=1024
 ro.hwui.text_large_cache_width=2048
 ro.hwui.text_large_cache_height=1024
+ro.sf.lcd_density=160
 
 config.disable_rtt=true
 
@@ -190,3 +191,6 @@ vendor.display.builtin_mirroring=true
 vendor.display.builtin_baseid_and_size=5,3
 vendor.display.pluggable_baseid_and_size=1,4
 vendor.display.virtual_baseid_and_size=8,1
+
+# Enable car power manager for LPM(LowPowerMode)
+persist.car.lpm=true

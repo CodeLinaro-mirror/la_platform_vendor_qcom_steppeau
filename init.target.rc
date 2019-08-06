@@ -507,3 +507,11 @@ service smcinvoked /system/bin/smcinvoked
     user system
     group system
     group drmrpc gps net_raw
+
+service carpowerd /vendor/bin/car_power_daemon
+    user root
+    group root system inet
+    disabled
+
+on property:sys.boot_completed=1
+    start carpowerd
