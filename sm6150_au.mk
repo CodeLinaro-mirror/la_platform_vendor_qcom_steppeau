@@ -103,7 +103,6 @@ PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.x
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
 # Audio configuration file
--include $(TOPDIR)hardware/qcom/audio/configs/msmsteppe_au/msmsteppe_au.mk
 -include $(TOPDIR)vendor/qcom/opensource/audio-hal/primary-hal/configs/msmsteppe_au/msmsteppe_au.mk
 
 #Audio DLKM
