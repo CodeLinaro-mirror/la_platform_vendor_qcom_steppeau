@@ -1,7 +1,6 @@
 #
 # system.prop for sm6150_au
 #
-
 rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so
 #rild.libargs=-d /dev/smd0
 persist.rild.nitz_plmn=
@@ -62,6 +61,9 @@ persist.vendor.data.mode=concurrent
 
 #system props for time-services
 persist.timed.enable=true
+
+#system props for vulkan
+persist.graphics.vulkan.disable=true
 
 #
 # system prop for opengles version
