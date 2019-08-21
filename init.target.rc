@@ -67,6 +67,11 @@ service sec_nvm /vendor/bin/sec_nvm
     user system
     group system
 
+#emac
+service emac_perf_setting /system/vendor/bin/sh /data/emac/emac_perf_settings.sh
+    user root
+    oneshot
+
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
@@ -138,6 +143,8 @@ on property:init.svc.surfaceflinger=running
 #Load emac driver
     insmod /vendor/lib/modules/emac_dwc_eqos.ko
     ifup eth0
+    chmod 0771 /data/emac/emac_perf_settings.sh
+    start emac_perf_setting
 
 #USB controller configuration
     setprop vendor.usb.rndis.func.name "gsi"
