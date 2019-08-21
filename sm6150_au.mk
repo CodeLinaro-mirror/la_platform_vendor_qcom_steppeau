@@ -195,6 +195,10 @@ PRODUCT_PACKAGES += \
     wificond \
     wifilogd
 
+#for Emac
+PRODUCT_PACKAGES += \
+    emac_perf_settings.sh
+
 PRODUCT_PACKAGES += candump \
                     cansend \
                     bcmserver \
