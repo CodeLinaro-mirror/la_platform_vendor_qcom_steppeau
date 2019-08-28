@@ -71,9 +71,9 @@ BOARD_INCLUDE_RECOVERY_DTBO := true
 endif
 
 ifeq ($(ENABLE_AB), true)
-    TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)/recovery_AB_variant.fstab
+    TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)_au/recovery_AB_variant.fstab
 else
-    TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)/recovery_non-AB_variant.fstab
+    TARGET_RECOVERY_FSTAB := device/qcom/$(MSMSTEPPE)_au/recovery_non-AB_variant.fstab
 endif
 
 #Enable compilation of oem-extensions to recovery
