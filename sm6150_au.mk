@@ -180,6 +180,10 @@ PRODUCT_COPY_FILES += \
 TARGET_WLAN_CHIP := qca6174 qca6390
 include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
+#for Emac
+PRODUCT_PACKAGES += \
+    emac_perf_settings.sh
+
 PRODUCT_PACKAGES += candump \
                     cansend \
                     bcmserver \
