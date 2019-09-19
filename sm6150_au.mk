@@ -119,6 +119,9 @@ AUDIO_DLKM += audio_native.ko
 AUDIO_DLKM += audio_machine_talos.ko
 PRODUCT_PACKAGES += $(AUDIO_DLKM)
 
+# HS-I2S DLKM
+PRODUCT_PACKAGES += hsi2s.ko
+
 PRODUCT_PACKAGES += fs_config_files
 ENABLE_AB ?= true
 
