@@ -1,7 +1,6 @@
 #
 # system.prop for sm6150_au
 #
-
 rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so
 #rild.libargs=-d /dev/smd0
 persist.rild.nitz_plmn=
@@ -25,7 +24,6 @@ debug.sf.latch_unsignaled=1
 #debug.composition.type=c2d
 #persist.hwc.mdpcomp.enable=true
 debug.mdpcomp.logs=0
-debug.sf.enable_hwc_vds=1
 dalvik.vm.heapsize=36m
 dev.pm.dyn_samplingrate=1
 persist.demo.hdmirotationlock=false
@@ -62,6 +60,9 @@ persist.vendor.data.mode=concurrent
 
 #system props for time-services
 persist.timed.enable=true
+
+#system props for vulkan
+persist.graphics.vulkan.disable=true
 
 #
 # system prop for opengles version
