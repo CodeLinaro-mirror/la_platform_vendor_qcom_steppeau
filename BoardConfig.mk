@@ -226,3 +226,8 @@ BOARD_VNDK_VERSION:=current
 -include vendor/qcom/defs/board-defs/system/*.mk
 -include vendor/qcom/defs/board-defs/vendor/*.mk
 #################################################################################
+
+#Flag for Early Ethernet
+IS_EARLY_ETH_ENABLED := 1
+
+include $(TOPDIR)device/qcom/sm6150_au/early_eth.mk
