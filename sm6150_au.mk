@@ -119,6 +119,9 @@ AUDIO_DLKM += audio_native.ko
 AUDIO_DLKM += audio_machine_talos.ko
 PRODUCT_PACKAGES += $(AUDIO_DLKM)
 
+# HS-I2S DLKM
+PRODUCT_PACKAGES += hsi2s.ko
+
 PRODUCT_PACKAGES += fs_config_files
 ENABLE_AB ?= true
 
@@ -225,7 +228,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # wlan specific
 #----------------------------------------------------------------------
 # Multiple chips
-TARGET_WLAN_CHIP := qca6174 qca6390
+TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
 include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
 
