@@ -195,3 +195,6 @@ vendor.display.virtual_baseid_and_size=8,1
 
 # Enable car power manager for LPM(LowPowerMode)
 persist.vendor.car.lpm=true
+
+# set BT AVRCP prop to false
+persist.bluetooth.enablenewavrcp=false
