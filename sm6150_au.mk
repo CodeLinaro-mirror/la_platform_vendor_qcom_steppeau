@@ -33,7 +33,7 @@ $(call inherit-product, packages/services/Car/car_product/build/car.mk)
 MSMSTEPPE = sm6150
 PRODUCT_NAME := $(MSMSTEPPE)_au
 PRODUCT_DEVICE := $(MSMSTEPPE)_au
-PRODUCT_BRAND := Android
+PRODUCT_BRAND := qti
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
 #Initial bringup flags
