@@ -16,7 +16,7 @@ BOARD_HAVE_QCOM_FM := false
 TARGET_DISABLE_PERF_OPTIMIATIONS := true
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
-TARGET_USES_AOSP_FOR_WLAN = true
+TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 
 TARGET_DEFINES_DALVIK_HEAP := true
@@ -118,6 +118,9 @@ AUDIO_DLKM += audio_stub.ko
 AUDIO_DLKM += audio_native.ko
 AUDIO_DLKM += audio_machine_talos.ko
 PRODUCT_PACKAGES += $(AUDIO_DLKM)
+
+# HS-I2S DLKM
+PRODUCT_PACKAGES += hsi2s.ko
 
 PRODUCT_PACKAGES += fs_config_files
 ENABLE_AB ?= true
@@ -225,7 +228,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # wlan specific
 #----------------------------------------------------------------------
 # Multiple chips
-TARGET_WLAN_CHIP := qca6174 qca6390
+TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
 include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
 
