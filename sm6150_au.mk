@@ -214,6 +214,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml
 
+# OEM unlock feature
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
+
 # USB default HAL
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service
