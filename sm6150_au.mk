@@ -145,6 +145,9 @@ endif
 PRODUCT_PACKAGES += \
     libhealthd.msm
 
+# MTMD enablement
+PRODUCT_COPY_FILES += \
+    device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 
 
 DEVICE_MANIFEST_FILE := device/qcom/msmnile_au/manifest.xml
