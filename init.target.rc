@@ -32,6 +32,10 @@ on early-init
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
     write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
+    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
+    start acdb_loader_service
+    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
+    start audio_hal_plugin_service
 
 on init
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
@@ -80,6 +84,11 @@ on boot
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
+    start vendor.adsprpcd
+    start vendor.adsprpcd_audiopd
+    wait /dev/snd/controlC0
+    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_chime Start"
+    start audio_chime
     write /dev/cpuset/top-app/cpus 0-3
     write /dev/cpuset/foreground/cpus 0-3
     write /dev/cpuset/foreground/boost/cpus 0-3
@@ -203,17 +212,6 @@ service vendor.thermal-engine /vendor/bin/thermal-engine
    socket thermal-send-rule stream 0660 system system
    group root
 
-
-service vendor.adsprpcd /vendor/bin/adsprpcd
-   class main
-   user root
-   group media
-
-service vendor.adsprpcd_audiopd /vendor/bin/adsprpcd audiopd
-   class main
-   user media
-   group media
-
 service vendor.cdsprpcd /vendor/bin/cdsprpcd
    class main
    user system
@@ -318,3 +316,30 @@ service carpowerd /vendor/bin/car_power_daemon
 
 on property:sys.boot_completed=1
     start carpowerd
+
+#audio hal plugin service
+service audio_hal_plugin_service /vendor/bin/audio_hal_plugin_service
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
+
+#acdb-loader-service
+service acdb_loader_service /vendor/bin/acdb_loader_service
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
+
+#audio chime
+service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
