@@ -86,6 +86,7 @@ on boot
     start rfs_access
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
+    start audiod
     wait /dev/snd/controlC0
     write /sys/kernel/debug/bootkpi/kpi_values "M - audio_chime Start"
     start audio_chime
@@ -222,6 +223,7 @@ service audiod /vendor/bin/audiod
     user system
     group system wakelock
     capabilities BLOCK_SUSPEND
+    disabled
 
 ## imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
 service vendor.imsqmidaemon /vendor/bin/imsqmidaemon
