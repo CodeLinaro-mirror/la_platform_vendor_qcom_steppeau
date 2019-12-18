@@ -16,7 +16,7 @@ BOARD_HAVE_QCOM_FM := false
 TARGET_DISABLE_PERF_OPTIMIATIONS := true
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
-TARGET_USES_AOSP_FOR_WLAN := true
+TARGET_USES_AOSP_FOR_WLAN := false
 ENABLE_CAR_POWER_MANAGER := true
 
 TARGET_DEFINES_DALVIK_HEAP := true
@@ -33,7 +33,7 @@ $(call inherit-product, packages/services/Car/car_product/build/car.mk)
 MSMSTEPPE = sm6150
 PRODUCT_NAME := $(MSMSTEPPE)_au
 PRODUCT_DEVICE := $(MSMSTEPPE)_au
-PRODUCT_BRAND := Android
+PRODUCT_BRAND := qti
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
 #Initial bringup flags
@@ -145,6 +145,9 @@ endif
 PRODUCT_PACKAGES += \
     libhealthd.msm
 
+# MTMD enablement
+PRODUCT_COPY_FILES += \
+    device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 
 
 DEVICE_MANIFEST_FILE := device/qcom/msmnile_au/manifest.xml
