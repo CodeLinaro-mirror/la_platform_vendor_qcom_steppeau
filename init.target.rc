@@ -140,9 +140,6 @@ on property:sys.boot_completed=1
 on property:init.svc.surfaceflinger=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"
 
-#Load emac driver
-    insmod /vendor/lib/modules/emac_dwc_eqos.ko
-    ifup eth0
     chmod 0771 /data/emac/emac_perf_settings.sh
     start emac_perf_setting
 
