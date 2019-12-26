@@ -19,6 +19,7 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 ENABLE_MODEM_DATA := false
+TARGET_USES_GAS := true
 
 TARGET_DEFINES_DALVIK_HEAP := true
 $(call inherit-product, device/qcom/common/common64.mk)
