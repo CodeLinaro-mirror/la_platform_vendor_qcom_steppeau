@@ -20,6 +20,7 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_USES_AOSP_FOR_WLAN := false
 ENABLE_CAR_POWER_MANAGER := true
 ENABLE_MODEM_DATA := true
+TARGET_USES_GAS := true
 
 # Dynamic-partition enabled by default
 BOARD_DYNAMIC_PARTITION_ENABLE := false
