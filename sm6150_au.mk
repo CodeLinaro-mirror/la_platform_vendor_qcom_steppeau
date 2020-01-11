@@ -1,3 +1,4 @@
+ENABLE_AB ?= true
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
 TARGET_BOARD_AUTO := true
@@ -18,6 +19,37 @@ BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_USES_AOSP_FOR_WLAN := false
 ENABLE_CAR_POWER_MANAGER := true
+ENABLE_MODEM_DATA := true
+TARGET_USES_GAS := true
+
+# Dynamic-partition enabled by default
+BOARD_DYNAMIC_PARTITION_ENABLE := false
+ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+  PRODUCT_USE_DYNAMIC_PARTITIONS := true
+  BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
+  PRODUCT_BUILD_SUPER_PARTITION := true
+  PRODUCT_BUILD_RAMDISK_IMAGE := true
+  PRODUCT_PACKAGES += fastbootd
+
+  BOARD_AVB_VBMETA_SYSTEM := system
+  BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
+  BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
+  BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+  BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
+
+  PRODUCT_BUILD_SYSTEM_OTHER_IMAGE := false
+  PRODUCT_BUILD_PRODUCT_IMAGE := false
+  PRODUCT_BUILD_PRODUCT_SERVICES_IMAGE := false
+  PRODUCT_BUILD_CACHE_IMAGE := false
+  PRODUCT_BUILD_RAMDISK_IMAGE := true
+  PRODUCT_BUILD_USERDATA_IMAGE := true
+
+  ifeq ($(ENABLE_AB), true)
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+  else
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+  endif
+endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
 TARGET_DEFINES_DALVIK_HEAP := true
 $(call inherit-product, device/qcom/common/common64.mk)
@@ -33,7 +65,7 @@ $(call inherit-product, packages/services/Car/car_product/build/car.mk)
 MSMSTEPPE = sm6150
 PRODUCT_NAME := $(MSMSTEPPE)_au
 PRODUCT_DEVICE := $(MSMSTEPPE)_au
-PRODUCT_BRAND := Android
+PRODUCT_BRAND := qti
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
 #Initial bringup flags
@@ -121,9 +153,10 @@ PRODUCT_PACKAGES += $(AUDIO_DLKM)
 
 # HS-I2S DLKM
 PRODUCT_PACKAGES += hsi2s.ko
+# HS-I2S test app
+PRODUCT_PACKAGES += hsi2s_test
 
 PRODUCT_PACKAGES += fs_config_files
-ENABLE_AB ?= true
 
 ifeq ($(ENABLE_AB), true)
 #A/B related packages
@@ -145,6 +178,9 @@ endif
 PRODUCT_PACKAGES += \
     libhealthd.msm
 
+# MTMD enablement
+PRODUCT_COPY_FILES += \
+    device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 
 
 DEVICE_MANIFEST_FILE := device/qcom/msmnile_au/manifest.xml
