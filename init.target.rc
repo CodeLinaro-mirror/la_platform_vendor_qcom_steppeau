@@ -45,7 +45,6 @@ on early-init
     write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-nxp-auto Start"
     start audio-nxp-auto
     write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-nxp-auto End"
-    start esplash
 
 on init
     write /sys/kernel/boot_cdsp/boot 1
@@ -99,13 +98,6 @@ service audio_chime /vendor/bin/audio_chime /vendor/etc/car2-chime.wav
     user system
     group system wakelock
     capabilities BLOCK_SUSPEND
-    oneshot
-    disabled
-
-service esplash /vendor/bin/esplash
-    class core
-    user system
-    group system
     oneshot
     disabled
 
