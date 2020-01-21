@@ -37,6 +37,10 @@ on early-init
     mount_all /vendor/etc/fstab.qcom --early
     write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
+    write /sys/kernel/debug/bootkpi/kpi_values "M - adsprpcd Start"
+    start vendor.adsprpcd
+    start vendor.adsprpcd_audiopd
+    start audiod
     write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
     start acdb_loader_service
     write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
@@ -86,15 +90,10 @@ on post-fs-data
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
+    start audio_chime
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
-    start vendor.adsprpcd
-    start vendor.adsprpcd_audiopd
-    start audiod
-    wait /dev/snd/controlC0
-    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_chime Start"
-    start audio_chime
     write /dev/cpuset/top-app/cpus 0-3
     write /dev/cpuset/foreground/cpus 0-3
     write /dev/cpuset/foreground/boost/cpus 0-3
