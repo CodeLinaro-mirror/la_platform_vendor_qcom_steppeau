@@ -32,8 +32,18 @@ on early-init
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
     write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    mount_all /vendor/etc/fstab.qcom --early
+    write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
+    write /sys/kernel/boot_adsp/boot 1
+    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
+    start acdb_loader_service
+    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
+    start audio_hal_plugin_service
 
 on init
+    write /sys/kernel/boot_cdsp/boot 1
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
     write /dev/stune/top-app/schedtune.sched_boost_no_override 1
     write /dev/stune/schedtune.colocate 0
@@ -46,11 +56,13 @@ on init
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
 on fs
-    mount_all /vendor/etc/fstab.qcom
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
     mkdir /mnt/vendor/persist/data 0700 system system
+
+on late-fs
+    mount_all /vendor/etc/fstab.qcom --late
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
@@ -71,15 +83,18 @@ on post-fs-data
     mkdir /data/vendor/tloc 0700 system drmrpc
     mkdir /data/vendor/nnhal 0700 system system
 
-    #Create folder for ais_server
-    mkdir /dev/socket/camera 0770 system camera
-
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
+    start vendor.adsprpcd
+    start vendor.adsprpcd_audiopd
+    start audiod
+    wait /dev/snd/controlC0
+    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_chime Start"
+    start audio_chime
     write /dev/cpuset/top-app/cpus 0-3
     write /dev/cpuset/foreground/cpus 0-3
     write /dev/cpuset/foreground/boost/cpus 0-3
@@ -203,17 +218,6 @@ service vendor.thermal-engine /vendor/bin/thermal-engine
    socket thermal-send-rule stream 0660 system system
    group root
 
-
-service vendor.adsprpcd /vendor/bin/adsprpcd
-   class main
-   user root
-   group media
-
-service vendor.adsprpcd_audiopd /vendor/bin/adsprpcd audiopd
-   class main
-   user media
-   group media
-
 service vendor.cdsprpcd /vendor/bin/cdsprpcd
    class main
    user system
@@ -224,6 +228,7 @@ service audiod /vendor/bin/audiod
     user system
     group system wakelock
     capabilities BLOCK_SUSPEND
+    disabled
 
 ## imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
 service vendor.imsqmidaemon /vendor/bin/imsqmidaemon
@@ -275,17 +280,6 @@ service vendor.ims_rtp_daemon /vendor/bin/ims_rtp_daemon
 on property:vendor.ims.DATA_DAEMON_STATUS=1
     restart vendor.ims_rtp_daemon
 
-#start AIS server as daemon
-on property:sys.boot_completed=1
-start vendor.ais_server
-
-#declaring AIS service to be started after boot complete
-service vendor.ais_server /vendor/bin/ais_server
-    class late_start
-    user system
-    group camera input graphics
-    disabled
-
 service vendor.energy-awareness /vendor/bin/energy-awareness
     class main
     user system
@@ -318,3 +312,30 @@ service carpowerd /vendor/bin/car_power_daemon
 
 on property:sys.boot_completed=1
     start carpowerd
+
+#audio hal plugin service
+service audio_hal_plugin_service /vendor/bin/audio_hal_plugin_service
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
+
+#acdb-loader-service
+service acdb_loader_service /vendor/bin/acdb_loader_service
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
+
+#audio chime
+service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
+    class main
+    user system
+    group system wakelock
+    capabilities BLOCK_SUSPEND
+    oneshot
+    disabled
