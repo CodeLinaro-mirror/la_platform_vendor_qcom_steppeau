@@ -81,6 +81,8 @@ TARGET_KERNEL_VERSION := 4.14
 #Enable llvm support for kernel
 KERNEL_LLVM_SUPPORT := true
 
+PRODUCT_SHIPPING_API_LEVEL := 29
+
 #Enable sd-llvm suppport for kernel
 KERNEL_SD_LLVM_SUPPORT := false
 
