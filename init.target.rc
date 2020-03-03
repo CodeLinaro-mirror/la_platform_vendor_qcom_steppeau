@@ -40,7 +40,6 @@ on early-init
     start ais_server
     #start vendor.qcarcam_edrm_rvc
     mount_all /vendor/etc/fstab.qcom --early
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/debug/bootkpi/kpi_values "M - adsprpcd Start"
     start vendor.adsprpcd
