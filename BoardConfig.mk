@@ -124,6 +124,7 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/qca_cld3_wlan.ko \
     $(KERNEL_MODULES_OUT)/audio_stub.ko \
     $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
+    $(KERNEL_MODULES_OUT)/v4l2loopback.ko
 #    $(KERNEL_MODULES_OUT)/rdbg.ko
 
 TARGET_USES_ION := true

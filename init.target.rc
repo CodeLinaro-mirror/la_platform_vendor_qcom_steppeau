@@ -77,6 +77,7 @@ on fs
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
     mkdir /mnt/vendor/persist/data 0700 system system
+    insmod /vendor/lib/modules/v4l2loopback.ko devices=2 video_nr=51,52
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
@@ -127,6 +128,10 @@ on post-fs-data
     mkdir /data/misc/seemp 0700 system system
     mkdir /data/vendor/nnhal 0700 system system
 
+    #Create folder for mm-qcamera-daemon
+    mkdir /data/vendor/camera 0770 camera camera
+    start ais_v4l2_proxy
+
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
@@ -164,6 +169,12 @@ on property:init.svc.bootanim=running
 
 on property:init.svc.media=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
+
+#declaring AIS service to be started after boot Complete
+service ais_v4l2_proxy /vendor/bin/ais_v4l2_proxy
+    user root
+    group camera input graphics system
+    disabled
 
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
