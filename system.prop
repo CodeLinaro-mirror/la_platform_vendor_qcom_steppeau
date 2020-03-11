@@ -196,3 +196,6 @@ vendor.display.virtual_baseid_and_size=8,1
 
 # Enable car power manager for LPM(LowPowerMode)
 persist.vendor.car.lpm=true
+
+# default wifi country code
+ro.boot.wificountrycode=us
