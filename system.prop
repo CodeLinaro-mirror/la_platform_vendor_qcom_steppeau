@@ -199,3 +199,6 @@ persist.vendor.car.lpm=true
 
 # set BT AVRCP prop to false
 persist.bluetooth.enablenewavrcp=false
+
+# default wifi country code
+ro.boot.wificountrycode=us
