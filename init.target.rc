@@ -28,13 +28,36 @@
 #
 
 on early-init
+    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
     exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_wglink audio_q6_pdr audio_q6_notifier audio_apr audio_adsp_loader audio_q6 audio_native audio_usf audio_pinctrl_wcd audio_pinctrl_lpi audio_swr audio_platform audio_hdmi audio_wcd_spi audio_stub audio_wcd_core audio_wsa881x audio_hdmi audio_bolero_cdc audio_wsa_macro audio_va_macro audio_rx_macro audio_tx_macro audio_machine_talos audio_wcd937x audio_wcd937x_slave
     write /proc/sys/kernel/sched_boost 1
     mkdir /dsp 0771 media media
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     symlink /data/tombstones /tombstones
-    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
+    #Create folder for ais_server
+    mkdir /dev/socket/camera 0770 system camera
+    #start AIS server as daemon
+    start ais_server
+    #start vendor.qcarcam_edrm_rvc
+
+service ais_server /system/vendor/bin/ais_server
+    class core
+    user system
+    group camera input graphics
+    disabled
+    onrestart restart evs_driver
+    onrestart restart qcarcam_hal
+
+service vendor.qcarcam_edrm_rvc /vendor/bin/qcarcam_edrm_rvc
+    class core
+    user system
+    group camera input graphics
+    oneshot
+    disabled
+
+#on property:sys.boot_completed=1
+    #stop vendor.qcarcam_edrm_rvc
 
 on init
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
