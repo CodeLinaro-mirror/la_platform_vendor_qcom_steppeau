@@ -6,18 +6,13 @@
 TARGET_BOARD_PLATFORM := $(MSMSTEPPE)
 TARGET_SEPOLICY_DIR := msmsteppe
 TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
-export TARGET_BOARD_TYPE := auto
+TARGET_BOARD_TYPE := auto
 TARGET_BOARD_SUFFIX := _au
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
-
-BOARD_SUPPORTS_EARLY_INIT := true
-ifeq ($(BOARD_SUPPORTS_EARLY_INIT),true)
-export CONFIG_EARLY_INIT := true
-endif
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv7-a-neon
@@ -34,7 +29,6 @@ TARGET_NO_KERNEL := false
 TARGET_USES_IOPHAL := true
 
 BUILD_BROKEN_DUP_RULES := true
-BUILD_BROKEN_PHONY_TARGETS := true
 
 -include $(QCPATH)/common/msmnile_au/BoardConfigVendor.mk
 
@@ -84,6 +78,7 @@ else
   endif
 endif
 ### Dynamic partition Handling
+
 
 # Defines for enabling A/B builds
 AB_OTA_UPDATER := true
@@ -160,8 +155,8 @@ TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
 TARGET_USES_DRM_PP := true
-#BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 nokaslr
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize
+
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=permissive androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize
 
 BOARD_EGL_CFG := device/qcom/$(TARGET_BOARD_PLATFORM)/egl.cfg
 
@@ -241,10 +236,18 @@ endif
 
 #Flag to enable System SDK Requirements.
 #All vendor APK will be compiled against system_current API set.
-BOARD_SYSTEMSDK_VERSIONS:=28
+BOARD_SYSTEMSDK_VERSIONS:=29
 
 #Enable VNDK Compliance
 BOARD_VNDK_VERSION:=current
+
+BUILD_BROKEN_NINJA_USES_ENV_VARS := SDCLANG_AE_CONFIG SDCLANG_CONFIG SDCLANG_SA_ENABLED SDCLANG_CONFIG_AOSP
+BUILD_BROKEN_NINJA_USES_ENV_VARS += TEMPORARY_DISABLE_PATH_RESTRICTIONS
+BUILD_BROKEN_PREBUILT_ELF_FILES := true
+BUILD_BROKEN_USES_BUILD_HOST_SHARED_LIBRARY := true
+BUILD_BROKEN_USES_BUILD_HOST_EXECUTABLE := true
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
 
 #################################################################################
 # This is the End of BoardConfig.mk file.
@@ -254,8 +257,5 @@ BOARD_VNDK_VERSION:=current
 -include vendor/qcom/defs/board-defs/system/*.mk
 -include vendor/qcom/defs/board-defs/vendor/*.mk
 #################################################################################
+include device/qcom/sepolicy/SEPolicy.mk
 
-#Flag for Early Ethernet
-IS_EARLY_ETH_ENABLED := 1
-
-include $(TOPDIR)device/qcom/sm6150_au/early_eth.mk
