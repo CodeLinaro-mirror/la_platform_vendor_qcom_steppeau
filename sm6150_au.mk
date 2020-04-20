@@ -51,8 +51,6 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   endif
 endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
-TARGET_HIBERNATION_ENABLE := true
-
 TARGET_DEFINES_DALVIK_HEAP := true
 $(call inherit-product, device/qcom/common/common64.mk)
 #Inherit all except heap growth limit from phone-xhdpi-2048-dalvik-heap.mk
