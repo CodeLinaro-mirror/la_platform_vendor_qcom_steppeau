@@ -28,12 +28,17 @@
 #
 
 on early-init
+    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
     exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_wglink audio_q6_pdr audio_q6_notifier audio_apr audio_adsp_loader audio_q6 audio_native audio_usf audio_pinctrl_wcd audio_swr audio_platform audio_hdmi audio_wcd_spi audio_stub audio_wcd_core audio_wsa881x audio_wcd9360 audio_hdmi audio_machine_talos
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
-    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    #Create folder for ais_server
+    mkdir /dev/socket/camera 0770 system camera
+    #start AIS server as daemon
+    start ais_server
+    #start vendor.qcarcam_edrm_rvc
     mount_all /vendor/etc/fstab.qcom --early
     write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
@@ -45,6 +50,25 @@ on early-init
     start acdb_loader_service
     write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
     start audio_hal_plugin_service
+    start esplash
+
+service ais_server /system/vendor/bin/ais_server
+    class core
+    user system
+    group camera input graphics
+    disabled
+    onrestart restart evs_driver
+    onrestart restart qcarcam_hal
+
+service vendor.qcarcam_edrm_rvc /vendor/bin/qcarcam_edrm_rvc
+    class core
+    user system
+    group camera input graphics
+    oneshot
+    disabled
+
+#on property:sys.boot_completed=1
+    #stop vendor.qcarcam_edrm_rvc
 
 on init
     write /sys/kernel/boot_cdsp/boot 1
@@ -76,6 +100,13 @@ on post-fs
     write /dev/ipa 1
     start vendor.spdaemon
     start vendor.sec_nvm
+
+service esplash /vendor/bin/esplash
+    class core
+    user system
+    group system
+    oneshot
+    disabled
 
 on post-fs-data
     mkdir /vendor/data/tombstones 0771 system system
@@ -124,12 +155,17 @@ on property:init.svc.zygote=running
 
 on property:init.svc.bootanim=running
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Boot Animation Start"
+    setprop vendor.init.svc.bootanim "running"
+
+on property:init.svc.bootanim=stopped
+   setprop vendor.init.svc.bootanim "stopped"
 
 on property:init.svc.media=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
 
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
+    setprop vendor.sys.boot_completed 1
 
 on property:init.svc.surfaceflinger=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"
