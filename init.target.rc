@@ -28,12 +28,17 @@
 #
 
 on early-init
+    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
     exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_wglink audio_q6_pdr audio_q6_notifier audio_apr audio_adsp_loader audio_q6 audio_native audio_usf audio_pinctrl_wcd audio_swr audio_platform audio_hdmi audio_wcd_spi audio_stub audio_wcd_core audio_wsa881x audio_wcd9360 audio_hdmi audio_machine_talos
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
-    write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    #Create folder for ais_server
+    mkdir /dev/socket/camera 0770 system camera
+    #start AIS server as daemon
+    start ais_server
+    #start vendor.qcarcam_edrm_rvc
     mount_all /vendor/etc/fstab.qcom --early
     write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
@@ -46,7 +51,27 @@ on early-init
     write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
     start audio_hal_plugin_service
 
+service ais_server /system/vendor/bin/ais_server
+    class core
+    user system
+    group camera input graphics
+    disabled
+    onrestart restart evs_driver
+    onrestart restart qcarcam_hal
+
+service vendor.qcarcam_edrm_rvc /vendor/bin/qcarcam_edrm_rvc
+    class core
+    user system
+    group camera input graphics
+    oneshot
+    disabled
+
+#on property:sys.boot_completed=1
+    #stop vendor.qcarcam_edrm_rvc
+
 on init
+    start vendor.pd_mapper
+    start vendor.qrtr-ns
     write /sys/kernel/boot_cdsp/boot 1
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
     write /dev/stune/top-app/schedtune.sched_boost_no_override 1
@@ -60,6 +85,7 @@ on init
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
 on fs
+    start audio_chime
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
@@ -90,7 +116,6 @@ on post-fs-data
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
-    start audio_chime
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
@@ -166,6 +191,14 @@ service vendor.pd_mapper /vendor/bin/pd-mapper
     class core
     user system
     group system
+    disabled
+
+service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
+    class core
+    user vendor_qrtr
+    group vendor_qrtr
+    capabilities NET_BIND_SERVICE
+    disabled
 
 #Peripheral manager
 service vendor.per_mgr /vendor/bin/pm-service
