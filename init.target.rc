@@ -38,13 +38,9 @@ on early-init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --early
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Start audiod"
     start audiod
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-nxp-auto Start"
     start audio-nxp-auto
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-nxp-auto End"
 
 on init
     write /sys/kernel/boot_cdsp/boot 1
@@ -67,9 +63,7 @@ service audio-nxp-auto /vendor/bin/audio-nxp-auto
 
 on fs
     wait /dev/snd/controlC0
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-Chime Start"
     start audio_chime
-    write /sys/kernel/debug/bootkpi/kpi_values "M - Audio-Chime End"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --late
@@ -166,6 +160,10 @@ on property:init.svc.zygote=running
 
 on property:init.svc.bootanim=running
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Boot Animation Start"
+    setprop vendor.init.svc.bootanim "running"
+
+on property:init.svc.bootanim=stopped
+    setprop vendor.init.svc.bootanim "stopped"
 
 on property:init.svc.media=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
@@ -178,6 +176,7 @@ service ais_v4l2_proxy /vendor/bin/ais_v4l2_proxy
 
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
+    setprop vendor.sys.boot_completed 1
 
 on property:init.svc.surfaceflinger=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"
