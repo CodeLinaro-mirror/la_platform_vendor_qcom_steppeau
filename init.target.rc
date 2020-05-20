@@ -337,3 +337,6 @@ service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
     capabilities BLOCK_SUSPEND
     oneshot
     disabled
+
+on property:sys.boot_completed=1
+    mount vfat /dev/block/bootdevice/by-name/logfs /sys/kernel/debug/bookpi/bootloader_log
