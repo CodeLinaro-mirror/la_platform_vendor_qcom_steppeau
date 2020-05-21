@@ -12,12 +12,13 @@ TARGET_NO_QTI_MPGEN := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
-BOARD_HAS_QCOM_WLAN := false
+BOARD_HAS_QCOM_WLAN := true
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 TARGET_DISABLE_PERF_OPTIMIATIONS := true
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
+TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 TARGET_USES_GAS := true
@@ -186,22 +187,22 @@ PRODUCT_COPY_FILES += \
     device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 
 
-DEVICE_MANIFEST_FILE := device/qcom/msmnile_au/manifest.xml
+DEVICE_MANIFEST_FILE := device/qcom/sm6150_au/manifest.xml
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/msmnile_au/framework_manifest.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/vendor_framework_compatibility_matrix.xml
 
 
 #ANT+ stack
-PRODUCT_PACKAGES += \
-    AntHalService \
-    libantradio \
-    antradio_app \
-    libvolumelistener
+#PRODUCT_PACKAGES += \
+#    AntHalService \
+#    libantradio \
+#    antradio_app \
+#    libvolumelistener
 
 # Display/Graphics
 PRODUCT_PACKAGES += \
-    android.hardware.configstore@1.2-service \
+    android.hardware.configstore@1.1-service \
     android.hardware.broadcastradio@1.0-impl
 
 # FBE support
@@ -307,6 +308,8 @@ PRODUCT_PACKAGES += canflasher \
 PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
                     android.hardware.thermal@1.0-service
 
+#add vndservicemanager for surfaceflinger crash
+PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
 ###################################################################################
