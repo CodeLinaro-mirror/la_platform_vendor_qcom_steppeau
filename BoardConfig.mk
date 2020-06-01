@@ -150,20 +150,20 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/br_netfilter.ko \
     $(KERNEL_MODULES_OUT)/lcd.ko \
     $(KERNEL_MODULES_OUT)/llcc_perfmon.ko \
-    $(KERNEL_MODULES_OUT)/locktorture.ko \
     $(KERNEL_MODULES_OUT)/mmc_test.ko \
     $(KERNEL_MODULES_OUT)/mpq-adapter.ko \
     $(KERNEL_MODULES_OUT)/mpq-dmx-hw-plugin.ko \
     $(KERNEL_MODULES_OUT)/msm-geni-ir.ko \
-    $(KERNEL_MODULES_OUT)/rcutorture.ko \
-    $(KERNEL_MODULES_OUT)/test_user_copy.ko \
-    $(KERNEL_MODULES_OUT)/torture.ko \
-    $(KERNEL_MODULES_OUT)/atomic64_test.ko \
 
 # install lkdtm only for userdebug and eng build variants
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
     ifeq (,$(findstring perf_defconfig, $(KERNEL_DEFCONFIG)))
-        BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULES_OUT)/lkdtm.ko
+        BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULES_OUT)/lkdtm.ko \
+                                       $(KERNEL_MODULES_OUT)/rcutorture.ko \
+                                       $(KERNEL_MODULES_OUT)/test_user_copy.ko \
+                                       $(KERNEL_MODULES_OUT)/torture.ko \
+                                       $(KERNEL_MODULES_OUT)/atomic64_test.ko \
+                                       $(KERNEL_MODULES_OUT)/locktorture.ko
     endif
 endif
 
