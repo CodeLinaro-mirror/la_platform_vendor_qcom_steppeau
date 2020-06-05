@@ -62,7 +62,6 @@ service audio-nxp-auto /vendor/bin/audio-nxp-auto
     disabled
 
 on fs
-    wait /dev/snd/controlC0
     start audio_chime
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
