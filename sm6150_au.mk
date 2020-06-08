@@ -162,13 +162,21 @@ PRODUCT_PACKAGES += update_engine \
     update_verifier \
     bootctrl.$(MSMSTEPPE) \
     android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot@1.0-service \
+    android.hardware.boot@1.0-impl-wrapper.recovery
 
 PRODUCT_HOST_PACKAGES += \
 	brillo_update_payload
 
 #Boot control HAL test app
 PRODUCT_PACKAGES_DEBUG += bootctl
+
+PRODUCT_STATIC_BOOT_CONTROL_HAL := \
+    bootctrl.$(MSMSTEPPE) \
+    librecovery_updater_msm \
+    libz \
+    libcutils
+
 endif
 
 #Healthd packages
