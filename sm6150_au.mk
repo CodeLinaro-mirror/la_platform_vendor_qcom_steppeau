@@ -258,7 +258,7 @@ ENABLE_KM_4_0 := true
 #Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
-DEVICE_PACKAGE_OVERLAYS += device/qcom/msmnile_au/overlay
+DEVICE_PACKAGE_OVERLAYS += device/qcom/sm6150_au/overlay
 
 # Enable flag to support slow devices
 TARGET_PRESIL_SLOW_BOARD := true
