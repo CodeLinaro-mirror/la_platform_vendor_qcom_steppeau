@@ -238,21 +238,6 @@ service audiod /vendor/bin/audiod
     capabilities BLOCK_SUSPEND
     disabled
 
-## imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
-service vendor.imsqmidaemon /vendor/bin/imsqmidaemon
-    class main
-    user system
-    socket ims_qmid stream 0660 system radio
-    group radio log diag
-
-# imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
-service vendor.imsdatadaemon /vendor/bin/imsdatadaemon
-    class main
-    user system
-    socket ims_datad stream 0660 system radio
-    group system wifi radio inet log diag
-    disabled
-
 service vendor.mdm_helper /vendor/bin/mdm_helper
     class core
     group system wakelock
@@ -261,16 +246,6 @@ service vendor.mdm_helper /vendor/bin/mdm_helper
 service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
     class main
     oneshot
-
-
-service vendor.imsrcsservice /vendor/bin/imsrcsd
-    class main
-    user system
-    group radio diag inet log wakelock
-
-on property:vendor.ims.QMI_DAEMON_STATUS=1
-    start vendor.imsdatadaemon
-
 on property:vold.decrypt=trigger_restart_framework
     start cnss_diag
 
@@ -279,14 +254,6 @@ service cnss_diag /system/vendor/bin/cnss_diag -q -f -t HELIUM
     user system
     group system wifi inet sdcard_rw media_rw diag
     oneshot
-
-service vendor.ims_rtp_daemon /vendor/bin/ims_rtp_daemon
-   class main
-   user system
-   group radio diag inet log
-
-on property:vendor.ims.DATA_DAEMON_STATUS=1
-    restart vendor.ims_rtp_daemon
 
 service vendor.energy-awareness /vendor/bin/energy-awareness
     class main
