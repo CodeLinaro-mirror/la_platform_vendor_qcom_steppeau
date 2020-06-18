@@ -36,7 +36,7 @@ TARGET_USES_IOPHAL := true
 BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_PHONY_TARGETS := true
 
--include $(QCPATH)/common/msmnile_au/BoardConfigVendor.mk
+-include $(QCPATH)/common/$(MSMSTEPPE)_au/BoardConfigVendor.mk
 
 # Some framework code requires this to enable BT
 BOARD_HAVE_BLUETOOTH := true
