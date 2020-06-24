@@ -15,6 +15,7 @@ TARGET_CPU_VARIANT := generic
 BOARD_SUPPORTS_EARLY_INIT := true
 ifeq ($(BOARD_SUPPORTS_EARLY_INIT),true)
 export CONFIG_EARLY_INIT := true
+TARGET_COPY_OUT_EARLY_SERVICES := early_services
 endif
 
 TARGET_2ND_ARCH := arm
