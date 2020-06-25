@@ -13,7 +13,7 @@ TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
-BOARD_SUPPORTS_EARLY_INIT := true
+BOARD_SUPPORTS_EARLY_INIT := false
 ifeq ($(BOARD_SUPPORTS_EARLY_INIT),true)
 export CONFIG_EARLY_INIT := true
 endif
@@ -36,7 +36,15 @@ BUILD_BROKEN_DUP_COPY_HEADERS=true
 BUILD_BROKEN_ANDROIDMK_EXPORTS=true
 BUILD_BROKEN_PHONY_TARGETS := true
 
--include $(QCPATH)/common/msmnile_au/BoardConfigVendor.mk
+ifeq ($(BOARD_SUPPORTS_EARLY_INIT),true)
+TEMPORARY_DISABLE_PATH_RESTRICTIONS := true
+export TEMPORARY_DISABLE_PATH_RESTRICTIONS
+ifeq (,$(findstring $(MSMSTEPPE)_au, $(TARGET_FS_CONFIG_GEN)))
+TARGET_FS_CONFIG_GEN += device/qcom/$(MSMSTEPPE)_au/config.fs
+endif
+endif
+
+-include $(QCPATH)/common/$(MSMSTEPPE)_au/BoardConfigVendor.mk
 
 # Some framework code requires this to enable BT
 BOARD_HAVE_BLUETOOTH := true
@@ -119,6 +127,10 @@ BOARD_METADATAIMAGE_PARTITION_SIZE := 16777216
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/$(MSMSTEPPE)_au/prebuilt_dtbo.img
 BOARD_DTBOIMG_PARTITION_SIZE := 0x0800000
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+ifeq ($(BOARD_SUPPORTS_EARLY_INIT),true)
+BOARD_EARLY_IMAGE_PARTITION_SIZE := 524288000
+BOARD_EARLY_SERVICESIMAGE_FILE_SYSTEM_TYPE := ext4
+endif
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 
 #----------------------------------------------------------------------
@@ -146,12 +158,24 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/wil6210.ko \
     $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko \
     $(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
-    $(KERNEL_MODULES_OUT)/hsi2s.ko
+    $(KERNEL_MODULES_OUT)/hsi2s.ko \
+    $(KERNEL_MODULES_OUT)/br_netfilter.ko \
+    $(KERNEL_MODULES_OUT)/lcd.ko \
+    $(KERNEL_MODULES_OUT)/llcc_perfmon.ko \
+    $(KERNEL_MODULES_OUT)/mmc_test.ko \
+    $(KERNEL_MODULES_OUT)/mpq-adapter.ko \
+    $(KERNEL_MODULES_OUT)/mpq-dmx-hw-plugin.ko \
+    $(KERNEL_MODULES_OUT)/msm-geni-ir.ko \
 
 # install lkdtm only for userdebug and eng build variants
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
     ifeq (,$(findstring perf_defconfig, $(KERNEL_DEFCONFIG)))
-        BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULES_OUT)/lkdtm.ko
+        BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULES_OUT)/lkdtm.ko \
+                                       $(KERNEL_MODULES_OUT)/rcutorture.ko \
+                                       $(KERNEL_MODULES_OUT)/test_user_copy.ko \
+                                       $(KERNEL_MODULES_OUT)/torture.ko \
+                                       $(KERNEL_MODULES_OUT)/atomic64_test.ko \
+                                       $(KERNEL_MODULES_OUT)/locktorture.ko
     endif
 endif
 
