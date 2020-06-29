@@ -82,7 +82,7 @@ TARGET_KERNEL_VERSION := 4.14
 KERNEL_LLVM_SUPPORT := true
 
 #Enable sd-llvm suppport for kernel
-KERNEL_SD_LLVM_SUPPORT := true
+KERNEL_SD_LLVM_SUPPORT := false
 
 # default is nosdcard, S/W button enabled in resource
 PRODUCT_CHARACTERISTICS := nosdcard
