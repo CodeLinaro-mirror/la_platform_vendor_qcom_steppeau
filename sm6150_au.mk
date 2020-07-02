@@ -82,7 +82,7 @@ TARGET_KERNEL_VERSION := 4.14
 KERNEL_LLVM_SUPPORT := true
 
 #Enable sd-llvm suppport for kernel
-KERNEL_SD_LLVM_SUPPORT := true
+KERNEL_SD_LLVM_SUPPORT := false
 
 # default is nosdcard, S/W button enabled in resource
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -258,7 +258,7 @@ ENABLE_KM_4_0 := true
 #Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
-DEVICE_PACKAGE_OVERLAYS += device/qcom/msmnile_au/overlay
+DEVICE_PACKAGE_OVERLAYS += device/qcom/sm6150_au/overlay
 
 # Enable flag to support slow devices
 TARGET_PRESIL_SLOW_BOARD := true
@@ -304,9 +304,6 @@ PRODUCT_PACKAGES += canflasher \
                     mpc5746c_firmware_B.bin \
                     vendor.qti.hardware.automotive.vehicle@1.0-service \
                     android.hardware.automotive.vehicle@2.0-manager-lib-shared
-#Thermal
-PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
-                    android.hardware.thermal@1.0-service
 
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
