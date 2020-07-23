@@ -70,6 +70,25 @@ PRODUCT_BRAND := qti
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
 #Initial bringup flags
+ifeq ($(TARGET_FWK_SUPPORTS_FULL_VALUEADDS),true)
+  $(warning "Compiling with full value-added framework")
+else
+  $(warning "Compiling without full value-added framework - enabling GENERIC_ODM_IMAGE")
+  GENERIC_ODM_IMAGE := true
+endif
+
+#Enable OMX for pure AOSP AUTO variants.
+ifeq (,$(filter true, $(GENERIC_ODM_IMAGE)$(TARGET_BOARD_AUTO)))
+  $(warning "Forcing OMX for Generic auto build variant")
+  PRODUCT_PROPERTY_OVERRIDES += debug.media.codec2=0
+  PRODUCT_PROPERTY_OVERRIDES += debug.stagefright.ccodec=0
+  PRODUCT_PROPERTY_OVERRIDES += debug.stagefright.omx_default_rank=1000
+else
+  $(warning "Enabling codec2.0 SW only for non-generic odm build variant")
+  #Rank OMX SW codecs lower than OMX HW codecs
+  PRODUCT_PROPERTY_OVERRIDES += debug.stagefright.omx_default_rank.sw-audio=1
+  PRODUCT_PROPERTY_OVERRIDES += debug.stagefright.omx_default_rank=0
+endif
 
 #Default vendor image configuration
 ifeq ($(ENABLE_VENDOR_IMAGE),)
