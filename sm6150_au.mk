@@ -78,7 +78,7 @@ else
 endif
 
 #Enable OMX for pure AOSP AUTO variants.
-ifeq (,$(filter true, $(GENERIC_ODM_IMAGE)$(TARGET_BOARD_AUTO)))
+ifeq ($(GENERIC_ODM_IMAGE),true)
   $(warning "Forcing OMX for Generic auto build variant")
   PRODUCT_PROPERTY_OVERRIDES += debug.media.codec2=0
   PRODUCT_PROPERTY_OVERRIDES += debug.stagefright.ccodec=0
