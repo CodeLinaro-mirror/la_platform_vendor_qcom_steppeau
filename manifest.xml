@@ -228,25 +228,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>legacy/0</instance>
         </interface>
     </hal>
-    <!-- fingerprint hal: using remote service instead of Google's default service-->
-    <hal format="hidl">
-        <name>android.hardware.biometrics.fingerprint</name>
-        <transport>hwbinder</transport>
-        <version>2.1</version>
-        <interface>
-            <name>IBiometricsFingerprint</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.qti.hardware.fingerprint</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IQtiExtendedFingerprint</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <!-- keymaster -->
     <hal format="hidl">
        <name>android.hardware.keymaster</name>
@@ -315,94 +296,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>gnss_vendor</instance>
         </interface>
     </hal>
-   <!-- RIL AUDIO HAL -->
-   <hal format="hidl">
-       <name>vendor.qti.hardware.radio.am</name>
-       <transport>hwbinder</transport>
-       <version>1.0</version>
-       <interface>
-           <name>IQcRilAudio</name>
-           <instance>slot1</instance>
-           <instance>slot2</instance>
-       </interface>
-   </hal>
-    <!-- qcrilhook -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.qcrilhook</name>
-           <transport>hwbinder</transport>
-           <version>1.0</version>
-           <interface>
-               <name>IQtiOemHook</name>
-               <instance>oemhook0</instance>
-               <instance>oemhook1</instance>
-           </interface>
-    </hal>
-    <!-- RIL UIM REMOTE CLIENT -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.uim_remote_client</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IUimRemoteServiceClient</name>
-            <instance>uimRemoteClient0</instance>
-            <instance>uimRemoteClient1</instance>
-        </interface>
-    </hal>
-    <!-- RIL UIM REMOTE SERVER -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.uim_remote_server</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IUimRemoteServiceServer</name>
-            <instance>uimRemoteServer0</instance>
-            <instance>uimRemoteServer1</instance>
-        </interface>
-    </hal>
-    <!-- RIL UIM LPA -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.lpa</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IUimLpa</name>
-            <instance>UimLpa0</instance>
-            <instance>UimLpa1</instance>
-        </interface>
-    </hal>
-    <!-- RIL UIM -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.uim</name>
-        <transport>hwbinder</transport>
-        <version>1.2</version>
-        <interface>
-            <name>IUim</name>
-            <instance>Uim0</instance>
-            <instance>Uim1</instance>
-        </interface>
-    </hal>
-    <!-- legacy qtiradio service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.qtiradio</name>
-           <transport>hwbinder</transport>
-           <version>1.0</version>
-           <interface>
-               <name>IQtiRadio</name>
-               <instance>slot1</instance>
-               <instance>slot2</instance>
-           </interface>
-    </hal>
-    <!-- Hidl service for 5G network apis -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.radio.qtiradio</name>
-           <transport>hwbinder</transport>
-           <version>2.3</version>
-           <interface>
-               <name>IQtiRadio</name>
-               <instance>slot1</instance>
-               <instance>slot2</instance>
-           </interface>
-    </hal>
     <!-- Perf HAL service -->
     <hal format="hidl">
         <name>vendor.qti.hardware.perf</name>
@@ -459,24 +352,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>IEsePowerManager</name>
             <instance>default</instance>
         </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.radio</name>
-        <transport>hwbinder</transport>
-        <fqname>@1.4::IRadio/slot1</fqname>
-        <fqname>@1.4::IRadio/slot2</fqname>
-        <fqname>@1.2::ISap/slot1</fqname>
-        <fqname>@1.2::ISap/slot2</fqname>
-    </hal>
-    <!-- RADIO CONFIG -->
-   <hal format="hidl">
-       <name>android.hardware.radio.config</name>
-       <transport>hwbinder</transport>
-       <version>1.1</version>
-       <interface>
-           <name>IRadioConfig</name>
-           <instance>default</instance>
-       </interface>
     </hal>
     <!-- VPP Service -->
     <hal format="hidl">
