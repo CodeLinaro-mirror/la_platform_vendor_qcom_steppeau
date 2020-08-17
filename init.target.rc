@@ -168,7 +168,7 @@ on property:ro.vendor.wlan.chip=*
     insmod /vendor/lib/modules/qca_cld3_${ro.vendor.wlan.chip}.ko
     setprop wlan.driver.status "ok"
 
-service wlan_multiko /vendor/bin/init.qti.wlan.sh
+service wlan_multiko /vendor/bin/init.qcom.wlan.sh
     user root
     group root
     disabled
