@@ -264,6 +264,9 @@ KMGK_USE_QTI_SERVICE := true
 #Enable KEYMASTER 4.0
 ENABLE_KM_4_0 := true
 
+SHIPPING_API_LEVEL := 30
+PRODUCT_SHIPPING_API_LEVEL := 30
+
 #Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
