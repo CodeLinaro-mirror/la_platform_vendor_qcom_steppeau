@@ -37,6 +37,9 @@ on early-init
     mkdir /dev/socket/camera 0770 system camera
     start ais_server
     mount_all /vendor/etc/fstab.qcom --early
+    mkdir /dev/socket/camera 0770 system camera
+    start ais_server
+    mount_all --early
     write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/debug/bootkpi/kpi_values "M - adsprpcd Start"
@@ -87,7 +90,7 @@ on fs
     mkdir /mnt/vendor/persist/data 0700 system system
 
 on late-fs
-    mount_all /vendor/etc/fstab.qcom --late
+    mount_all --late
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
