@@ -59,6 +59,9 @@ on init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
+on late-init
+    start automotive_display
+
 on fs
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
