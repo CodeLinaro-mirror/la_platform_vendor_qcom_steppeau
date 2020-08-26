@@ -77,6 +77,9 @@ ro.opengles.version=196610
 # system property for maximum number of HFP client connections
 bt.max.hfpclient.connections=1
 
+# system property for hfpclient sco s4 settings
+persist.bluetooth.hfpclient.sco_s4_supported=true
+
 # System property for cabl
 ro.qualcomm.cabl=1
 
