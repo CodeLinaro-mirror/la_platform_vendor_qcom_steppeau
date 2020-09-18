@@ -150,6 +150,8 @@ ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
     endif
 endif
 
+BOARD_DO_NOT_STRIP_VENDOR_MODULES := true
+
 BOARD_VENDOR_KERNEL_MODULES += $(shell ls $(KERNEL_MODULES_OUT)/*.ko)
 TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
@@ -236,7 +238,7 @@ endif
 
 #Flag to enable System SDK Requirements.
 #All vendor APK will be compiled against system_current API set.
-BOARD_SYSTEMSDK_VERSIONS:=29
+BOARD_SYSTEMSDK_VERSIONS:=30
 
 #Enable VNDK Compliance
 BOARD_VNDK_VERSION:=current

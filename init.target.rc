@@ -36,7 +36,7 @@ on early-init
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mkdir /dev/socket/camera 0770 system camera
     start ais_server
-    mount_all /vendor/etc/fstab.qcom --early
+    mount_all --early
     write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/debug/bootkpi/kpi_values "M - adsprpcd Start"
@@ -69,6 +69,9 @@ on init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
+on late-init
+    start automotive_display
+
 on fs
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
@@ -76,7 +79,7 @@ on fs
     mkdir /mnt/vendor/persist/data 0700 system system
 
 on late-fs
-    mount_all /vendor/etc/fstab.qcom --late
+    mount_all --late
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
@@ -165,7 +168,7 @@ on property:ro.vendor.wlan.chip=*
     insmod /vendor/lib/modules/qca_cld3_${ro.vendor.wlan.chip}.ko
     setprop wlan.driver.status "ok"
 
-service wlan_multiko /vendor/bin/init.qti.wlan.sh
+service wlan_multiko /vendor/bin/init.qcom.wlan.sh
     user root
     group root
     disabled
