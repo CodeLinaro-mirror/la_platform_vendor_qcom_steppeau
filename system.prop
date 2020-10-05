@@ -199,3 +199,6 @@ persist.vendor.car.lpm=true
 
 # default wifi country code
 ro.boot.wificountrycode=us
+
+#enable ethernet Audio-Video-Bridging
+automotive.ethavb.early_enable=1
