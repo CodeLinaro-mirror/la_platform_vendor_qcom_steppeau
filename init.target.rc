@@ -142,7 +142,8 @@ on boot
     chmod 0770 /data/vendor/netmgr/recovery
     write /data/vendor/netmgr/recovery/recovery_info ""
     chown radio radio /data/vendor/netmgr/recovery/recovery_info
-
+# eavb folder create
+    mkdir /data/vendor/avb 0771 root root
 # Add a cpuset for the camera daemon
 # We want all cores for camera
     mkdir /dev/cpuset/camera-daemon
