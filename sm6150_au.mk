@@ -31,6 +31,8 @@ ENABLE_CAR_POWER_MANAGER := true
 #TARGET_USES_GAS := true
 
 
+BOARD_USES_EARLY_SERVICESIMAGE := true
+
 # Dynamic-partition enabled by default
 BOARD_DYNAMIC_PARTITION_ENABLE := true
 ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
