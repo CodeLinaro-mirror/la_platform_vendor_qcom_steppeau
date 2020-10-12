@@ -308,6 +308,8 @@ TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
 include device/qcom/wlan/sm6150_au/wlan.mk
 endif
 
+#for Emac
+PRODUCT_PACKAGES += emac_rps_settings.sh
 
 # CAN utils
 PRODUCT_PACKAGES += candump \
