@@ -276,7 +276,8 @@ ENABLE_VENDOR_RIL_SERVICE := true
 TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
 include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
 
-
+#for Emac
+PRODUCT_PACKAGES += emac_rps_settings.sh
 
 # CAN utils
 PRODUCT_PACKAGES += candump \

@@ -233,6 +233,11 @@ service vendor.sec_nvm /vendor/bin/sec_nvm
     user system
     group system
 
+#emac
+service emac_rps_setting /system/vendor/bin/sh /vendor/bin/emac_rps_settings.sh
+    user root
+    oneshot
+
 service vendor.thermal-engine /vendor/bin/thermal-engine
    class main
    user root
@@ -323,6 +328,10 @@ service smcinvoked /system/bin/smcinvoked
 #Start EMAC ethernet driver
 on boot
     insmod /vendor/lib/modules/emac_dwc_eqos.ko
+
+on property:sys.boot_completed=1
+    chmod 0771 /vendor/bin/emac_rps_settings.sh
+    start emac_rps_setting
 
 service carpowerd /vendor/bin/car_power_daemon
     user root
