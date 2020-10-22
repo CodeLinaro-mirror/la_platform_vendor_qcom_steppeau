@@ -90,6 +90,7 @@ on fs
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
     mkdir /mnt/vendor/persist/data 0700 system system
+    insmod /vendor/lib/modules/v4l2loopback.ko devices=2 video_nr=51,52
 
 on late-fs
     mount_all /vendor/etc/fstab.qcom --late
@@ -119,6 +120,8 @@ on post-fs-data
     mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/vendor/tloc 0700 system drmrpc
     mkdir /data/vendor/nnhal 0700 system system
+
+    start ais_v4l2_proxy
 
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
@@ -163,6 +166,12 @@ on property:init.svc.bootanim=stopped
 
 on property:init.svc.media=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
+
+#declaring AIS service to be started after boot Complete
+service ais_v4l2_proxy /vendor/bin/ais_v4l2_proxy
+    user system
+    group camera input graphics system
+    disabled
 
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
