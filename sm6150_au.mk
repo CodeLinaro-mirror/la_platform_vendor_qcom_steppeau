@@ -317,6 +317,8 @@ PRODUCT_PACKAGES += canflasher \
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+SHIPPING_API_LEVEL := 30
+PRODUCT_SHIPPING_API_LEVEL := 30
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
