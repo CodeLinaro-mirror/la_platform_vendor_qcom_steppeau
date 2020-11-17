@@ -80,7 +80,7 @@ TARGET_HAS_GENERIC_KERNEL_HEADERS := true
 KERNEL_LLVM_SUPPORT := true
 
 #Enable sd-llvm suppport for kernel
-KERNEL_SD_LLVM_SUPPORT := true
+KERNEL_SD_LLVM_SUPPORT := false
 
 # default is nosdcard, S/W button enabled in resource
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -315,6 +315,8 @@ PRODUCT_PACKAGES += android.hardware.health@2.1-service \
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+SHIPPING_API_LEVEL := 30
+PRODUCT_SHIPPING_API_LEVEL := 30
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
