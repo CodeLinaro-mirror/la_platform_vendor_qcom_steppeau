@@ -56,6 +56,14 @@ service ais_server /system/vendor/bin/ais_server
     onrestart restart evs_driver
     onrestart restart qcarcam_hal
 
+on init && property:vendor.gdb.dump=true
+    setrlimit 4 -1 -1
+
+on property:vendor.gdb.dump=true
+    mkdir data/core
+    chmod 0777 data/core
+    write /proc/sys/kernel/core_pattern "/data/core/core.%e.%p.%h.%t"
+
 on init
     write /sys/kernel/boot_cdsp/boot 1
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
