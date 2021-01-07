@@ -37,6 +37,9 @@ on early-init
     mkdir /dev/socket/camera 0770 system camera
     start ais_server
     mount_all /vendor/etc/fstab.qcom --early
+    mkdir /dev/socket/camera 0770 system camera
+    start ais_server
+    mount_all --early
     write /sys/kernel/debug/bootkpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/debug/bootkpi/kpi_values "M - adsprpcd Start"
@@ -55,6 +58,14 @@ service ais_server /system/vendor/bin/ais_server
     disabled
     onrestart restart evs_driver
     onrestart restart qcarcam_hal
+
+on init && property:vendor.gdb.dump=true
+    setrlimit 4 -1 -1
+
+on property:vendor.gdb.dump=true
+    mkdir data/core
+    chmod 0777 data/core
+    write /proc/sys/kernel/core_pattern "/data/core/core.%e.%p.%h.%t"
 
 on init
     write /sys/kernel/boot_cdsp/boot 1
@@ -79,7 +90,7 @@ on fs
     mkdir /mnt/vendor/persist/data 0700 system system
 
 on late-fs
-    mount_all /vendor/etc/fstab.qcom --late
+    mount_all --late
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
