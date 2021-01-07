@@ -201,4 +201,4 @@ persist.vendor.car.lpm=true
 ro.boot.wificountrycode=us
 
 #enable ethernet Audio-Video-Bridging
-automotive.ethavb.early_enable=1
+persist.automotive.ethavb.early_enable=0
