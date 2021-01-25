@@ -46,10 +46,6 @@ on early-init
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
-    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
-    start acdb_loader_service
-    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
-    start audio_hal_plugin_service
     start esplash
 
 service ais_server /system/vendor/bin/ais_server
@@ -80,6 +76,11 @@ on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    # Revert this change once resolved https://partnerissuetracker.corp.google.com/issues/175540571
+    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
+    start acdb_loader_service
+    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
+    start audio_hal_plugin_service
 
 on late-init
     start automotive_display
