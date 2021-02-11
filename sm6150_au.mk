@@ -10,7 +10,7 @@ TARGET_NO_TELEPHONY := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
-BOARD_HAS_QCOM_WLAN := true
+BOARD_HAS_QCOM_WLAN := false
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
@@ -43,9 +43,11 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_BUILD_USERDATA_IMAGE := true
 
   ifeq ($(ENABLE_AB), true)
-    PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.emmc
   else
-    PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.emmc
   endif
 endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
@@ -73,13 +75,14 @@ ifeq ($(ENABLE_VENDOR_IMAGE),)
 ENABLE_VENDOR_IMAGE := false
 endif
 
-TARGET_KERNEL_VERSION := 4.14
+TARGET_KERNEL_VERSION := 5.4
+TARGET_HAS_GENERIC_KERNEL_HEADERS := true
 
 #Enable llvm support for kernel
 KERNEL_LLVM_SUPPORT := true
 
 #Enable sd-llvm suppport for kernel
-KERNEL_SD_LLVM_SUPPORT := true
+KERNEL_SD_LLVM_SUPPORT := false
 
 # default is nosdcard, S/W button enabled in resource
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -88,6 +91,9 @@ BOARD_FRP_PARTITION_NAME := frp
 
 #Android EGL implementation
 PRODUCT_PACKAGES += libGLES_android
+
+# diag-router
+TARGET_HAS_DIAG_ROUTER := true
 
 -include $(QCPATH)/common/config/qtic-config.mk
 
@@ -136,7 +142,7 @@ PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_vendor_audio.xml:$(T
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
 endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
-PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
+#PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
 
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
@@ -169,8 +175,12 @@ PRODUCT_PACKAGES += update_engine \
     update_engine_client \
     update_verifier \
     bootctrl.$(MSMSTEPPE) \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot@1.1-impl-qti \
+    android.hardware.boot@1.1-impl-qti.recovery \
+    android.hardware.boot@1.1-service
+
+PRODUCT_PACKAGES += \
+    update_engine_sideload
 
 PRODUCT_HOST_PACKAGES += \
 	brillo_update_payload
@@ -185,7 +195,8 @@ PRODUCT_PACKAGES += \
 
 # MTMD enablement
 PRODUCT_COPY_FILES += \
-    device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
+    device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml \
+    device/qcom/sm6150_au/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
 
 
 DEVICE_MANIFEST_FILE := device/qcom/sm6150_au/manifest.xml
@@ -203,7 +214,6 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/
 
 # Display/Graphics
 PRODUCT_PACKAGES += \
-    android.hardware.configstore@1.1-service \
     android.hardware.broadcastradio@1.0-impl
 
 # Automotive display service
@@ -228,9 +238,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
 
-# USB default HAL
-PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service
 
 PRODUCT_PACKAGES += \
        openavb_harness \
@@ -253,11 +260,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 PRODUCT_VENDOR_MOVE_ENABLED := true
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
-
-KMGK_USE_QTI_SERVICE := true
-
-#Enable KEYMASTER 4.0
-ENABLE_KM_4_0 := true
 
 #Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
@@ -308,14 +310,19 @@ PRODUCT_PACKAGES += canflasher \
                     mpc5746c_firmware_B.bin \
                     vendor.qti.hardware.automotive.vehicle@1.0-service \
                     android.hardware.automotive.vehicle@2.0-manager-lib-shared
-#Thermal
-PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
-                    android.hardware.thermal@1.0-service
+
+PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example \
+                    android.hardware.thermal@2.0-service.mock \
+
+PRODUCT_PACKAGES += android.hardware.health@2.1-service \
+                    android.hardware.health@2.1-impl \
 
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+SHIPPING_API_LEVEL := 30
+PRODUCT_SHIPPING_API_LEVEL := 30
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
