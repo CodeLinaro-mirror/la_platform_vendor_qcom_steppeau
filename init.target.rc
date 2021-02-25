@@ -251,7 +251,7 @@ service vendor.sec_nvm /vendor/bin/sec_nvm
     group system
 
 #emac
-service emac_rps_setting /system/vendor/bin/sh /vendor/bin/emac_rps_settings.sh
+service emac_rps_setting /system/vendor/bin/sh /vendor/bin/emac_rps_settings.sh 2 34
     user root
     oneshot
 
@@ -316,11 +316,8 @@ service smcinvoked /system/bin/smcinvoked
 
 #Start EMAC ethernet driver
 on boot
-    insmod /vendor/lib/modules/emac_dwc_eqos.ko
-
-on property:sys.boot_completed=1
-    chmod 0771 /vendor/bin/emac_rps_settings.sh
     start emac_rps_setting
+    insmod /vendor/lib/modules/emac_dwc_eqos.ko
 
 service carpowerd /vendor/bin/car_power_daemon
     user root
