@@ -34,7 +34,6 @@ on early-init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --early
-    write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/debug/bootkpi/kpi_values "M - adsprpcd Start"
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
@@ -63,7 +62,6 @@ on init
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
 on fs
-    start audio_chime
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
@@ -339,15 +337,6 @@ service acdb_loader_service /vendor/bin/acdb_loader_service
     class main
     user system
     group system wakelock audio
-    capabilities BLOCK_SUSPEND
-    oneshot
-    disabled
-
-#audio chime
-service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
-    class main
-    user system
-    group system wakelock
     capabilities BLOCK_SUSPEND
     oneshot
     disabled
