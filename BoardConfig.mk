@@ -30,7 +30,7 @@ TARGET_USES_IOPHAL := true
 
 BUILD_BROKEN_DUP_RULES := true
 
--include $(QCPATH)/common/sm6150_au/BoardConfigVendor.mk
+-include $(QCPATH)/common/msmnile_au/BoardConfigVendor.mk
 
 # Some framework code requires this to enable BT
 BOARD_HAVE_BLUETOOTH := true
@@ -41,7 +41,18 @@ USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
 
 # Set Header version for bootimage
+#Disable appended dtb
+TARGET_KERNEL_APPEND_DTB := false
+
+# Set Header version for bootimage
+ifneq ($(strip $(TARGET_KERNEL_APPEND_DTB)),true)
+#Enable dtb in boot image and Set Header version
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_BOOTIMG_HEADER_VERSION := 2
+else
 BOARD_BOOTIMG_HEADER_VERSION := 1
+endif
+
 BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 
 TARGET_RECOVERY_PIXEL_FORMAT:= RGBX_8888
@@ -127,25 +138,25 @@ ifeq ($(KERNEL_DEFCONFIG),)
     endif
 endif
 
-BOARD_VENDOR_KERNEL_MODULES := \
-    $(KERNEL_MODULES_OUT)/audio_apr.ko \
-    $(KERNEL_MODULES_OUT)/audio_snd_event.ko \
-    $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
-    $(KERNEL_MODULES_OUT)/audio_adsp_loader.ko \
-    $(KERNEL_MODULES_OUT)/audio_q6.ko \
-    $(KERNEL_MODULES_OUT)/audio_platform.ko \
-    $(KERNEL_MODULES_OUT)/audio_hdmi.ko \
-    $(KERNEL_MODULES_OUT)/audio_stub.ko \
-    $(KERNEL_MODULES_OUT)/audio_native.ko \
-    $(KERNEL_MODULES_OUT)/audio_machine_talos.ko \
-    $(KERNEL_MODULES_OUT)/wil6210.ko \
-    $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko \
-    $(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
-    $(KERNEL_MODULES_OUT)/hsi2s.ko
+#BOARD_VENDOR_KERNEL_MODULES := \
+#    $(KERNEL_MODULES_OUT)/audio_apr.ko \
+#    $(KERNEL_MODULES_OUT)/audio_snd_event.ko \
+#    $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
+#    $(KERNEL_MODULES_OUT)/audio_adsp_loader.ko \
+#    $(KERNEL_MODULES_OUT)/audio_q6.ko \
+#    $(KERNEL_MODULES_OUT)/audio_platform.ko \
+#    $(KERNEL_MODULES_OUT)/audio_hdmi.ko \
+#    $(KERNEL_MODULES_OUT)/audio_stub.ko \
+#    $(KERNEL_MODULES_OUT)/audio_native.ko \
+#    $(KERNEL_MODULES_OUT)/audio_machine_talos.ko \
+#    $(KERNEL_MODULES_OUT)/wil6210.ko \
+#    $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko \
+#    $(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
+#    $(KERNEL_MODULES_OUT)/hsi2s.ko
 
 # install lkdtm only for userdebug and eng build variants
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-    ifeq (,$(findstring perf_defconfig, $(KERNEL_DEFCONFIG)))
+    ifeq (,$(findstring qgki_defconfig, $(KERNEL_DEFCONFIG)))
         BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULES_OUT)/lkdtm.ko
     endif
 endif
@@ -171,7 +182,7 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(shell pwd)/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-androidkernel-
 
-KERN_CONF_PATH := kernel/msm-4.14/arch/arm64/configs/vendor/
+KERN_CONF_PATH := kernel/msm-5.4/arch/arm64/configs/vendor/
 KERN_CONF_FILE := $(shell ls $(KERN_CONF_PATH) | grep sdmsteppe-auto_defconfig)
 KERNEL_UNCOMPRESSED_DEFCONFIG := $(shell grep "CONFIG_BUILD_ARM64_UNCOMPRESSED_KERNEL=y" $(KERN_CONF_PATH)$(KERN_CONF_FILE))
 ifeq ($(KERNEL_UNCOMPRESSED_DEFCONFIG),)
@@ -181,9 +192,9 @@ else
 endif
 
 KERN_PATH := kernel/msm-5.4/
-$(shell rm -f $(KERN_PATH)gen_headers_arm64.bp $(KERN_PATH)gen_headers_arm.bp)
-$(shell cp $(KERN_PATH)gen_headers_arm64_auto.bp $(KERN_PATH)gen_headers_arm64.bp)
-$(shell cp $(KERN_PATH)gen_headers_arm_auto.bp $(KERN_PATH)gen_headers_arm.bp)
+$(shell rm $(KERN_PATH)gen_headers_arm64.bp $(KERN_PATH)gen_headers_arm.bp)
+$(shell ln $(KERN_PATH)gen_headers_arm64_auto.bp $(KERN_PATH)gen_headers_arm64.bp)
+$(shell ln $(KERN_PATH)gen_headers_arm_auto.bp $(KERN_PATH)gen_headers_arm.bp)
 
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
@@ -195,7 +206,6 @@ TARGET_NO_RPC := true
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_INIT_VENDOR_LIB := libinit_msm
 
-TARGET_KERNEL_APPEND_DTB := true
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
 #Enable PD locater/notifier
@@ -232,6 +242,12 @@ TARGET_USES_INTERACTION_BOOST := true
 
 #Enable DRM plugins 64 bit compilation
 TARGET_ENABLE_MEDIADRM_64 := true
+
+#namespace definition for librecovery_updater
+#differentiate legacy 'sg' or 'bsg' framework
+SOONG_CONFIG_NAMESPACES += ufsbsg
+SOONG_CONFIG_ufsbsg += ufsframework
+SOONG_CONFIG_ufsbsg_ufsframework := bsg
 
 #----------------------------------------------------------------------
 # wlan specific

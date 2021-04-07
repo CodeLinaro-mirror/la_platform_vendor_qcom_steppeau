@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+# Copyright (c) 2013-2018, 2021, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -28,12 +28,14 @@
 #
 
 on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_wglink audio_q6_pdr audio_q6_notifier audio_apr audio_adsp_loader audio_q6 audio_native audio_usf audio_pinctrl_wcd audio_swr audio_platform audio_hdmi audio_wcd_spi audio_stub audio_wcd_core audio_wsa881x audio_wcd9360 audio_hdmi audio_machine_talos
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules snd_event_dlkm wglink_dlkm q6_pdr_dlkm q6_notifier_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm usf_dlkm pinctrl_wcd_dlkm swr_dlkm platform_dlkm wcd_spi_dlkm stub_dlkm wcd_core_dlkm wsa881x_dlkm wcd9360_dlkm hdmi_dlkm machine_dlkm
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
     write /sys/kernel/debug/bootkpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    mkdir /dev/socket/camera 0770 system camera
+    start ais_server
     mount_all /vendor/etc/fstab.qcom --early
     mkdir /dev/socket/camera 0770 system camera
     start ais_server
@@ -44,10 +46,15 @@ on early-init
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
-    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
-    start acdb_loader_service
-    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
-    start audio_hal_plugin_service
+    start esplash
+
+service ais_server /system/vendor/bin/ais_server
+    class core
+    user system
+    group camera input graphics
+    disabled
+    onrestart restart evs_driver
+    onrestart restart qcarcam_hal
 
 on init && property:vendor.gdb.dump=true
     setrlimit 4 -1 -1
@@ -62,6 +69,11 @@ on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    # Revert this change once resolved https://partnerissuetracker.corp.google.com/issues/175540571
+    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
+    start acdb_loader_service
+    write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
+    start audio_hal_plugin_service
 
 on late-init
     start automotive_display
@@ -83,6 +95,13 @@ on post-fs
     write /dev/ipa 1
     start vendor.spdaemon
     start vendor.sec_nvm
+
+service esplash /vendor/bin/esplash
+    class core
+    user system
+    group system
+    oneshot
+    disabled
 
 on post-fs-data
     mkdir /vendor/data/tombstones 0771 system system
@@ -131,12 +150,17 @@ on property:init.svc.zygote=running
 
 on property:init.svc.bootanim=running
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Boot Animation Start"
+    setprop vendor.init.svc.bootanim "running"
+
+on property:init.svc.bootanim=stopped
+    setprop vendor.init.svc.bootanim "stopped"
 
 on property:init.svc.media=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
 
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
+    setprop vendor.sys.boot_completed 1
 
 on property:init.svc.surfaceflinger=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"

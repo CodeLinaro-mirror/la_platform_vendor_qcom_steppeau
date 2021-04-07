@@ -12,19 +12,19 @@ BOARD_AVB_ENABLE := true
 BOARD_USES_QCNE := false
 TARGET_BOARD_AUTO := true
 TARGET_USES_AOSP := true
-TARGET_USES_AOSP_FOR_AUDIO := false
+TARGET_USES_AOSP_FOR_AUDIO := true
 TARGET_USES_QCOM_BSP := false
 TARGET_NO_TELEPHONY := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
-BOARD_HAS_QCOM_WLAN := true
+BOARD_HAS_QCOM_WLAN := false
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
-TARGET_USES_AOSP_FOR_WLAN := false
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
+TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
+TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 #TARGET_USES_GAS := true
 
@@ -83,7 +83,8 @@ ifeq ($(ENABLE_VENDOR_IMAGE),)
 ENABLE_VENDOR_IMAGE := false
 endif
 
-TARGET_KERNEL_VERSION := 4.14
+TARGET_KERNEL_VERSION := 5.4
+TARGET_HAS_GENERIC_KERNEL_HEADERS := true
 
 #Enable llvm support for kernel
 KERNEL_LLVM_SUPPORT := true
@@ -149,7 +150,7 @@ PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_vendor_audio.xml:$(T
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
 endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
-PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
+#PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
 
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
@@ -223,7 +224,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 # Display/Graphics
 PRODUCT_PACKAGES += \
-    android.hardware.configstore@1.1-service \
     android.hardware.broadcastradio@1.0-impl
 
 # Automotive display service
@@ -248,9 +248,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
 
-# USB default HAL
-PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service
 
 PRODUCT_PACKAGES += \
        openavb_harness \
@@ -274,15 +271,10 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 PRODUCT_VENDOR_MOVE_ENABLED := true
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 
-KMGK_USE_QTI_SERVICE := true
-
-#Enable KEYMASTER 4.0
-ENABLE_KM_4_0 := true
-
 #Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
-DEVICE_PACKAGE_OVERLAYS += device/qcom/sm6150_au/overlay
+DEVICE_PACKAGE_OVERLAYS += device/qcom/msmnile_au/overlay
 
 # Enable flag to support slow devices
 TARGET_PRESIL_SLOW_BOARD := true
@@ -328,6 +320,12 @@ PRODUCT_PACKAGES += canflasher \
                     mpc5746c_firmware_B.bin \
                     vendor.qti.hardware.automotive.vehicle@1.0-service \
                     android.hardware.automotive.vehicle@2.0-manager-lib-shared
+
+PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example \
+                    android.hardware.thermal@2.0-service.mock \
+
+PRODUCT_PACKAGES += android.hardware.health@2.1-service \
+                    android.hardware.health@2.1-impl \
 
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
