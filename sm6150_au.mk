@@ -319,6 +319,10 @@ PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example \
 PRODUCT_PACKAGES += android.hardware.health@2.1-service \
                     android.hardware.health@2.1-impl \
 
+#sysprofiler
+PRODUCT_PACKAGES += libsysprofiler \
+                    sysprofiler_app \
+                    sysprofiler_interface
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
