@@ -69,7 +69,6 @@ on fs
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
     mkdir /mnt/vendor/persist/data 0700 system system
-    insmod /vendor/lib/modules/v4l2loopback.ko devices=2 video_nr=51,52
 
 on late-fs
     mount_all /vendor/etc/fstab.qcom --late
@@ -92,8 +91,6 @@ on post-fs-data
     mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/vendor/tloc 0700 system drmrpc
     mkdir /data/vendor/nnhal 0700 system system
-
-    start ais_v4l2_proxy
 
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
@@ -149,6 +146,13 @@ service ais_v4l2_proxy /vendor/bin/ais_v4l2_proxy
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
     setprop vendor.sys.boot_completed 1
+    insmod /vendor/lib/modules/v4l2loopback.ko devices=2 video_nr=51,52
+    start ais_v4l2_proxy
+    #Load WLAN driver
+    start wlan_multiko
+    #start EMAC ethernet driver
+    start emac_rps_setting
+    insmod /vendor/lib/modules/emac_dwc_eqos.ko
 
 on property:init.svc.surfaceflinger=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER SurfaceFlinger Start"
@@ -166,9 +170,6 @@ on boot && property:persist.vendor.usb.controller.default=*
 
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
-
-#Load WLAN driver
-    start wlan_multiko
 
 on property:ro.vendor.wlan.chip=*
     insmod /vendor/lib/modules/qca_cld3_${ro.vendor.wlan.chip}.ko
@@ -324,11 +325,6 @@ service smcinvoked /system/bin/smcinvoked
     class main
     user system
     group system
-
-#Start EMAC ethernet driver
-on boot
-    start emac_rps_setting
-    insmod /vendor/lib/modules/emac_dwc_eqos.ko
 
 service carpowerd /vendor/bin/car_power_daemon
     user root
