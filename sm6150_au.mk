@@ -244,6 +244,12 @@ PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/msm_irqbalance.conf:$(TARGET_COPY
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml
 
+
+#Copy unsupported features list
+PRODUCT_COPY_FILES += \
+    device/qcom/$(MSMSTEPPE)_au/sm6150_au_excluded_features.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sm6150_au_excluded_features.xml
+
+
 # OEM unlock feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
