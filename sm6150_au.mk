@@ -1,3 +1,4 @@
+ALLOW_MISSING_DEPENDENCIES := true
 ENABLE_AB ?= true
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
