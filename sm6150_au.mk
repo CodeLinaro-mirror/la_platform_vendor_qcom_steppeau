@@ -1,4 +1,12 @@
 ENABLE_AB ?= true
+# Enable virtual-ab by default
+ifeq ($(ENABLE_AB), true)
+  ENABLE_VIRTUAL_AB ?= true
+endif
+ifeq ($(ENABLE_VIRTUAL_AB), true)
+  $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+endif
+
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
 BOARD_USES_QCNE := false
@@ -18,7 +26,7 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
-TARGET_USES_GAS := true
+#TARGET_USES_GAS := true
 
 
 # Dynamic-partition enabled by default
