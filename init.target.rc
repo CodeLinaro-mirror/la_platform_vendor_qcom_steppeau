@@ -139,17 +139,9 @@ on property:init.svc.bootanim=stopped
 on property:init.svc.media=running
     write /sys/kernel/debug/bootkpi/kpi_values "M - USER MediaServer Start"
 
-#declaring AIS service to be started after boot Complete
-service ais_v4l2_proxy /vendor/bin/ais_v4l2_proxy
-    user system
-    group camera input graphics system
-    disabled
-
 on property:sys.boot_completed=1
     write /sys/kernel/debug/bootkpi/kpi_values "K - USER Android Boot Complete"
     setprop vendor.sys.boot_completed 1
-    insmod /vendor/lib/modules/v4l2loopback.ko devices=2 video_nr=51,52
-    start ais_v4l2_proxy
     #start EMAC ethernet driver
     start emac_rps_setting
     insmod /vendor/lib/modules/emac_dwc_eqos.ko
