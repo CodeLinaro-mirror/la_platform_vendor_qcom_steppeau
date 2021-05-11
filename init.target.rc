@@ -116,6 +116,8 @@ on boot
     chown radio radio /data/vendor/netmgr/recovery/recovery_info
 # eavb folder create
     mkdir /data/vendor/avb 0771 root root
+#Load WLAN driver
+    start wlan_multiko
 # Add a cpuset for the camera daemon
 # We want all cores for camera
     mkdir /dev/cpuset/camera-daemon
@@ -148,8 +150,6 @@ on property:sys.boot_completed=1
     setprop vendor.sys.boot_completed 1
     insmod /vendor/lib/modules/v4l2loopback.ko devices=2 video_nr=51,52
     start ais_v4l2_proxy
-    #Load WLAN driver
-    start wlan_multiko
     #start EMAC ethernet driver
     start emac_rps_setting
     insmod /vendor/lib/modules/emac_dwc_eqos.ko
