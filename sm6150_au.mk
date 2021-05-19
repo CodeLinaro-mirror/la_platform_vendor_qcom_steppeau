@@ -340,6 +340,9 @@ PRODUCT_PACKAGES += android.hardware.health@2.1-service \
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+#add libnbaio for avenhancement
+PRODUCT_PACKAGES += libnbaio
+
 SHIPPING_API_LEVEL := 30
 PRODUCT_SHIPPING_API_LEVEL := 30
 ###################################################################################
