@@ -139,6 +139,9 @@ on boot
     write /data/vendor/netmgr/recovery/recovery_info ""
     chown radio radio /data/vendor/netmgr/recovery/recovery_info
 
+#Load WLAN driver
+    start wlan_multiko
+
 # Add a cpuset for the camera daemon
 # We want all cores for camera
     mkdir /dev/cpuset/camera-daemon
@@ -181,14 +184,11 @@ on boot && property:persist.vendor.usb.controller.default=*
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
 
-#Load WLAN driver
-    start wlan_multiko
-
 on property:ro.vendor.wlan.chip=*
     insmod /vendor/lib/modules/qca_cld3_${ro.vendor.wlan.chip}.ko
     setprop wlan.driver.status "ok"
 
-service wlan_multiko /vendor/bin/init.qti.wlan.sh
+service wlan_multiko /vendor/bin/init.qcom.wlan.sh
     user root
     group root
     disabled
