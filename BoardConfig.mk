@@ -296,3 +296,7 @@ BOARD_VNDK_VERSION:=current
 IS_EARLY_ETH_ENABLED := 1
 
 include $(TOPDIR)device/qcom/sm6150_au/early_eth.mk
+
+
+#Early-chime
+include $(TOPDIR)device/qcom/sm6150_au/early_chime.mk
