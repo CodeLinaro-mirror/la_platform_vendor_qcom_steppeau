@@ -117,6 +117,7 @@ on post-fs-data
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
+    start audio_chime
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
@@ -145,10 +146,6 @@ on boot
     chown cameraserver cameraserver /dev/cpuset/camera-daemon
     chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
     chmod 0660 /dev/cpuset/camera-daemon/tasks
-
-on property:init.svc.vendor.diag-router=running
-    start audio_chime
-
 on property:init.svc.zygote=running
     write /sys/kernel/boot_kpi/kpi_values "M - USER Zygote Start"
 
