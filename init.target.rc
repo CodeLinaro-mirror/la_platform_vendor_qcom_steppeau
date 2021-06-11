@@ -38,8 +38,6 @@ on early-init
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
-    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
-    start acdb_loader_service
     write /sys/kernel/debug/bootkpi/kpi_values "M - audio_hal_plugin_service Start"
     start audio_hal_plugin_service
 
@@ -88,6 +86,9 @@ on post-fs-data
     mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/vendor/tloc 0700 system drmrpc
     mkdir /data/vendor/nnhal 0700 system system
+
+    write /sys/kernel/debug/bootkpi/kpi_values "M - acdb_loader_service Start"
+    start acdb_loader_service
 
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
