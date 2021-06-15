@@ -354,4 +354,4 @@ service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
     disabled
 
 on property:sys.boot_completed=1
-    mount vfat /dev/block/bootdevice/by-name/logfs /sys/kernel/debug/bootkpi/bootloader_log -o noatime
+    mount vfat /dev/block/bootdevice/by-name/logfs /sys/kernel/debug/bootkpi/bootloader_log -o ro,noatime
