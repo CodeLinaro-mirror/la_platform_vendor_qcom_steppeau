@@ -76,6 +76,9 @@ PRODUCT_DEVICE := $(MSMSTEPPE)_au
 PRODUCT_BRAND := qti
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
 
+PRODUCT_PROPERTY_OVERRIDES += \
+   ro.incremental.enable=yes
+
 #Initial bringup flags
 
 #Default vendor image configuration
