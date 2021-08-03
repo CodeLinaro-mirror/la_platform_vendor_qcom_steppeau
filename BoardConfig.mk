@@ -40,20 +40,22 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common/automotive
 USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
 
+#Generate DTBO image
+BOARD_KERNEL_SEPARATED_DTBO := true
+
 # Set Header version for bootimage
 #Disable appended dtb
 TARGET_KERNEL_APPEND_DTB := false
 
-# Set Header version for bootimage
-ifneq ($(strip $(TARGET_KERNEL_APPEND_DTB)),true)
-#Enable dtb in boot image and Set Header version
+#Enable dtb in boot image and boot image header version 3 support.
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_BOOTIMG_HEADER_VERSION := 2
-else
-BOARD_BOOTIMG_HEADER_VERSION := 1
+ifeq ($(ENABLE_AB), true)
+  BOARD_USES_RECOVERY_AS_BOOT := true
+  TARGET_NO_RECOVERY := true
 endif
 
-BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+BOARD_BOOT_HEADER_VERSION := 3
+BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOT_HEADER_VERSION)
 
 TARGET_RECOVERY_PIXEL_FORMAT:= RGBX_8888
 
@@ -83,13 +85,13 @@ else
   BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
   BOARD_EXT4_SHARE_DUP_BLOCKS := true
   BOARD_USES_METADATA_PARTITION := true
-  ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
-    # Enable DTBO for recovery image
-    BOARD_INCLUDE_RECOVERY_DTBO := true
-  endif
 endif
 ### Dynamic partition Handling
 
+ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
+   # Enable DTBO for recovery image
+   BOARD_INCLUDE_RECOVERY_DTBO := true
+endif
 
 # Defines for enabling A/B builds
 AB_OTA_UPDATER := true
@@ -119,6 +121,7 @@ endif
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x06000000
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 0x06000000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_METADATAIMAGE_PARTITION_SIZE := 16777216
@@ -169,7 +172,7 @@ TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
 TARGET_USES_DRM_PP := true
 
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=permissive androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize pcie_ports=compat
 
 BOARD_EGL_CFG := device/qcom/$(TARGET_BOARD_PLATFORM)/egl.cfg
 
@@ -234,9 +237,6 @@ USE_SENSOR_MULTI_HAL := false
 #Add non-hlos files to ota packages
 ADD_RADIO_FILES := true
 
-#Generate DTBO image
-BOARD_KERNEL_SEPARATED_DTBO := true
-
 #Enable INTERACTION_BOOST
 TARGET_USES_INTERACTION_BOOST := true
 
@@ -259,7 +259,7 @@ endif
 
 #Flag to enable System SDK Requirements.
 #All vendor APK will be compiled against system_current API set.
-BOARD_SYSTEMSDK_VERSIONS:=30
+BOARD_SYSTEMSDK_VERSIONS:=31
 
 #Enable VNDK Compliance
 BOARD_VNDK_VERSION:=current
@@ -271,6 +271,9 @@ BUILD_BROKEN_USES_BUILD_HOST_SHARED_LIBRARY := true
 BUILD_BROKEN_USES_BUILD_HOST_EXECUTABLE := true
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
+
+#Flag for Early Ethernet
+IS_EARLY_ETH_ENABLED := 1
 
 #################################################################################
 # This is the End of BoardConfig.mk file.
