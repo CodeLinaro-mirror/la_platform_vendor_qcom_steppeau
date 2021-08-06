@@ -3,11 +3,7 @@
 # Product-specific compile-time definitions.
 #
 
-TARGET_BOARD_PLATFORM := $(MSMSTEPPE)
 TARGET_SEPOLICY_DIR := gen3_metal
-TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
-TARGET_BOARD_TYPE := auto
-TARGET_BOARD_SUFFIX := _au
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
@@ -30,7 +26,7 @@ TARGET_USES_IOPHAL := true
 
 BUILD_BROKEN_DUP_RULES := true
 
--include $(QCPATH)/common/$(MSMSTEPPE)_au/BoardConfigVendor.mk
+-include $(QCPATH)/common/sm6150_au/BoardConfigVendor.mk
 
 # Some framework code requires this to enable BT
 BOARD_HAVE_BLUETOOTH := true
