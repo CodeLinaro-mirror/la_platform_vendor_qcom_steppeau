@@ -160,6 +160,7 @@ endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
 #PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
 
+PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.hardware.hardware_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.hardware_keystore.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
 # Audio configuration file
