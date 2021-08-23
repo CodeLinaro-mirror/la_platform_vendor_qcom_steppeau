@@ -28,18 +28,13 @@
 #
 
 on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules snd_event_dlkm wglink_dlkm q6_pdr_dlkm q6_notifier_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm usf_dlkm pinctrl_wcd_dlkm swr_dlkm platform_dlkm wcd_spi_dlkm stub_dlkm wcd_core_dlkm wsa881x_dlkm wcd9360_dlkm hdmi_dlkm machine_dlkm
     chown system system /sys/kernel/boot_kpi/kpi_values
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
     write /sys/kernel/boot_kpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    mkdir /dev/socket/camera 0770 system camera
-    start ais_server
     mount_all /vendor/etc/fstab.qcom --early
-    mkdir /dev/socket/camera 0770 system camera
-    start ais_server
     mount_all --early
     write /sys/kernel/boot_kpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
@@ -48,14 +43,6 @@ on early-init
     start vendor.adsprpcd_audiopd
     start audiod
     start esplash
-
-service ais_server /system/vendor/bin/ais_server
-    class core
-    user system
-    group camera input graphics
-    disabled
-    onrestart restart evs_driver
-    onrestart restart qcarcam_hal
 
 on init && property:vendor.gdb.dump=true
     setrlimit 4 -1 -1
@@ -117,7 +104,6 @@ on post-fs-data
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
-    start audio_chime
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
@@ -321,15 +307,6 @@ service audio_hal_plugin_service /vendor/bin/audio_hal_plugin_service
 
 #acdb-loader-service
 service acdb_loader_service /vendor/bin/acdb_loader_service
-    class main
-    user system
-    group system wakelock
-    capabilities BLOCK_SUSPEND
-    oneshot
-    disabled
-
-#audio chime
-service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
     class main
     user system
     group system wakelock
