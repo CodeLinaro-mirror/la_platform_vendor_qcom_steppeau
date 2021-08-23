@@ -26,7 +26,7 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
-#TARGET_USES_GAS := true
+TARGET_USES_GAS := true
 
 
 # Dynamic-partition enabled by default
@@ -75,6 +75,9 @@ PRODUCT_NAME := $(MSMSTEPPE)_au
 PRODUCT_DEVICE := $(MSMSTEPPE)_au
 PRODUCT_BRAND := qti
 PRODUCT_MODEL := $(MSMSTEPPE)_au for arm64
+
+PRODUCT_PROPERTY_OVERRIDES += \
+   ro.incremental.enable=yes
 
 #Initial bringup flags
 
