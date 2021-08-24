@@ -41,7 +41,7 @@ TARGET_FS_CONFIG_GEN += device/qcom/$(TARGET_BOARD_PLATFORM)_au/config.fs
 endif
 endif
 
--include $(QCPATH)/common/msmnile_au/BoardConfigVendor.mk
+-include $(QCPATH)/common/$(MSMSTEPPE)_au/BoardConfigVendor.mk
 
 # Some framework code requires this to enable BT
 BOARD_HAVE_BLUETOOTH := true
