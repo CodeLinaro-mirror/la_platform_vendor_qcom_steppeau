@@ -1,3 +1,9 @@
+MSMSTEPPE = sm6150
+TARGET_BOARD_PLATFORM := $(MSMSTEPPE)
+TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
+TARGET_BOARD_TYPE := auto
+TARGET_BOARD_SUFFIX := _au
+
 ALLOW_MISSING_DEPENDENCIES := true
 ENABLE_AB ?= true
 # Enable virtual-ab by default
@@ -160,6 +166,7 @@ endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
 #PRODUCT_COPY_FILES += hardware/qcom/media/conf_files/msmnile/system_properties.xml:$(TARGET_COPY_OUT_VENDOR)/etc/system_properties.xml
 
+PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.hardware.hardware_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.hardware_keystore.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
 # Audio configuration file
@@ -230,12 +237,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 #    antradio_app \
 #    libvolumelistener
 
-# Display/Graphics
-PRODUCT_PACKAGES += \
-    android.hardware.broadcastradio@1.0-impl
-
 # Automotive display service
 PRODUCT_PACKAGES += android.frameworks.automotive.display@1.0-service
+
+PRODUCT_ENFORCE_RRO_TARGETS := framework-res
 
 # FBE support
 PRODUCT_COPY_FILES += \
@@ -298,6 +303,8 @@ TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
 include device/qcom/wlan/sm6150_au/wlan.mk
 endif
 
+#for Emac
+PRODUCT_PACKAGES += emac_rps_settings.sh
 
 # CAN utils
 PRODUCT_PACKAGES += candump \
