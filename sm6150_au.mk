@@ -349,6 +349,9 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 #add libnbaio for avenhancement
 PRODUCT_PACKAGES += libnbaio
 
+# privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
+PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
+
 SHIPPING_API_LEVEL := 30
 PRODUCT_SHIPPING_API_LEVEL := 30
 ###################################################################################
