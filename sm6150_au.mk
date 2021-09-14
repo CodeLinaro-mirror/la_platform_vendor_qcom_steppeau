@@ -248,6 +248,9 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/
 # Enable Scoped Storage related
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
+PRODUCT_LOCALES := \
+en_US
+
 #ANT+ stack
 #PRODUCT_PACKAGES += \
 #    AntHalService \
