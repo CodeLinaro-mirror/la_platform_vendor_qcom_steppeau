@@ -3,9 +3,6 @@
 # Product-specific compile-time definitions.
 #
 
-#Generate DTBO image
-BOARD_KERNEL_SEPARATED_DTBO := true
-
 TARGET_BOARD_PLATFORM := $(MSMSTEPPE)
 TARGET_SEPOLICY_DIR := gen3_metal
 TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
@@ -58,16 +55,16 @@ BOARD_USE_LEGACY_UI := true
 #Disable appended dtb
 TARGET_KERNEL_APPEND_DTB := false
 
-#Enable dtb in boot image and boot image header version 3 support.
+# Set Header version for bootimage
+ifneq ($(strip $(TARGET_KERNEL_APPEND_DTB)),true)
+#Enable dtb in boot image and Set Header version
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_BOOT_HEADER_VERSION := 3
-
-ifeq ($(ENABLE_AB), true)
-  BOARD_USES_RECOVERY_AS_BOOT := true
-  TARGET_NO_RECOVERY := true
+BOARD_BOOTIMG_HEADER_VERSION := 2
+else
+BOARD_BOOTIMG_HEADER_VERSION := 1
 endif
 
-BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 
 TARGET_RECOVERY_PIXEL_FORMAT:= RGBX_8888
 
@@ -97,13 +94,11 @@ else
   BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
   BOARD_EXT4_SHARE_DUP_BLOCKS := true
   BOARD_USES_METADATA_PARTITION := true
+  ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
+    # Enable DTBO for recovery image
+    BOARD_INCLUDE_RECOVERY_DTBO := true
+  endif
 endif
-
-# Enable DTBO for recovery image
-ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
-  BOARD_INCLUDE_RECOVERY_DTBO := true
-endif
-
 ### Dynamic partition Handling
 
 
@@ -135,7 +130,6 @@ endif
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x06000000
-BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 0x06000000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_METADATAIMAGE_PARTITION_SIZE := 16777216
@@ -253,6 +247,9 @@ USE_SENSOR_MULTI_HAL := false
 
 #Add non-hlos files to ota packages
 ADD_RADIO_FILES := true
+
+#Generate DTBO image
+BOARD_KERNEL_SEPARATED_DTBO := true
 
 #Enable INTERACTION_BOOST
 TARGET_USES_INTERACTION_BOOST := true
