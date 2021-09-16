@@ -115,6 +115,10 @@ PRODUCT_PACKAGES += libGLES_android
 # diag-router
 TARGET_HAS_DIAG_ROUTER := true
 
+
+# Memtrack HAL deprecated. Replaced with AIDL for target-level 6.
+ENABLE_MEMTRACK_AIDL_HAL := true
+
 -include $(QCPATH)/common/config/qtic-config.mk
 
 $(warning ****** MSMSTEPPE code name is: $(MSMSTEPPE))
@@ -199,9 +203,9 @@ PRODUCT_PACKAGES += update_engine \
     update_engine_client \
     update_verifier \
     bootctrl.$(MSMSTEPPE) \
-    android.hardware.boot@1.1-impl-qti \
-    android.hardware.boot@1.1-impl-qti.recovery \
-    android.hardware.boot@1.1-service
+    android.hardware.boot@1.2-impl-qti \
+    android.hardware.boot@1.2-impl-qti.recovery \
+    android.hardware.boot@1.2-service
 
 PRODUCT_PACKAGES += \
     update_engine_sideload
