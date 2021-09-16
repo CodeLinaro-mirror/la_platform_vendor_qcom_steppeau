@@ -18,7 +18,7 @@ TARGET_NO_TELEPHONY := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
-BOARD_HAS_QCOM_WLAN := false
+BOARD_HAS_QCOM_WLAN := true
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 TARGET_LINUX_BOOT_CPU_SELECTION := true
@@ -301,7 +301,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # Multiple chips
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
 TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
-include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
+include device/qcom/wlan/sm6150_au/wlan.mk
 endif
 
 
