@@ -18,9 +18,11 @@ TARGET_NO_TELEPHONY := true
 TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
-BOARD_HAS_QCOM_WLAN := false
+BOARD_HAS_QCOM_WLAN := true
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
+TARGET_LINUX_BOOT_CPU_SELECTION := true
+TARGET_LINUX_BOOT_CPU_ID := 7
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
@@ -49,13 +51,14 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_BUILD_CACHE_IMAGE := false
   PRODUCT_BUILD_RAMDISK_IMAGE := true
   PRODUCT_BUILD_USERDATA_IMAGE := true
+  PRODUCT_BUILD_VENDOR_BOOT_IMAGE := true
 
   ifeq ($(ENABLE_AB), true)
-    PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
-    PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.emmc
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.default
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.emmc
   else
-    PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
-    PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.emmc
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.default
+    PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.emmc
   endif
 endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
@@ -204,6 +207,9 @@ endif
 PRODUCT_PACKAGES += \
     libhealthd.msm
 
+PRODUCT_COPY_FILES += \
+    device/qcom/msmnile_au/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+
 # MTMD enablement
 PRODUCT_COPY_FILES += \
     device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml \
@@ -296,7 +302,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # Multiple chips
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
 TARGET_WLAN_CHIP := qca6174 qca6390 qcn7605
-include device/qcom/wlan/$(PRODUCT_NAME)/wlan.mk
+include device/qcom/wlan/sm6150_au/wlan.mk
 endif
 
 
@@ -342,6 +348,9 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 
 #add libnbaio for avenhancement
 PRODUCT_PACKAGES += libnbaio
+
+# privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
+PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
 SHIPPING_API_LEVEL := 30
 PRODUCT_SHIPPING_API_LEVEL := 30

@@ -30,14 +30,49 @@
 on early-init
     chown system system /sys/kernel/boot_kpi/kpi_values
     write /proc/sys/kernel/sched_boost 1
+
+    mkdir /dev/cpuctl/foreground
+    mkdir /dev/cpuctl/background
+    mkdir /dev/cpuctl/top-app
+    mkdir /dev/cpuctl/rt
+    mkdir /dev/cpuctl/camera-daemon
+
+    chown system system /dev/cpuctl
+    chown system system /dev/cpuctl/foreground
+    chown system system /dev/cpuctl/background
+    chown system system /dev/cpuctl/top-app
+    chown system system /dev/cpuctl/rt
+    chown system system /dev/cpuctl/camera-daemon
+
+    chown system system /dev/cpuctl/tasks
+    chown system system /dev/cpuctl/background/tasks
+    chown system system /dev/cpuctl/top-app/tasks
+    chown system system /dev/cpuctl/foreground/tasks
+    chown system system /dev/cpuctl/rt/tasks
+    chown system system /dev/cpuctl/camera-daemon/tasks
+
+    chmod 0664 /dev/cpuctl/tasks
+    chmod 0664 /dev/cpuctl/foreground/tasks
+    chmod 0664 /dev/cpuctl/background/tasks
+    chmod 0664 /dev/cpuctl/top-app/tasks
+    chmod 0664 /dev/cpuctl/rt/tasks
+    chmod 0664 /dev/cpuctl/camera-daemon/tasks
+
+    write /dev/cpuctl/foreground/cpu.uclamp.sched_boost_no_override 1
+    write /dev/cpuctl/top-app/cpu.uclamp.sched_boost_no_override 1
+    write /dev/cpuctl/rt/cpu.uclamp.sched_boost_no_override 1
+
+    write /dev/cpuctl/rt/cpu.uclamp.latency_sensitive 1
+    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
+
+    write /dev/cpuctl/top-app/cpu.uclamp.colocate 1
+
     symlink /data/tombstones /tombstones
     write /sys/kernel/boot_kpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --early
     mount_all --early
-    write /sys/kernel/boot_kpi/kpi_values "M - Start adsp"
-    write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/boot_kpi/kpi_values "M - adsprpcd Start"
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
@@ -124,6 +159,9 @@ on boot
     write /data/vendor/netmgr/recovery/recovery_info ""
     chown radio radio /data/vendor/netmgr/recovery/recovery_info
 
+#Load WLAN driver
+    start wlan_multiko
+
 # Add a cpuset for the camera daemon
 # We want all cores for camera
     mkdir /dev/cpuset/camera-daemon
@@ -166,14 +204,11 @@ on boot && property:persist.vendor.usb.controller.default=*
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
 
-#Load WLAN driver
-    start wlan_multiko
-
 on property:ro.vendor.wlan.chip=*
     insmod /vendor/lib/modules/qca_cld3_${ro.vendor.wlan.chip}.ko
     setprop wlan.driver.status "ok"
 
-service wlan_multiko /vendor/bin/init.qti.wlan.sh
+service wlan_multiko /vendor/bin/init.qcom.wlan.sh
     user root
     group root
     disabled
