@@ -77,7 +77,7 @@ on early-init
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
-    start esplash
+    #start esplash
 
 on init && property:vendor.gdb.dump=true
     setrlimit 4 -1 -1
@@ -115,9 +115,9 @@ on post-fs
     setrlimit 8 67108864 67108864
     start vendor.qseecomd
     exec - system system -- /vendor/bin/init.qti.qseecomd.sh
-    write /dev/ipa 1
-    start vendor.spdaemon
-    start vendor.sec_nvm
+    #write /dev/ipa 1
+    #start vendor.spdaemon
+    #start vendor.sec_nvm
 
 service esplash /vendor/bin/esplash
     class core
