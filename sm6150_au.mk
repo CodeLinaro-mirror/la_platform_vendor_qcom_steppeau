@@ -28,7 +28,7 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
-TARGET_USES_GAS := true
+#TARGET_USES_GAS := true
 
 
 # Dynamic-partition enabled by default
