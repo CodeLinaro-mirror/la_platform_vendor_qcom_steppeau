@@ -25,7 +25,6 @@
     <unavailable-feature name="android.hardware.screen.portrait" />
     <unavailable-feature name="android.software.picture_in_picture" />
     <unavailable-feature name="android.hardware.telephony" />
-    <unavailable-feature name="android.hardware.telephony.carrierlock" />
     <unavailable-feature name="android.hardware.telephony.cdma" />
     <unavailable-feature name="android.hardware.telephony.gsm" />
     <unavailable-feature name="android.hardware.telephony.ims" />
