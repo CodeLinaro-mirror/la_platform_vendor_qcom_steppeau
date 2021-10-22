@@ -204,6 +204,9 @@ endif
 PRODUCT_PACKAGES += \
     libhealthd.msm
 
+PRODUCT_COPY_FILES += \
+    device/qcom/msmnile_au/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+
 # MTMD enablement
 PRODUCT_COPY_FILES += \
     device/qcom/sm6150_au/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml \
@@ -339,6 +342,9 @@ PRODUCT_PACKAGES += android.hardware.health@2.1-service \
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
+
+#add libnbaio for avenhancement
+PRODUCT_PACKAGES += libnbaio
 
 SHIPPING_API_LEVEL := 30
 PRODUCT_SHIPPING_API_LEVEL := 30
