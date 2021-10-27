@@ -252,6 +252,10 @@ PRODUCT_ENFORCE_RRO_TARGETS := framework-res
 PRODUCT_COPY_FILES += \
     device/qcom/$(MSMSTEPPE)_au/init.qti.qseecomd.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qti.qseecomd.sh
 
+# HS-I2S support
+PRODUCT_COPY_FILES += \
+    device/qcom/$(MSMSTEPPE)_au/hsi2s_early_boot.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hsi2s_early_boot.sh
+
 # MSM IRQ Balancer configuration file
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
 
