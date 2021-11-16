@@ -42,6 +42,7 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
   PRODUCT_BUILD_SUPER_PARTITION := true
   PRODUCT_PACKAGES += fastbootd
+  TARGET_HIBERNATION_SECURE_ENABLE := true
   # Enable System_ext
   PRODUCT_BUILD_SYSTEM_EXT_IMAGE := true
 # Mismatch in the uses-library tags between build system and the manifest leads
