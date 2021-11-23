@@ -358,6 +358,12 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 
 SHIPPING_API_LEVEL := 30
 PRODUCT_SHIPPING_API_LEVEL := 30
+
+PRODUCT_PACKAGES += android.hardware.neuralnetworks@1.0.vendor \
+                    android.hardware.neuralnetworks@1.1.vendor \
+                    android.hardware.neuralnetworks@1.2.vendor \
+                    android.hardware.neuralnetworks@1.3.vendor
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
