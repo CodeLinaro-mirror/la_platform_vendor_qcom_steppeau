@@ -19,7 +19,6 @@ BOARD_AVB_ENABLE := true
 BOARD_USES_QCNE := false
 TARGET_BOARD_AUTO := true
 TARGET_USES_AOSP := true
-TARGET_USES_AOSP_FOR_AUDIO := true
 TARGET_USES_QCOM_BSP := false
 TARGET_NO_TELEPHONY := true
 TARGET_USES_QTIC := false
@@ -43,10 +42,11 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
   PRODUCT_BUILD_SUPER_PARTITION := true
   PRODUCT_PACKAGES += fastbootd
-
+  # Enable System_ext
+  PRODUCT_BUILD_SYSTEM_EXT_IMAGE := true
 # Mismatch in the uses-library tags between build system and the manifest leads
 # to soong APK manifest_check tool errors. Enable the flag to fix this.
-RELAX_USES_LIBRARY_CHECK := true
+  RELAX_USES_LIBRARY_CHECK := true
 
   BOARD_AVB_VBMETA_SYSTEM := system
   BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
@@ -114,6 +114,10 @@ PRODUCT_PACKAGES += libGLES_android
 # diag-router
 TARGET_HAS_DIAG_ROUTER := true
 
+
+# Memtrack HAL deprecated. Replaced with AIDL for target-level 6.
+ENABLE_MEMTRACK_AIDL_HAL := true
+
 -include $(QCPATH)/common/config/qtic-config.mk
 
 $(warning ****** MSMSTEPPE code name is: $(MSMSTEPPE))
@@ -150,9 +154,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/qcom/qssi/init.qcom.testscripts.sh:system/etc/init.qcom.testscripts.sh
 
-#Audio sample file for early services
-PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/bike_bell.wav:$(TARGET_COPY_OUT_VENDOR)/etc/bike_bell.wav
-
 # Video codec configuration files
 ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_vendor.xml
@@ -169,9 +170,6 @@ endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.hardware.hardware_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.hardware_keystore.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
-# Audio configuration file
--include $(TOPDIR)vendor/qcom/opensource/audio-hal/primary-hal/configs/msmsteppe_au/msmsteppe_au.mk
-
 #Audio DLKM
 AUDIO_DLKM := audio_apr.ko
 AUDIO_DLKM += audio_snd_event.ko
@@ -184,6 +182,12 @@ AUDIO_DLKM += audio_stub.ko
 AUDIO_DLKM += audio_native.ko
 AUDIO_DLKM += audio_machine_talos.ko
 PRODUCT_PACKAGES += $(AUDIO_DLKM)
+
+PCIE_DLKM := pci_msm_drv
+PRODUCT_PACKAGES += $(PCIE_DLKM)
+
+CNSS_DLKM := cnss2
+PRODUCT_PACKAGES += $(CNSS_DLKM)
 
 # HS-I2S DLKM
 PRODUCT_PACKAGES += hsi2s.ko
@@ -198,9 +202,9 @@ PRODUCT_PACKAGES += update_engine \
     update_engine_client \
     update_verifier \
     bootctrl.$(MSMSTEPPE) \
-    android.hardware.boot@1.1-impl-qti \
-    android.hardware.boot@1.1-impl-qti.recovery \
-    android.hardware.boot@1.1-service
+    android.hardware.boot@1.2-impl-qti \
+    android.hardware.boot@1.2-impl-qti.recovery \
+    android.hardware.boot@1.2-service
 
 PRODUCT_PACKAGES += \
     update_engine_sideload
