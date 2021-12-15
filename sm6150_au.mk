@@ -357,6 +357,8 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 #add libnbaio for avenhancement
 PRODUCT_PACKAGES += libnbaio
 
+PRODUCT_PACKAGES += qcar-gsi.avbpubkey
+
 # privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
 PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
