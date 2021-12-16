@@ -302,4 +302,5 @@ IS_EARLY_ETH_ENABLED := 1
 -include vendor/qcom/defs/board-defs/vendor/*.mk
 #################################################################################
 include device/qcom/sepolicy_vndr/SEPolicy.mk
-
+#Enable Camera2 APIs on automotive builds
+ENABLE_CAMERA_SERVICE := true
