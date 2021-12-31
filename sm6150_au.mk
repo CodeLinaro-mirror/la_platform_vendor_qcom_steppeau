@@ -37,7 +37,7 @@ TARGET_LINUX_BOOT_CPU_SELECTION := true
 TARGET_LINUX_BOOT_CPU_ID := 7
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
-TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
+TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 #TARGET_USES_GAS := true
@@ -375,6 +375,9 @@ PRODUCT_PACKAGES += libsysprofiler \
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
+
+#add libnbaio for avenhancement
+PRODUCT_PACKAGES += libnbaio
 
 PRODUCT_PACKAGES += qcar-gsi.avbpubkey
 SHIPPING_API_LEVEL := 31
