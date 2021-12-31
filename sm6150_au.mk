@@ -29,7 +29,7 @@ TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
-TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
+TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 #TARGET_USES_GAS := true
@@ -361,6 +361,9 @@ PRODUCT_PACKAGES += libsysprofiler \
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
+
+#add libnbaio for avenhancement
+PRODUCT_PACKAGES += libnbaio
 
 SHIPPING_API_LEVEL := 30
 PRODUCT_SHIPPING_API_LEVEL := 30
