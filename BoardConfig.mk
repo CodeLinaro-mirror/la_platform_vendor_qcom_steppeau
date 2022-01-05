@@ -273,6 +273,9 @@ BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
 #Flag for Early Ethernet
 IS_EARLY_ETH_ENABLED := 1
 
+#To relocate ramdisk due to space constraints
+IS_RAMDISK_RELOCATION_ENABLED := 1
+
 #################################################################################
 # This is the End of BoardConfig.mk file.
 # Now, Pickup other split Board.mk files:
