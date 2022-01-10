@@ -295,6 +295,8 @@ IS_EARLY_ETH_ENABLED := 1
 
 #To relocate ramdisk due to space constraints
 IS_RAMDISK_RELOCATION_ENABLED := 1
+RAMDISK_LOAD_ADDRESS := 0xE0000000
+RAMDISK_END_ADDRESS := 0xEA800000
 
 #################################################################################
 # This is the End of BoardConfig.mk file.
