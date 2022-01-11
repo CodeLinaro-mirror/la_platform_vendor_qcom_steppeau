@@ -38,6 +38,10 @@ echo 0 > /d/tracing/tracing_on
 # are used to allow this script to turn off BT.
 am start -a android.bluetooth.adapter.action.REQUEST_DISABLE && input keyevent 23 && input keyevent 22 && input keyevent 23
 
+# Turn WLAN off.
+svc wifi disable
+sleep 12
+
 echo none > /sys/bus/platform/devices/a600000.ssusb/mode
 
 killall qcarcam_edrm_rvc
