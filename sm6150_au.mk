@@ -31,6 +31,9 @@ ENABLE_CAR_POWER_MANAGER := true
 #TARGET_USES_GAS := true
 
 
+BOARD_USES_EARLY_SERVICESIMAGE := true
+
+TARGET_HAS_DIAG_ROUTER := true
 # Dynamic-partition enabled by default
 BOARD_DYNAMIC_PARTITION_ENABLE := true
 ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
@@ -98,6 +101,11 @@ KERNEL_LLVM_SUPPORT := true
 #Enable sd-llvm suppport for kernel
 KERNEL_SD_LLVM_SUPPORT := false
 
+#diag-router no there for router
+ifeq ($(strip $(TARGET_BUILD_VARIANT)),user)
+TARGET_HAS_DIAG_ROUTER := false
+endif
+
 # default is nosdcard, S/W button enabled in resource
 PRODUCT_CHARACTERISTICS := nosdcard
 
@@ -138,9 +146,11 @@ endif
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
+ifneq ($(strip $(TARGET_BUILD_VARIANT)),user)
 # Copy the testscripts from the qssi folder as it was moved to QSSI folder.
 PRODUCT_COPY_FILES += \
     device/qcom/qssi/init.qcom.testscripts.sh:system/etc/init.qcom.testscripts.sh
+endif
 
 #Audio sample file for early services
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/bike_bell.wav:$(TARGET_COPY_OUT_VENDOR)/etc/bike_bell.wav
@@ -342,7 +352,6 @@ PRODUCT_PACKAGES += canflasher \
                     android.hardware.automotive.vehicle@2.0-manager-lib-shared
 
 PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example \
-                    android.hardware.thermal@2.0-service.mock \
 
 PRODUCT_PACKAGES += android.hardware.health@2.1-service \
                     android.hardware.health@2.1-impl \
@@ -351,8 +360,32 @@ PRODUCT_PACKAGES += android.hardware.health@2.1-service \
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+#add for camera
+ENABLE_V4L2_CAMERA := true
+ifeq ($(ENABLE_V4L2_CAMERA), true)
+
+# Camera configuration file. Shared by passthrough/binderized camera HAL
+PRODUCT_PACKAGES += camera.device@1.0-impl
+PRODUCT_PACKAGES += camera.device@3.2-impl
+PRODUCT_PACKAGES += camera.device@3.3-impl
+PRODUCT_PACKAGES += camera.device@3.4-impl
+PRODUCT_PACKAGES += camera.device@3.4-external-impl
+PRODUCT_PACKAGES += camera.device@3.5-impl
+PRODUCT_PACKAGES += camera.device@3.5-external-impl
+PRODUCT_PACKAGES += android.hardware.camera.provider@2.4-external
+PRODUCT_PACKAGES += android.hardware.camera.provider@2.4-legacy
+PRODUCT_PACKAGES += android.hardware.camera.provider@2.4-impl
+# Enable binderized camera HAL
+PRODUCT_PACKAGES += android.hardware.camera.provider@2.4-service
+
+PRODUCT_PROPERTY_OVERRIDES += ro.hardware.camera=v4l2
+PRODUCT_PACKAGES += camera.v4l2
+endif
+
 #add libnbaio for avenhancement
 PRODUCT_PACKAGES += libnbaio
+
+PRODUCT_PACKAGES += qcar-gsi.avbpubkey
 
 # privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
 PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce

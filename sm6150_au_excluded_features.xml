@@ -28,4 +28,15 @@
     <unavailable-feature name="android.hardware.telephony.cdma" />
     <unavailable-feature name="android.hardware.telephony.gsm" />
     <unavailable-feature name="android.hardware.telephony.ims" />
+    <unavailable-feature name="android.hardware.camera" />
+    <unavailable-feature name="android.hardware.camera.autofocus" />
+    <unavailable-feature name="android.hardware.camera.any" />
+    <unavailable-feature name="android.hardware.camera.level.full" />
+    <unavailable-feature name="android.hardware.camera.capability.manual_post_processing" />
+    <unavailable-feature name="android.hardware.camera.capability.raw" />
+    <unavailable-feature name="android.hardware.camera.external" />
+    <unavailable-feature name="android.hardware.camera.flash"/>
+    <unavailable-feature name="android.hardware.camera.front"/>
+    <unavailable-feature name="android.hardware.camera.ar"/>
+    <unavailable-feature name="android.hardware.camera.capability.manual_sensor"/>
 </permissions>

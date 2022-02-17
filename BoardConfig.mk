@@ -144,6 +144,7 @@ BOARD_DTBOIMG_PARTITION_SIZE := 0x0800000
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 ifeq ($(BOARD_SUPPORTS_EARLY_INIT),true)
 BOARD_EARLY_IMAGE_PARTITION_SIZE := 524288000
+BOARD_EARLY_IMAGE_PARTITION_NAME := early_services
 BOARD_EARLY_SERVICESIMAGE_FILE_SYSTEM_TYPE := ext4
 endif
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
@@ -190,7 +191,7 @@ TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
 TARGET_USES_DRM_PP := true
 
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize kpti=0
 
 BOARD_EGL_CFG := device/qcom/$(TARGET_BOARD_PLATFORM)/egl.cfg
 
@@ -301,4 +302,5 @@ IS_EARLY_ETH_ENABLED := 1
 -include vendor/qcom/defs/board-defs/vendor/*.mk
 #################################################################################
 include device/qcom/sepolicy_vndr/SEPolicy.mk
-
+#Enable Camera2 APIs on automotive builds
+ENABLE_CAMERA_SERVICE := true
