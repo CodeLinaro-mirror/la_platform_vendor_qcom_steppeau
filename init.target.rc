@@ -362,7 +362,6 @@ service audio_hal_plugin_service /vendor/bin/audio_hal_plugin_service
     user system
     group system wakelock
     capabilities BLOCK_SUSPEND
-    oneshot
     disabled
 
 #acdb-loader-service
@@ -371,7 +370,7 @@ service acdb_loader_service /vendor/bin/acdb_loader_service
     user system
     group system wakelock audio
     capabilities BLOCK_SUSPEND
-    oneshot
+    onrestart restart vendor.audio-hal
     disabled
 
 #audio chime
