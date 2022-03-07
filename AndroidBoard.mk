@@ -47,6 +47,21 @@ LOCAL_SRC_FILES    := $(LOCAL_MODULE)
 LOCAL_MODULE_PATH  := $(TARGET_OUT_KEYLAYOUT)
 include $(BUILD_PREBUILT)
 
+include $(CLEAR_VARS)
+LOCAL_COPY_HEADERS_TO   := common/inc
+LOCAL_COPY_HEADERS      := ../../../vendor/qcom/proprietary/common/inc/armasm.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/comdef.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/common_log.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/customer.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/msm_ipc.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/rex.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/stringl.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/target.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/qsocket.h
+LOCAL_COPY_HEADERS      += ../../../vendor/qcom/proprietary/common/inc/qsocket_ipcr.h
+LOCAL_VENDOR_MODULE:=true
+include build/core/copy_headers.mk
+
 ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   include $(CLEAR_VARS)
   LOCAL_MODULE       := fstab.default

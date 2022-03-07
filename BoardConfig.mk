@@ -140,7 +140,8 @@ ifeq ($(KERNEL_DEFCONFIG),)
     endif
 endif
 
-#BOARD_VENDOR_KERNEL_MODULES := \
+BOARD_VENDOR_KERNEL_MODULES := \
+    $(KERNEL_MODULES_OUT)/hsi2s.ko
 #    $(KERNEL_MODULES_OUT)/audio_apr.ko \
 #    $(KERNEL_MODULES_OUT)/audio_snd_event.ko \
 #    $(KERNEL_MODULES_OUT)/audio_q6_notifier.ko \
@@ -154,7 +155,6 @@ endif
 #    $(KERNEL_MODULES_OUT)/wil6210.ko \
 #    $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko \
 #    $(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
-#    $(KERNEL_MODULES_OUT)/hsi2s.ko
 
 # install lkdtm only for userdebug and eng build variants
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
