@@ -364,6 +364,7 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 PRODUCT_PACKAGES += libnbaio
 
 PRODUCT_PACKAGES += qcar-gsi.avbpubkey
+PRODUCT_ENFORCE_RRO_TARGETS := framework-res
 
 # privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
 PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
