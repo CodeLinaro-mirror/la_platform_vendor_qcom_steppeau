@@ -14,6 +14,9 @@ ifeq ($(ENABLE_VIRTUAL_AB), true)
   $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 endif
 
+# FR77687: Migrate AIDL interface using -ndk_platform.so to -ndk.so
+NEED_AIDL_NDK_PLATFORM_BACKEND := true
+
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
 BOARD_USES_QCNE := false
