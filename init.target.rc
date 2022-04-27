@@ -71,7 +71,11 @@ on early-init
     write /sys/kernel/boot_kpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    mkdir /dev/socket/camera 0770 system camera
+    start ais_server
     mount_all /vendor/etc/fstab.qcom --early
+    mkdir /dev/socket/camera 0770 system camera
+    start ais_server
     mount_all --early
     write /sys/kernel/boot_kpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
@@ -87,6 +91,14 @@ service init_hsi2s /vendor/bin/hsi2s_early_boot.sh
     group root
     oneshot
     disabled
+
+service ais_server /system/vendor/bin/ais_server
+    class core
+    user system
+    group camera input graphics
+    disabled
+    onrestart restart evs_driver
+    onrestart restart qcarcam_hal
 
 on init && property:vendor.gdb.dump=true
     setrlimit 4 -1 -1
