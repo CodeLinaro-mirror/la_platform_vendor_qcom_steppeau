@@ -69,6 +69,8 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_BUILD_CACHE_IMAGE := false
   PRODUCT_BUILD_RAMDISK_IMAGE := true
   PRODUCT_BUILD_USERDATA_IMAGE := true
+# Enable boot-debug.img
+  PRODUCT_BUILD_DEBUG_BOOT_IMAGE := true
 
   ifeq ($(ENABLE_AB), true)
     PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.default
