@@ -37,7 +37,7 @@ TARGET_LINUX_BOOT_CPU_SELECTION := true
 TARGET_LINUX_BOOT_CPU_ID := 7
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
-TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
+TARGET_FWK_SUPPORTS_AV_VALUEADDS := true
 TARGET_USES_AOSP_FOR_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 #TARGET_USES_GAS := true
@@ -69,6 +69,8 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_BUILD_CACHE_IMAGE := false
   PRODUCT_BUILD_RAMDISK_IMAGE := true
   PRODUCT_BUILD_USERDATA_IMAGE := true
+# Enable boot-debug.img
+  PRODUCT_BUILD_DEBUG_BOOT_IMAGE := true
 
   ifeq ($(ENABLE_AB), true)
     PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.default
@@ -375,6 +377,9 @@ PRODUCT_PACKAGES += libsysprofiler \
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
+
+#add libnbaio for avenhancement
+PRODUCT_PACKAGES += libnbaio
 
 PRODUCT_PACKAGES += qcar-gsi.avbpubkey
 SHIPPING_API_LEVEL := 31
