@@ -194,6 +194,9 @@ vendor.display.builtin_baseid_and_size=5,3
 vendor.display.pluggable_baseid_and_size=1,4
 vendor.display.virtual_baseid_and_size=8,1
 
+#Disable boot animation
+debug.sf.nobootanimation=1
+
 # Enable car power manager for LPM(LowPowerMode)
 persist.vendor.car.lpm=true
 

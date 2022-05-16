@@ -88,6 +88,7 @@ do
   #hibernate
   echo "Start Hibernation"
   echo 8 > /proc/sys/kernel/printk
+
   echo 0 > /sys/power/image_size
   echo shutdown > /sys/power/disk
   echo disk > /sys/power/state
