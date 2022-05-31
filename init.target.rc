@@ -63,6 +63,8 @@
 #
 
 on early-init
+    umount /early_services/vendor/firmware_mnt
+    umount /aes_tmpfs/vendor/firmware_mnt
     start init_hsi2s
     exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules snd_event_dlkm q6_notifier_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm platform_dlkm stub_dlkm hdmi_dlkm machine_dlkm pci-msm-drv
     chown system system /sys/kernel/boot_kpi/kpi_values

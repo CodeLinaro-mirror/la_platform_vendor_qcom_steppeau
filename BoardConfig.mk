@@ -10,6 +10,12 @@ TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
 
+BOARD_SUPPORTS_RAMDISK_EARLY_INIT := true
+ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
+CONFIG_EARLY_INIT := true
+TARGET_COPY_OUT_EARLY_SERVICES := early_services
+endif
+
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv7-a-neon
 TARGET_2ND_CPU_ABI := armeabi-v7a
@@ -27,6 +33,13 @@ TARGET_NO_KERNEL := false
 TARGET_USES_IOPHAL := true
 
 BUILD_BROKEN_DUP_RULES := true
+
+ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
+TEMPORARY_DISABLE_PATH_RESTRICTIONS := true
+ifeq (,$(findstring $(TARGET_BOARD_PLATFORM)_au, $(TARGET_FS_CONFIG_GEN)))
+TARGET_FS_CONFIG_GEN += device/qcom/$(TARGET_BOARD_PLATFORM)_au/config.fs
+endif
+endif
 
 -include $(QCPATH)/common/sm6150_au/BoardConfigVendor.mk
 
@@ -123,6 +136,7 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x06000000
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 0x06000000
+BOARD_KERNEL-GKI_BOOTIMAGE_PARTITION_SIZE := $(BOARD_BOOTIMAGE_PARTITION_SIZE)
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_METADATAIMAGE_PARTITION_SIZE := 16777216
@@ -158,6 +172,19 @@ BOARD_VENDOR_KERNEL_MODULES := \
 #    $(KERNEL_MODULES_OUT)/msm_11ad_proxy.ko \
 #    $(KERNEL_MODULES_OUT)/emac_dwc_eqos.ko \
 
+BOARD_GENERIC_RAMDISK_KERNEL_MODULES_LOAD := \
+    snd_event_dlkm.ko \
+    q6_notifier_dlkm.ko \
+    apr_dlkm.ko \
+    adsp_loader_dlkm.ko \
+    q6_dlkm.ko \
+    machine_dlkm.ko \
+    stub_dlkm.ko \
+    platform_dlkm.ko \
+    native_dlkm.ko \
+    hdmi_dlkm.ko \
+
+
 # install lkdtm only for userdebug and eng build variants
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
     ifeq (,$(findstring qgki_defconfig, $(KERNEL_DEFCONFIG)))
@@ -173,7 +200,13 @@ TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
 TARGET_USES_DRM_PP := true
 
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize pcie_ports=compat kpti=0
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize pcie_ports=compat
+
+ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
+BOARD_KERNEL_CMDLINE += firmware_class.path=/early_services/vendor/firmware_mnt/image
+else
+BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware_mnt/image
+endif
 
 BOARD_EGL_CFG := device/qcom/$(TARGET_BOARD_PLATFORM)/egl.cfg
 
