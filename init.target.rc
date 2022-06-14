@@ -340,7 +340,7 @@ service audio_hal_plugin_service /vendor/bin/audio_hal_plugin_service
 service acdb_loader_service /vendor/bin/acdb_loader_service
     class main
     user system
-    group system wakelock
+    group system wakelock audio
     capabilities BLOCK_SUSPEND
     oneshot
     disabled
