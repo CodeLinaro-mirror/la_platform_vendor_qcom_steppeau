@@ -381,8 +381,8 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 PRODUCT_PACKAGES += libnbaio
 
 PRODUCT_PACKAGES += qcar-gsi.avbpubkey
-SHIPPING_API_LEVEL := 31
-PRODUCT_SHIPPING_API_LEVEL := 31
+SHIPPING_API_LEVEL := 32
+PRODUCT_SHIPPING_API_LEVEL := 32
 
 PRODUCT_PACKAGES += android.hardware.neuralnetworks@1.0.vendor \
                     android.hardware.neuralnetworks@1.1.vendor \
