@@ -28,6 +28,8 @@
 #
 
 on early-init
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules snd_event_dlkm wglink_dlkm q6_pdr_dlkm q6_notifier_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm usf_dlkm pinctrl_wcd_dlkm swr_dlkm platform_dlkm wcd_spi_dlkm stub_dlkm wcd_core_dlkm wsa881x_dlkm wcd9360_dlkm hdmi_dlkm machine_dlkm pci-msm-drv
+
     chown system system /sys/kernel/boot_kpi/kpi_values
     write /proc/sys/kernel/sched_boost 1
 
@@ -73,6 +75,7 @@ on early-init
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom --early
     mount_all --early
+    write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/boot_kpi/kpi_values "M - adsprpcd Start"
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
@@ -341,7 +344,7 @@ service audio_hal_plugin_service /vendor/bin/audio_hal_plugin_service
 service acdb_loader_service /vendor/bin/acdb_loader_service
     class main
     user system
-    group system wakelock
+    group system wakelock audio
     capabilities BLOCK_SUSPEND
     oneshot
     disabled
