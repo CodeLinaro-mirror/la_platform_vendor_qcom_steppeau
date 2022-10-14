@@ -187,6 +187,11 @@ PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
+#Copy supported features list
+ifeq ($(TARGET_USES_GAS),true)
+PRODUCT_COPY_FILES += device/qcom/sm6150_au/sm6150_au_features.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sm6150_au_features.xml
+endif
+
 #Audio DLKM
 AUDIO_DLKM := audio_apr.ko
 AUDIO_DLKM += audio_snd_event.ko
