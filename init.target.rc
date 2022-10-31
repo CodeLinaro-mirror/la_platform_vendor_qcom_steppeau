@@ -24,12 +24,10 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-#
 
 # Changes from Qualcomm Innovation Center are provided under the following license:
 #
-# Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+# Copyright (c) 2021-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted (subject to the limitations in the
@@ -79,7 +77,6 @@ on early-init
     write /sys/kernel/boot_kpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/boot_kpi/kpi_values "M - adsprpcd Start"
-    write /dev/socket/camera/gsi "0"
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
@@ -379,14 +376,25 @@ service acdb_loader_service /vendor/bin/acdb_loader_service
 on property:sys.boot_completed=1
     mount vfat /dev/block/bootdevice/by-name/logfs /sys/kernel/debug/bookpi/bootloader_log
 
-service ais_server /system/vendor/bin/ais_server_late -g
+service ais_server_late /system/vendor/bin/ais_server_late -g
     class core
     user root
     group camera input graphics
     disabled
 
+service camprovider_relaunch /vendor/bin/init.qti.cam.sh
+    class main
+    user root
+    group root system shell
+    disabled
+    oneshot
+
 on property:ro.product.product.name="gsi_car_arm64"
-   write /dev/socket/camera/gsi "1"
+   start ais_server_late
 
 on property:sys.boot_completed=1 && property:ro.product.product.name="gsi_car_arm64"
-   start ais_server
+   restart ais_v4l2_proxy
+   start camprovider_relaunch
+
+on property:vendor.camera_provider.restart=1
+   restart vendor.camera-provider-2-4

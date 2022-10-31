@@ -374,7 +374,7 @@ PRODUCT_PACKAGES += canflasher \
                     android.hardware.automotive.vehicle@2.0-manager-lib-shared
 
 PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example
-
+PRODUCT_PACKAGES += init.qti.cam.sh
 PRODUCT_PACKAGES += android.hardware.health@2.1-service \
                     android.hardware.health@2.1-impl \
 
