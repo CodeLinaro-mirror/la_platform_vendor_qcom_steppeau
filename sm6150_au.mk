@@ -187,6 +187,11 @@ PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
+#Copy supported features list
+ifeq ($(TARGET_USES_GAS),true)
+PRODUCT_COPY_FILES += device/qcom/sm6150_au/sm6150_au_features.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sm6150_au_features.xml
+endif
+
 #Audio DLKM
 AUDIO_DLKM := audio_apr.ko
 AUDIO_DLKM += audio_snd_event.ko
@@ -364,8 +369,7 @@ PRODUCT_PACKAGES += canflasher \
                     vendor.qti.hardware.automotive.vehicle@1.0-service \
                     android.hardware.automotive.vehicle@2.0-manager-lib-shared
 
-PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example \
-                    android.hardware.thermal@2.0-service.mock \
+PRODUCT_PACKAGES += android.hardware.dumpstate@1.1-service.example
 
 PRODUCT_PACKAGES += android.hardware.health@2.1-service \
                     android.hardware.health@2.1-impl \
@@ -382,8 +386,8 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 PRODUCT_PACKAGES += libnbaio
 
 PRODUCT_PACKAGES += qcar-gsi.avbpubkey
-SHIPPING_API_LEVEL := 31
-PRODUCT_SHIPPING_API_LEVEL := 31
+SHIPPING_API_LEVEL := 32
+PRODUCT_SHIPPING_API_LEVEL := 32
 
 PRODUCT_PACKAGES += android.hardware.neuralnetworks@1.0.vendor \
                     android.hardware.neuralnetworks@1.1.vendor \
