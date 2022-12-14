@@ -42,6 +42,10 @@ am start -a android.bluetooth.adapter.action.REQUEST_DISABLE && input keyevent 2
 svc wifi disable
 sleep 12
 
+swap=`ls -l /dev/block/by-name/swap_a | awk '{print $NF}'`
+dev=`ls -l ${swap} | awk '{print $5$6}' | sed 's/,/:/g'`
+echo $dev > /sys/power/resume
+
 echo none > /sys/bus/platform/devices/a600000.ssusb/mode
 
 killall qcarcam_edrm_rvc
