@@ -73,6 +73,7 @@ on early-init
     write /sys/kernel/boot_kpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    mkdir /dev/socket/camera 0775 system camera
     mount_all /vendor/etc/fstab.qcom --early
     mount_all --early
     write /sys/kernel/boot_adsp/boot 1
@@ -351,3 +352,12 @@ service acdb_loader_service /vendor/bin/acdb_loader_service
 
 on property:sys.boot_completed=1
     mount vfat /dev/block/bootdevice/by-name/logfs /sys/kernel/debug/bookpi/bootloader_log
+
+service ais_server_late /system/vendor/bin/ais_server_late
+    class core
+    user root
+    group camera input graphics
+    disabled
+
+on property:ro.product.product.name="aosp_car_arm64"
+   start ais_server_late
