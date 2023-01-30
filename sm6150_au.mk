@@ -300,6 +300,10 @@ PRODUCT_PACKAGES += \
        gptp \
        mrpd
 
+#Copy unsupported features list
+PRODUCT_COPY_FILES += \
+    device/qcom/sm6150_au/sm6150_au_excluded_features.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sm6150_au_excluded_features.xml
+
 # Kernel modules install path
 KERNEL_MODULES_INSTALL := dlkm
 KERNEL_MODULES_OUT := out/target/product/sm6150_au/$(KERNEL_MODULES_INSTALL)/lib/modules
