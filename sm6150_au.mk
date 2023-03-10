@@ -98,6 +98,80 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
   PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := true
 #endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
+###########
+#QMAA flags starts
+###########
+#QMAA global flag for modular architecture
+#true means QMAA is enabled for system
+#false means QMAA is disabled for system
+
+TARGET_USES_QMAA := true
+
+#QMAA flag which is set to incorporate any generic dependencies
+#required for the boot to UI flow in a QMAA enabled target.
+#Set to false when all target level depenencies are met with
+#actual full blown implementations.
+TARGET_USES_QMAA_RECOMMENDED_BOOT_CONFIG := true
+
+#QMAA tech team flag to override global QMAA per tech team
+#true means overriding global QMAA for this tech area
+#false means using global, no override
+TARGET_USES_QMAA_OVERRIDE_ANDROID_CORE := true
+TARGET_USES_QMAA_OVERRIDE_ANDROID_RECOVERY := true
+TARGET_USES_QMAA_OVERRIDE_AUDIO   := true
+TARGET_USES_QMAA_OVERRIDE_BIOMETRICS := true
+TARGET_USES_QMAA_OVERRIDE_BLUETOOTH   := true
+TARGET_USES_QMAA_OVERRIDE_CAMERA  := true
+TARGET_USES_QMAA_OVERRIDE_CVP  := false
+TARGET_USES_QMAA_OVERRIDE_DATA_NET := false
+TARGET_USES_QMAA_OVERRIDE_DATA := false
+TARGET_USES_QMAA_OVERRIDE_DIAG := false
+TARGET_USES_QMAA_OVERRIDE_DISPLAY := true
+TARGET_USES_QMAA_OVERRIDE_DPM  := false
+TARGET_USES_QMAA_OVERRIDE_DRM  := false
+TARGET_USES_QMAA_OVERRIDE_EID := false
+TARGET_USES_QMAA_OVERRIDE_FASTCV  := true
+TARGET_USES_QMAA_OVERRIDE_FASTRPC := false
+TARGET_USES_QMAA_OVERRIDE_FM  := true
+TARGET_USES_QMAA_OVERRIDE_FTM := false
+TARGET_USES_QMAA_OVERRIDE_GFX := true
+TARGET_USES_QMAA_OVERRIDE_GPS := true
+TARGET_USES_QMAA_OVERRIDE_GP := false
+TARGET_USES_QMAA_OVERRIDE_GPT := false
+TARGET_USES_QMAA_OVERRIDE_KERNEL_TESTS_INTERNAL := false
+TARGET_USES_QMAA_OVERRIDE_KMGK := false
+TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := true
+TARGET_USES_QMAA_OVERRIDE_OPENVX  := true
+TARGET_USES_QMAA_OVERRIDE_PERF := true
+TARGET_USES_QMAA_OVERRIDE_REMOTE_EFS := false
+TARGET_USES_QMAA_OVERRIDE_RPMB := true
+TARGET_USES_QMAA_OVERRIDE_SCVE  := false
+TARGET_USES_QMAA_OVERRIDE_SECUREMSM_TESTS := false
+TARGET_USES_QMAA_OVERRIDE_SENSORS := true
+TARGET_USES_QMAA_OVERRIDE_SMCINVOKE := false
+TARGET_USES_QMAA_OVERRIDE_SOTER := false
+TARGET_USES_QMAA_OVERRIDE_SPCOM_UTEST := false
+TARGET_USES_QMAA_OVERRIDE_SYNX := false
+TARGET_USES_QMAA_OVERRIDE_TFTP := false
+TARGET_USES_QMAA_OVERRIDE_USB := true
+TARGET_USES_QMAA_OVERRIDE_VIBRATOR := false
+TARGET_USES_QMAA_OVERRIDE_VIDEO   := true
+TARGET_USES_QMAA_OVERRIDE_VPP := false
+TARGET_USES_QMAA_OVERRIDE_WFD     := true
+TARGET_USES_QMAA_OVERRIDE_WLAN    := true
+
+TARGET_ENABLE_QSEECOM := false
+#Full QMAA HAL List
+QMAA_HAL_LIST := audio video camera display sensors gps
+
+ifeq ($(TARGET_USES_QMAA), true)
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.confqmaa=true
+endif
+
+###########
+#QMAA flags ends
+
 TARGET_SKIP_OTA_PACKAGE := true
 
 ifneq ("$(wildcard device/qcom/$(TARGET_BOARD_PLATFORM)-kernel/vendor_dlkm/system_dlkm.modules.blocklist)", "")
