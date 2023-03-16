@@ -116,7 +116,6 @@ on late-init
     start automotive_display
 
 on fs
-    start audio_chime
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
@@ -374,14 +373,6 @@ service acdb_loader_service /vendor/bin/acdb_loader_service
     onrestart restart vendor.audio-hal
     disabled
 
-#audio chime
-service audio_chime /vendor/bin/audio_chime /vendor/etc/bike_bell.wav
-    class main
-    user system
-    group system wakelock
-    capabilities BLOCK_SUSPEND
-    oneshot
-    disabled
 
 on property:sys.boot_completed=1
     mount vfat /dev/block/bootdevice/by-name/logfs /sys/kernel/debug/bookpi/bootloader_log
