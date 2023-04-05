@@ -56,8 +56,15 @@ echo 4 2 > /sys/bus/coresight/devices/coresight-cti-swao_cti0/unmap_trigout
 sleep 10
 
 echo "enable swap partition"
-mkswap /dev/block/mmcblk0p82
-swapon /dev/block/mmcblk0p82 -p 0
+swap=$(ls /dev/block/platform/soc | grep ufs )
+if [ "$swap" = "" ]
+then
+swap="mmcblk0p82"
+else
+swap="sda12"
+fi
+mkswap /dev/block/$swap
+swapon /dev/block/$swap -p 0
 
 echo "UI turn off"
 cat /proc/swaps
@@ -113,7 +120,7 @@ echo 1 > /sys/kernel/boot_adsp/boot
 echo 1 > /sys/kernel/boot_cdsp/boot
 setprop persist.vendor.usb.config diag,adb
 echo peripheral > /sys/bus/platform/devices/a600000.ssusb/mode
-swapoff /dev/block/mmcblk0p82
+swapoff /dev/block/$swap
 echo "enable swappiness"
 echo 100 > /proc/sys/vm/swappiness
 echo Y > /sys/module/printk/parameters/console_suspend
