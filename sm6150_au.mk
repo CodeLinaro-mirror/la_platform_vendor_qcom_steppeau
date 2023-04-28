@@ -33,6 +33,12 @@ ENABLE_HYP := false
 ENABLE_AIDL_VHAL := true
 TARGET_CONSOLE_ENABLED ?= true
 
+EXCLUDE_LOCATION_FEATURES := true
+
+SYSTEMEXT_SEPARATE_PARTITION_ENABLE = true
+TARGET_USES_QSSI := true
+PRODUCT_ENFORCE_VINTF_MANIFEST := false
+
 TARGET_NO_QTI_WFD := true
 BOARD_HAVE_QCOM_FM := false
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
@@ -46,21 +52,14 @@ ENABLE_CAR_POWER_MANAGER := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 
 # Dynamic-partition enabled by default
-BOARD_DYNAMIC_PARTITION_ENABLE := true
-ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+#BOARD_DYNAMIC_PARTITION_ENABLE := true
+#ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_USE_DYNAMIC_PARTITIONS := true
-  BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
-  PRODUCT_BUILD_SUPER_PARTITION := true
   PRODUCT_PACKAGES += fastbootd
   TARGET_HIBERNATION_SECURE_ENABLE := true
-  # Enable System_ext
-  PRODUCT_BUILD_SYSTEM_EXT_IMAGE := true
 # Mismatch in the uses-library tags between build system and the manifest leads
 # to soong APK manifest_check tool errors. Enable the flag to fix this.
   RELAX_USES_LIBRARY_CHECK := true
-
-# Enable boot-debug.img
-  PRODUCT_BUILD_DEBUG_BOOT_IMAGE := true
 
   BOARD_AVB_VBMETA_SYSTEM := system
   BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
@@ -84,7 +83,11 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
     PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.emmc
   endif
 
+  PRODUCT_BUILD_SYSTEM_IMAGE := false
+  PRODUCT_BUILD_SYSTEM_EXT_IMAGE := false
   PRODUCT_BUILD_SYSTEM_OTHER_IMAGE := false
+  PRODUCT_BUILD_VENDOR_IMAGE := true
+  PRODUCT_BUILD_ODM_IMAGE := false
   PRODUCT_BUILD_PRODUCT_IMAGE := false
   PRODUCT_BUILD_PRODUCT_SERVICES_IMAGE := false
   PRODUCT_BUILD_CACHE_IMAGE := false
@@ -93,7 +96,9 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_BUILD_VENDOR_BOOT_IMAGE := true
   PRODUCT_BUILD_VENDOR_DLKM_IMAGE := true
   PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := true
-endif #BOARD_DYNAMIC_PARTITION_ENABLE
+#endif #BOARD_DYNAMIC_PARTITION_ENABLE
+
+TARGET_SKIP_OTA_PACKAGE := true
 
 ifneq ("$(wildcard device/qcom/$(TARGET_BOARD_PLATFORM)-kernel/vendor_dlkm/system_dlkm.modules.blocklist)", "")
   PRODUCT_COPY_FILES += device/qcom/$(TARGET_BOARD_PLATFORM)-kernel/vendor_dlkm/system_dlkm.modules.blocklist:$(TARGET_COPY_OUT_VENDOR_DLKM)/lib/modules/system_dlkm.modules.blocklist
@@ -181,11 +186,11 @@ ifeq ($(TARGET_NO_QTI_WFD),)
 endif
 
 # Ethernet configuration file
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
 # Copy the testscripts from the qssi folder as it was moved to QSSI folder.
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     device/qcom/qssi/init.qcom.testscripts.sh:system/etc/init.qcom.testscripts.sh
 
 # Video codec configuration files
@@ -339,7 +344,7 @@ PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 #Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
-DEVICE_PACKAGE_OVERLAYS += device/qcom/msmnile_au/overlay
+DEVICE_PACKAGE_OVERLAYS += device/qcom/sm6150_au/overlay
 
 # Enable flag to support slow devices
 TARGET_PRESIL_SLOW_BOARD := true
