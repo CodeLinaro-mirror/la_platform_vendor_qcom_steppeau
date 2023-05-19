@@ -81,6 +81,15 @@ ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   endif
 endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
+
+#Using sha256 for dm-verity partitions.
+#system, system_ext, vendor, system_dlkm, vendor_dlkm.
+BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+
 TARGET_DEFINES_DALVIK_HEAP := true
 $(call inherit-product, device/qcom/common/common64.mk)
 #Inherit all except heap growth limit from phone-xhdpi-2048-dalvik-heap.mk
