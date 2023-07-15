@@ -45,11 +45,13 @@ BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
 TARGET_USES_AOSP_FOR_WLAN := true
-BOARD_HAS_QCOM_WLAN := false
+BOARD_HAS_QCOM_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
 
 #Enable Userspace Restart
 $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
+
+TARGET_USES_RRO := true
 
 # Dynamic-partition enabled by default
 #BOARD_DYNAMIC_PARTITION_ENABLE := true
@@ -139,7 +141,7 @@ TARGET_USES_QMAA_OVERRIDE_GPS := true
 TARGET_USES_QMAA_OVERRIDE_GP := false
 TARGET_USES_QMAA_OVERRIDE_GPT := false
 TARGET_USES_QMAA_OVERRIDE_KERNEL_TESTS_INTERNAL := false
-TARGET_USES_QMAA_OVERRIDE_KMGK := false
+TARGET_USES_QMAA_OVERRIDE_KMGK := true
 TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := true
 TARGET_USES_QMAA_OVERRIDE_OPENVX  := true
 TARGET_USES_QMAA_OVERRIDE_PERF := true
@@ -430,7 +432,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 #----------------------------------------------------------------------
 # Multiple chips
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-TARGET_WLAN_CHIP := qca6390
+TARGET_WLAN_CHIP := qcn7605
 include device/qcom/wlan/$(MSMSTEPPE)_au/wlan.mk
 endif
 

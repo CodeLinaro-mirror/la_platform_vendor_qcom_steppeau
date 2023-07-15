@@ -112,6 +112,9 @@ on post-fs
     start vendor.spdaemon
     start vendor.sec_nvm
 
+    # Enable WLAN cold boot calibration
+    write /sys/kernel/cnss/fs_ready 1
+
 service esplash /vendor/bin/esplash
     class core
     user system
