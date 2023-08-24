@@ -16,8 +16,9 @@ endif
 ifeq ($(ENABLE_VIRTUAL_AB), true)
   # Enable virtual A/B compression
   $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
-  $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/android_t_baseline.mk)
+  $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.mk)
   PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := gz
+  PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.compression.threads=true
 endif
 
 # Enable AVB 2.0
@@ -32,8 +33,6 @@ TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
 ENABLE_AIDL_VHAL := true
 TARGET_CONSOLE_ENABLED ?= true
-
-EXCLUDE_LOCATION_FEATURES := true
 
 SYSTEMEXT_SEPARATE_PARTITION_ENABLE = true
 TARGET_USES_QSSI := true
@@ -58,6 +57,8 @@ TARGET_USES_RRO := true
 #ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
   PRODUCT_USE_DYNAMIC_PARTITIONS := true
   PRODUCT_PACKAGES += fastbootd
+  # Add default implementation of fastboot AIDL.
+  PRODUCT_PACKAGES += android.hardware.fastboot-service.example_recovery
   TARGET_HIBERNATION_SECURE_ENABLE := true
 # Mismatch in the uses-library tags between build system and the manifest leads
 # to soong APK manifest_check tool errors. Enable the flag to fix this.
@@ -130,10 +131,10 @@ TARGET_USES_QMAA_OVERRIDE_DATA := false
 TARGET_USES_QMAA_OVERRIDE_DIAG := false
 TARGET_USES_QMAA_OVERRIDE_DISPLAY := true
 TARGET_USES_QMAA_OVERRIDE_DPM  := false
-TARGET_USES_QMAA_OVERRIDE_DRM  := false
+TARGET_USES_QMAA_OVERRIDE_DRM  := true
 TARGET_USES_QMAA_OVERRIDE_EID := false
 TARGET_USES_QMAA_OVERRIDE_FASTCV  := true
-TARGET_USES_QMAA_OVERRIDE_FASTRPC := false
+TARGET_USES_QMAA_OVERRIDE_FASTRPC := true
 TARGET_USES_QMAA_OVERRIDE_FM  := true
 TARGET_USES_QMAA_OVERRIDE_FTM := false
 TARGET_USES_QMAA_OVERRIDE_GFX := true
@@ -466,7 +467,6 @@ PRODUCT_VENDOR_PROPERTIES += media.stagefright.enable-player=true \
                               mmp.enable.3g2=true \
                               media.aac_51_output_enabled=true \
                               mm.enable.smoothstreaming=true \
-                              vendor.mm.enable.qcom_parser=63963135 \
                               persist.mm.enable.prefetch=true
 
 # system props for the data modules
@@ -676,8 +676,8 @@ PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
 PRODUCT_PACKAGES += qcar-gsi.avbpubkey
-SHIPPING_API_LEVEL := 33
-PRODUCT_SHIPPING_API_LEVEL := 33
+SHIPPING_API_LEVEL := 34
+PRODUCT_SHIPPING_API_LEVEL := 34
 
 PRODUCT_PACKAGES += android.hardware.neuralnetworks@1.0.vendor \
                     android.hardware.neuralnetworks@1.1.vendor \
