@@ -324,10 +324,8 @@ ifeq ($(ENABLE_AB), true)
 PRODUCT_PACKAGES += update_engine \
     update_engine_client \
     update_verifier \
-    bootctrl.$(MSMSTEPPE) \
-    android.hardware.boot@1.2-impl-qti \
-    android.hardware.boot@1.2-impl-qti.recovery \
-    android.hardware.boot@1.2-service
+    android.hardware.boot-service.qti.recovery \
+    android.hardware.boot-service.qti
 
 PRODUCT_PACKAGES += \
     update_engine_sideload
