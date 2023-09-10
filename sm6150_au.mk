@@ -3,6 +3,7 @@ TARGET_BOARD_PLATFORM := $(MSMSTEPPE)
 TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
 TARGET_BOARD_TYPE := auto
 TARGET_BOARD_SUFFIX := _au
+DEVICE_SUPPORTS_64_BIT_APPS_ONLY := true
 # Skip VINTF checks for kernel configs since we do not have kernel source
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
@@ -323,10 +324,8 @@ ifeq ($(ENABLE_AB), true)
 PRODUCT_PACKAGES += update_engine \
     update_engine_client \
     update_verifier \
-    bootctrl.$(MSMSTEPPE) \
-    android.hardware.boot@1.2-impl-qti \
-    android.hardware.boot@1.2-impl-qti.recovery \
-    android.hardware.boot@1.2-service
+    android.hardware.boot-service.qti.recovery \
+    android.hardware.boot-service.qti
 
 PRODUCT_PACKAGES += \
     update_engine_sideload
@@ -467,7 +466,6 @@ PRODUCT_VENDOR_PROPERTIES += media.stagefright.enable-player=true \
                               mmp.enable.3g2=true \
                               media.aac_51_output_enabled=true \
                               mm.enable.smoothstreaming=true \
-                              vendor.mm.enable.qcom_parser=63963135 \
                               persist.mm.enable.prefetch=true
 
 # system props for the data modules
