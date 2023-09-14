@@ -660,8 +660,7 @@ PRODUCT_PACKAGES += canflasher \
                     mpc5746c_firmware_B.bin \
 
 
-PRODUCT_PACKAGES += android.hardware.dumpstate-service.example \
-                    android.hardware.thermal@2.0-service.mock \
+PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
 PRODUCT_PACKAGES += android.hardware.health-service.qti \
                     android.hardware.health-service.qti_recovery \
