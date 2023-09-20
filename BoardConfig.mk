@@ -200,7 +200,7 @@ TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
 TARGET_USES_DRM_PP := true
 
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize pcie_ports=compat
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 earlycon=msm_geni_serial,0x880000 androidboot.selinux=enforcing androidboot.recover_usb=1 androidboot.usbcontroller=a600000.dwc3 hibernate=nocompress noswap_randomize pcie_ports=compat loop.max_part=7
 
 ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
 BOARD_KERNEL_CMDLINE += firmware_class.path=/early_services/vendor/firmware_mnt/image
