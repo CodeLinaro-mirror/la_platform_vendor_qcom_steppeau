@@ -682,6 +682,11 @@ PRODUCT_PACKAGES += android.hardware.neuralnetworks@1.0.vendor \
                     android.hardware.neuralnetworks@1.2.vendor \
                     android.hardware.neuralnetworks@1.3.vendor
 
+# Value Add changes: add libnbaio for avenhancement
+ifeq ($(TARGET_FWK_SUPPORTS_FULL_VALUEADDS), true)
+PRODUCT_PACKAGES += libnbaio
+endif
+
 # privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
 PRODUCT_VENDOR_PROPERTIES += ro.control_privapp_permissions=enforce
 
