@@ -174,7 +174,9 @@ on boot
     setprop vendor.usb.rmnet.inst.name "rmnet"
     setprop vendor.usb.dpl.inst.name "dpl"
     setprop vendor.usb.qdss.inst.name "qdss_sw"
-    setprop vendor.usb.controller a600000.dwc3
+
+on property:ro.boot.usbcontroller=*
+    setprop vendor.usb.controller ${ro.boot.usbcontroller}
 
 on property:vendor.wlan.driver.status="ok"
     setprop wlan.driver.status "ok"
