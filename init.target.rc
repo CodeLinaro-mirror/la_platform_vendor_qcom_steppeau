@@ -35,19 +35,17 @@ import /vendor/etc/init/hw/init.qti.kernel.rc
 
 on early-init
     start init_hsi2s
-    chown system system /sys/kernel/boot_kpi/kpi_values
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
-    write /sys/kernel/boot_kpi/kpi_values "M - INITRC Userspace Start"
+    write /dev/kmsg "boot_kpi: M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     mkdir /dev/socket/camera 0770 system camera
     start ais_server
     mkdir /dev/socket/camera 0770 system camera
     start ais_server
-    write /sys/kernel/boot_kpi/kpi_values "M - Start adsp"
+    write /dev/kmsg "boot_kpi: M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
-    write /sys/kernel/boot_kpi/kpi_values "M - adsprpcd Start"
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
@@ -86,9 +84,7 @@ on init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     # Revert this change once resolved https://partnerissuetracker.corp.google.com/issues/175540571
-    write /sys/kernel/boot_kpi/kpi_values "M - acdb_loader_service Start"
     start acdb_loader_service
-    write /sys/kernel/boot_kpi/kpi_values "M - audio_hal_plugin_service Start"
     start audio_hal_plugin_service
 
 on late-init
@@ -112,8 +108,8 @@ on post-fs
     start vendor.spdaemon
     start vendor.sec_nvm
 
-    # Enable WLAN cold boot calibration
-    write /sys/kernel/cnss/fs_ready 1
+#Load WLAN driver
+    start wlan_multiko
 
 service esplash /vendor/bin/esplash
     class core
@@ -180,24 +176,21 @@ on property:vendor.wlan.driver.status="ok"
     setprop wlan.driver.status "ok"
 
 on property:init.svc.zygote=running
-    write /sys/kernel/boot_kpi/kpi_values "M - USER Zygote Start"
+    write /dev/kmsg "boot_kpi: M - USER Zygote Start"
 
 on property:service.bootanim.exit=0
-    write /sys/kernel/boot_kpi/kpi_values "K - USER Boot Animation Start"
+    write /dev/kmsg "boot_kpi: K - USER Boot Animation Start"
     setprop vendor.init.svc.bootanim "running"
 
 on property:service.bootanim.exit=1
     setprop vendor.init.svc.bootanim "stopped"
 
 on property:sys.boot_completed=1
-    write /sys/kernel/boot_kpi/kpi_values "K - USER Android Boot Complete"
+    write /dev/kmsg "boot_kpi: K - USER Android Boot Complete"
     setprop vendor.sys.boot_completed 1
 
-    # Enable WLAN cold boot calibration
-    write /sys/kernel/cnss/fs_ready 1
-
 on property:init.svc.surfaceflinger=running
-    write /sys/kernel/boot_kpi/kpi_values "M - USER SurfaceFlinger Start"
+    write /dev/kmsg "boot_kpi: M - USER SurfaceFlinger Start"
 
 on boot && property:persist.vendor.usb.controller.default=*
     setprop vendor.usb.controller ${persist.vendor.usb.controller.default}
