@@ -140,7 +140,7 @@ TARGET_USES_QMAA_OVERRIDE_FM  := true
 TARGET_USES_QMAA_OVERRIDE_FTM := false
 TARGET_USES_QMAA_OVERRIDE_GFX := true
 TARGET_USES_QMAA_OVERRIDE_GPS := true
-TARGET_USES_QMAA_OVERRIDE_GP := false
+TARGET_USES_QMAA_OVERRIDE_GP := true
 TARGET_USES_QMAA_OVERRIDE_GPT := false
 TARGET_USES_QMAA_OVERRIDE_KERNEL_TESTS_INTERNAL := false
 TARGET_USES_QMAA_OVERRIDE_KMGK := true
@@ -150,7 +150,7 @@ TARGET_USES_QMAA_OVERRIDE_PERF := true
 TARGET_USES_QMAA_OVERRIDE_REMOTE_EFS := false
 TARGET_USES_QMAA_OVERRIDE_RPMB := true
 TARGET_USES_QMAA_OVERRIDE_SCVE  := false
-TARGET_USES_QMAA_OVERRIDE_SECUREMSM_TESTS := false
+TARGET_USES_QMAA_OVERRIDE_SECUREMSM_TESTS := true
 TARGET_USES_QMAA_OVERRIDE_SENSORS := true
 TARGET_USES_QMAA_OVERRIDE_SMCINVOKE := false
 TARGET_USES_QMAA_OVERRIDE_SOTER := false
@@ -660,8 +660,7 @@ PRODUCT_PACKAGES += canflasher \
                     mpc5746c_firmware_B.bin \
 
 
-PRODUCT_PACKAGES += android.hardware.dumpstate-service.example \
-                    android.hardware.thermal@2.0-service.mock \
+PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
 PRODUCT_PACKAGES += android.hardware.health-service.qti \
                     android.hardware.health-service.qti_recovery \
@@ -682,6 +681,11 @@ PRODUCT_PACKAGES += android.hardware.neuralnetworks@1.0.vendor \
                     android.hardware.neuralnetworks@1.1.vendor \
                     android.hardware.neuralnetworks@1.2.vendor \
                     android.hardware.neuralnetworks@1.3.vendor
+
+# Value Add changes: add libnbaio for avenhancement
+ifeq ($(TARGET_FWK_SUPPORTS_FULL_VALUEADDS), true)
+PRODUCT_PACKAGES += libnbaio
+endif
 
 # privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
 PRODUCT_VENDOR_PROPERTIES += ro.control_privapp_permissions=enforce
