@@ -51,6 +51,9 @@ ENABLE_CAR_POWER_MANAGER := true
 #Enable Userspace Restart
 $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 
+# Enable support for APEX updates
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
 TARGET_USES_RRO := true
 
 # Dynamic-partition enabled by default
