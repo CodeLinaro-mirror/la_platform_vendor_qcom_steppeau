@@ -49,7 +49,6 @@ on early-init
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
-    start esplash
 
 on early-init && property:ro.boot.audio=audioreach
     setprop ro.hardware.audio.primary "msmnile.ar"
@@ -99,6 +98,7 @@ on fs
 
 on late-fs
     mount_all --late
+    start esplash
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
