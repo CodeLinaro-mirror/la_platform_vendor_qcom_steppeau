@@ -665,8 +665,8 @@ PRODUCT_PACKAGES += canflasher \
 
 PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
-PRODUCT_PACKAGES += android.hardware.health-service.qti \
-                    android.hardware.health-service.qti_recovery \
+PRODUCT_PACKAGES += android.hardware.health-service.example \
+                    android.hardware.health-service.example_recovery \
 
 #sysprofiler
 PRODUCT_PACKAGES += libsysprofiler \
