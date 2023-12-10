@@ -35,7 +35,7 @@ import /vendor/etc/init/hw/init.qti.kernel.rc
 
 on early-init
     start init_hsi2s
-    umount /vendor_early_services/vendor/firmware_mnt
+    #umount /vendor_early_services/vendor/firmware_mnt
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
     write /dev/kmsg "boot_kpi: M - INITRC Userspace Start"
