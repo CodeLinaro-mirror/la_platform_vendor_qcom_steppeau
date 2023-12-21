@@ -628,6 +628,11 @@ PRODUCT_VENDOR_PROPERTIES += ro.radio.noril=true
 # Default wifi country code
 PRODUCT_VENDOR_PROPERTIES += ro.boot.wificountrycode=us
 
+# Native service to load modules
+ifneq (,$(filter $(TARGET_BOARD_PLATFORM)$(TARGET_BOARD_SUFFIX), sm6150_au))
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.qti.load_dlkm.service=native
+endif
+
 #for Emac
 PRODUCT_PACKAGES += emac_perf_settings.sh
 
