@@ -80,7 +80,7 @@ on early-init
     start vendor.adsprpcd
     start vendor.adsprpcd_audiopd
     start audiod
-    start esplash
+    #start esplash
 
 service init_hsi2s /vendor/bin/hsi2s_early_boot.sh
     class core
@@ -129,8 +129,8 @@ on post-fs
     setrlimit 8 67108864 67108864
     start vendor.qseecomd
     exec - system system -- /vendor/bin/init.qti.qseecomd.sh
-    start vendor.spdaemon
-    start vendor.sec_nvm
+    #start vendor.spdaemon
+    #start vendor.sec_nvm
 
 service esplash /vendor/bin/esplash
     class core
