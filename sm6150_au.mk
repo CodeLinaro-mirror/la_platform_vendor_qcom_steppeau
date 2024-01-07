@@ -51,6 +51,9 @@ ENABLE_CAR_POWER_MANAGER := true
 #Enable Userspace Restart
 $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 
+# Enable support for APEX updates
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
 TARGET_USES_RRO := true
 
 # Dynamic-partition enabled by default
@@ -432,7 +435,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 #----------------------------------------------------------------------
 # Multiple chips
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-TARGET_WLAN_CHIP := qcn7605
+TARGET_WLAN_CHIP := qca6174 qcn7605
 include device/qcom/wlan/$(MSMSTEPPE)_au/wlan.mk
 endif
 
@@ -662,8 +665,8 @@ PRODUCT_PACKAGES += canflasher \
 
 PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
-PRODUCT_PACKAGES += android.hardware.health-service.qti \
-                    android.hardware.health-service.qti_recovery \
+PRODUCT_PACKAGES += android.hardware.health-service.example \
+                    android.hardware.health-service.example_recovery \
 
 #sysprofiler
 PRODUCT_PACKAGES += libsysprofiler \
