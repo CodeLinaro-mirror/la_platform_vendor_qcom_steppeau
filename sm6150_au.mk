@@ -435,7 +435,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 #----------------------------------------------------------------------
 # Multiple chips
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-TARGET_WLAN_CHIP := qcn7605
+TARGET_WLAN_CHIP := qca6174 qcn7605
 include device/qcom/wlan/$(MSMSTEPPE)_au/wlan.mk
 endif
 
@@ -627,6 +627,11 @@ PRODUCT_VENDOR_PROPERTIES += ro.radio.noril=true
 
 # Default wifi country code
 PRODUCT_VENDOR_PROPERTIES += ro.boot.wificountrycode=us
+
+# Native service to load modules
+ifneq (,$(filter $(TARGET_BOARD_PLATFORM)$(TARGET_BOARD_SUFFIX), sm6150_au))
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.qti.load_dlkm.service=native
+endif
 
 #for Emac
 PRODUCT_PACKAGES += emac_perf_settings.sh
