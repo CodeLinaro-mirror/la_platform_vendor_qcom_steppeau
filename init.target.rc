@@ -101,8 +101,6 @@ on late-fs
     mount_all --late
 
 on post-fs
-    # set RLIMIT_MEMLOCK to 64MB
-    setrlimit 8 67108864 67108864
     start vendor.qseecomd
     exec - system system -- /vendor/bin/init.qti.qseecomd.sh
     start vendor.spdaemon
