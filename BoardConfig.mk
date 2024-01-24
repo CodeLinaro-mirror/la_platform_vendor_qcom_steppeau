@@ -15,6 +15,16 @@ TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
 
+BOARD_SUPPORTS_RAMDISK_EARLY_INIT := false
+ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
+CONFIG_EARLY_INIT := true
+TARGET_COPY_OUT_EARLY_SERVICES := vendor_early_services
+
+ifeq (,$(findstring $(TARGET_BOARD_PLATFORM)_au, $(TARGET_FS_CONFIG_GEN)))
+TARGET_FS_CONFIG_GEN += device/qcom/$(TARGET_BOARD_PLATFORM)_au/config.fs
+endif
+endif
+
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv7-a-neon
 TARGET_2ND_CPU_ABI := armeabi-v7a
@@ -97,6 +107,12 @@ ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
    BOARD_INCLUDE_RECOVERY_DTBO := true
 endif
 
+# Enable chained vbmeta for boot images
+BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 3
+
 # Defines for enabling A/B builds
 AB_OTA_UPDATER := true
 # Full A/B partition update set
@@ -138,6 +154,19 @@ BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 
+ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT), true)
+BOARD_GENERIC_RAMDISK_KERNEL_MODULES_LOAD := \
+    snd_event_dlkm.ko \
+    q6_notifier_dlkm.ko \
+    apr_dlkm.ko \
+    adsp_loader_dlkm.ko \
+    q6_dlkm.ko \
+    machine_dlkm.ko \
+    stub_dlkm.ko \
+    platform_dlkm.ko \
+    native_dlkm.ko \
+    hdmi_dlkm.ko
+endif
 BOARD_DO_NOT_STRIP_VENDOR_MODULES := true
 
 BOARD_VENDOR_KERNEL_MODULES += $(shell ls $(KERNEL_MODULES_OUT)/*.ko)
@@ -148,7 +177,13 @@ TARGET_USES_DRM_PP := true
 
 BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.memcg=1 androidboot.usbcontroller=a600000.dwc3 androidboot.recover_usb=1 androidboot.selinux=enforcing
 
-BOARD_KERNEL_CMDLINE := lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 kvm-arm.mode=nvhe hibernate=nocompress noswap_randomize pcie_ports=compat
+BOARD_KERNEL_CMDLINE := lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 kvm-arm.mode=nvhe hibernate=nocompress noswap_randomize pcie_ports=compat
+
+ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
+BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor_early_services/vendor/firmware_mnt/image,/vendor_early_services/firmware
+else
+BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware_mnt/image
+endif
 
 ifeq ($(TARGET_CONSOLE_ENABLED),true)
 #BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200n8 earlycon=qcom_geni,0xa90000 qcom_geni_serial.con_enabled=1
