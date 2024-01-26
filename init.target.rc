@@ -106,9 +106,6 @@ on post-fs
     start vendor.spdaemon
     start vendor.sec_nvm
 
-#Load WLAN driver
-    start wlan_multiko
-
 service esplash /vendor/bin/esplash
     class core
     user system
@@ -135,6 +132,7 @@ on boot
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
+    start wlan_multiko
     write /dev/cpuset/top-app/cpus 0-3
     write /dev/cpuset/foreground/cpus 0-3
     write /dev/cpuset/foreground/boost/cpus 0-3
