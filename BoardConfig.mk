@@ -167,9 +167,9 @@ BOARD_GENERIC_RAMDISK_KERNEL_MODULES_LOAD := \
     native_dlkm.ko \
     hdmi_dlkm.ko
 endif
-BOARD_DO_NOT_STRIP_VENDOR_MODULES := true
+BOARD_DO_NOT_STRIP_VENDOR_MODULES := false
 
-BOARD_VENDOR_KERNEL_MODULES += $(shell ls $(KERNEL_MODULES_OUT)/*.ko)
+#BOARD_VENDOR_KERNEL_MODULES += $(shell ls $(KERNEL_MODULES_OUT)/*.ko)
 TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := false
@@ -177,7 +177,7 @@ TARGET_USES_DRM_PP := true
 
 BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.memcg=1 androidboot.usbcontroller=a600000.dwc3 androidboot.recover_usb=1 androidboot.selinux=enforcing
 
-BOARD_KERNEL_CMDLINE := lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 kvm-arm.mode=nvhe hibernate=nocompress noswap_randomize pcie_ports=compat
+BOARD_KERNEL_CMDLINE := lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 kvm-arm.mode=nvhe hibernate=nocompress noswap_randomize pcie_ports=compat log_buf_len=2M
 
 ifeq ($(BOARD_SUPPORTS_RAMDISK_EARLY_INIT),true)
 BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor_early_services/vendor/firmware_mnt/image,/vendor_early_services/firmware
