@@ -402,6 +402,11 @@ PRODUCT_PACKAGES += \
        gptp \
        mrpd
 
+# Enable libgptp
+PRODUCT_PACKAGES += \
+       libgptp \
+       libgptp_test
+
 # Kernel modules install path
 KERNEL_MODULES_INSTALL := dlkm
 ifeq ($(KERNEL_MODULES_OUT),)
