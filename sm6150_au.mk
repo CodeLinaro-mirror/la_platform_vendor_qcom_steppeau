@@ -365,9 +365,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 #    antradio_app \
 #    libvolumelistener
 
-# Automotive display service
-PRODUCT_PACKAGES += android.frameworks.automotive.display@1.0-service
-
 PRODUCT_ENFORCE_RRO_TARGETS := framework-res
 
 # FBE support
