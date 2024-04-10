@@ -365,9 +365,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 #    antradio_app \
 #    libvolumelistener
 
-# Automotive display service
-PRODUCT_PACKAGES += android.frameworks.automotive.display@1.0-service
-
 PRODUCT_ENFORCE_RRO_TARGETS := framework-res
 
 # FBE support
@@ -401,6 +398,11 @@ PRODUCT_PACKAGES += \
        openavb_harness \
        gptp \
        mrpd
+
+# Enable libgptp
+PRODUCT_PACKAGES += \
+       libgptp \
+       libgptp_test
 
 # Kernel modules install path
 KERNEL_MODULES_INSTALL := dlkm
@@ -676,7 +678,9 @@ PRODUCT_PACKAGES += android.hardware.health-service.example \
 #sysprofiler
 PRODUCT_PACKAGES += libsysprofiler \
                     sysprofiler_app \
-                    sysprofiler_interface
+                    libQProfilerInterface\
+                    sysprofiler.h
+
 #add vndservicemanager for surfaceflinger crash
 PRODUCT_PACKAGES += vndservicemanager
 TARGET_MOUNT_POINTS_SYMLINKS := false
