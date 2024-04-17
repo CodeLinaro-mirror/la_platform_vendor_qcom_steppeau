@@ -41,10 +41,8 @@ on early-init
     write /dev/kmsg "boot_kpi: M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    mkdir /dev/socket/camera 0770 system camera
-    start ais_server
-    mkdir /dev/socket/camera 0770 system camera
-    start ais_server
+    #mkdir /dev/socket/camera 0770 system camera
+    #start ais_server
     write /dev/kmsg "boot_kpi: M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
     start vendor.adsprpcd
@@ -62,7 +60,7 @@ service init_hsi2s /vendor/bin/hsi2s_early_boot.sh
     oneshot
     disabled
 
-service ais_server /system/vendor/bin/ais_server
+service ais_server /vendor_early_services/vendor/bin/ais_server
     class core
     user system
     group camera input graphics
