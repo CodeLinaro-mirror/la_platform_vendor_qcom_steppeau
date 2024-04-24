@@ -43,12 +43,9 @@ on early-init
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     #mkdir /dev/socket/camera 0770 system camera
     #start ais_server
-    start vendor.adsprpcd
-    start vendor.adsprpcd_audiopd
-    start audiod
 
 # Start adsp here only for pure aosp build, for va_aosp it is launched from EarlyServices
-on early-init && property:ro.vendor.qti.va_aosp.support=0
+on init && property:ro.vendor.qti.va_aosp.support=0
     write /dev/kmsg "boot_kpi: M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
 
@@ -87,6 +84,9 @@ on init
     # Revert this change once resolved https://partnerissuetracker.corp.google.com/issues/175540571
     start acdb_loader_service
     start audio_hal_plugin_service
+    start vendor.adsprpcd
+    start vendor.adsprpcd_audiopd
+    start audiod
 
 on late-init
     start automotive_display
