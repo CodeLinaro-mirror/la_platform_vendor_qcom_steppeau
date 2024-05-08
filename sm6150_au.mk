@@ -33,6 +33,7 @@ TARGET_USES_QTIC := false
 TARGET_USES_QTIC_EXTENSION := false
 ENABLE_HYP := false
 ENABLE_AIDL_VHAL := true
+ENABLE_AIDL_SENSOR := true
 TARGET_CONSOLE_ENABLED ?= true
 
 SYSTEMEXT_SEPARATE_PARTITION_ENABLE = true
@@ -289,6 +290,7 @@ endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
 #Hibernation Script
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/hiber.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hiber.sh
+PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/hiber_restore.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hiber_restore.sh
 
 PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.hardware.hardware_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.hardware_keystore.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
