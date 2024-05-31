@@ -83,9 +83,17 @@ ifeq ($(strip $(PRODUCT_USE_DYNAMIC_PARTITIONS)),true)
   LOCAL_MODULE_TAGS  := optional
   LOCAL_MODULE_CLASS := ETC
   ifeq ($(ENABLE_AB), true)
-    LOCAL_SRC_FILES := default/fstab_AB_dynamic_partition_variant.qti
+    ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),34))
+      LOCAL_SRC_FILES := default/sm6150au_fstab_metadata_f2fs/fstab_AB_dynamic_partition_variant.qti
+    else
+      LOCAL_SRC_FILES := default/fstab_AB_dynamic_partition_variant.qti
+    endif
   else
-    LOCAL_SRC_FILES := default/fstab_non_AB_dynamic_partition_variant.qti
+    ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),34))
+      LOCAL_SRC_FILES := default/sm6150au_fstab_metadata_f2fs/fstab_non_AB_dynamic_partition_variant.qti
+    else
+      LOCAL_SRC_FILES := default/fstab_non_AB_dynamic_partition_variant.qti
+    endif
   endif #ENABLE_AB
   LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)
   include $(BUILD_PREBUILT)
@@ -95,9 +103,17 @@ ifeq ($(strip $(PRODUCT_USE_DYNAMIC_PARTITIONS)),true)
   LOCAL_MODULE_TAGS  := optional
   LOCAL_MODULE_CLASS := ETC
   ifeq ($(ENABLE_AB), true)
-    LOCAL_SRC_FILES := emmc/fstab_AB_dynamic_partition_variant.qti
+    ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),34))
+      LOCAL_SRC_FILES := emmc/sm6150au_fstab_metadata_f2fs/fstab_AB_dynamic_partition_variant.qti
+    else
+      LOCAL_SRC_FILES := emmc/fstab_AB_dynamic_partition_variant.qti
+    endif
   else
-    LOCAL_SRC_FILES := emmc/fstab_non_AB_dynamic_partition_variant.qti
+    ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),34))
+      LOCAL_SRC_FILES := emmc/sm6150au_fstab_metadata_f2fs/fstab_non_AB_dynamic_partition_variant.qti
+    else
+      LOCAL_SRC_FILES := emmc/fstab_non_AB_dynamic_partition_variant.qti
+    endif
   endif #ENABLE_AB
   LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)
   include $(BUILD_PREBUILT)
