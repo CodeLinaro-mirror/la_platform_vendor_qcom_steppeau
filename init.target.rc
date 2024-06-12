@@ -26,7 +26,7 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Changes from Qualcomm Innovation Center are provided under the following license:
-# Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+# Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Clear
 #
 #
@@ -41,15 +41,13 @@ on early-init
     write /dev/kmsg "boot_kpi: M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    mkdir /dev/socket/camera 0770 system camera
-    start ais_server
-    mkdir /dev/socket/camera 0770 system camera
-    start ais_server
+    #mkdir /dev/socket/camera 0770 system camera
+    #start ais_server
+
+# Start adsp here only for pure aosp build, for va_aosp it is launched from EarlyServices
+on init && property:ro.vendor.qti.va_aosp.support=0
     write /dev/kmsg "boot_kpi: M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
-    start vendor.adsprpcd
-    start vendor.adsprpcd_audiopd
-    start audiod
 
 on early-init && property:ro.boot.audio=audioreach
     setprop ro.hardware.audio.primary "msmnile.ar"
@@ -62,7 +60,7 @@ service init_hsi2s /vendor/bin/hsi2s_early_boot.sh
     oneshot
     disabled
 
-service ais_server /system/vendor/bin/ais_server
+service ais_server /vendor_early_services/vendor/bin/ais_server
     class core
     user system
     group camera input graphics
@@ -86,6 +84,9 @@ on init
     # Revert this change once resolved https://partnerissuetracker.corp.google.com/issues/175540571
     start acdb_loader_service
     start audio_hal_plugin_service
+    start vendor.adsprpcd
+    start vendor.adsprpcd_audiopd
+    start audiod
 
 on late-init
     start automotive_display
@@ -128,7 +129,6 @@ on post-fs-data
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
-    start audio_chime
     chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
@@ -192,6 +192,10 @@ on property:init.svc.surfaceflinger=running
 
 on boot && property:persist.vendor.usb.controller.default=*
     setprop vendor.usb.controller ${persist.vendor.usb.controller.default}
+
+# Start audio_chime here only for pure aosp build, for va_aosp it is launched from EarlyServices
+on boot && property:ro.vendor.qti.va_aosp.support=0
+    start audio_chime
 
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
