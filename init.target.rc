@@ -186,6 +186,8 @@ on property:service.bootanim.exit=1
 on property:sys.boot_completed=1
     write /dev/kmsg "boot_kpi: K - USER Android Boot Complete"
     setprop vendor.sys.boot_completed 1
+    mkdir /data/vendor/fastcv 0700 media media
+    start fastcv
 
 on property:init.svc.surfaceflinger=running
     write /dev/kmsg "boot_kpi: M - USER SurfaceFlinger Start"
@@ -199,6 +201,13 @@ on boot && property:ro.vendor.qti.va_aosp.support=0
 
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
+
+#FastCV
+service fastcv /vendor/bin/fastcv.sh
+    user media
+    group media
+    disabled
+    oneshot
 
 service wlan_multiko /vendor/bin/init.qcom.wlan.sh
     user root
