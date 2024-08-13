@@ -246,7 +246,11 @@ BOARD_FRP_PARTITION_NAME := frp
 PRODUCT_PACKAGES += libGLES_android
 
 # diag-router
-TARGET_HAS_DIAG_ROUTER := true
+ifeq ($(strip $(TARGET_BUILD_VARIANT)),user)
+    TARGET_HAS_DIAG_ROUTER := false
+else
+    TARGET_HAS_DIAG_ROUTER := true
+endif
 
 # Memtrack HAL deprecated. Replaced with AIDL for target-level 6.
 ENABLE_MEMTRACK_AIDL_HAL := true
