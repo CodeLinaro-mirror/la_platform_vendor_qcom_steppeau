@@ -50,15 +50,6 @@ SPDX-License-Identifier: BSD-3-Clause-Clear
         </interface>
     </hal>
     <hal format="hidl">
-         <name>vendor.qti.hardware.dsp</name>
-         <transport>hwbinder</transport>
-         <version>1.0</version>
-         <interface>
-            <name>IDspService</name>
-            <instance>dspservice</instance>
-         </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.soundtrigger</name>
         <transport>hwbinder</transport>
         <version>2.3</version>
