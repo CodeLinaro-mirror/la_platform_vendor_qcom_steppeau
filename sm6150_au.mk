@@ -376,6 +376,13 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/
 # Enable Scoped Storage related
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
+# BroadcastRadio
+PRODUCT_PACKAGES += \
+    android.hardware.broadcastradio-service.default
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.broadcastradio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.broadcastradio.xml \
+
 #ANT+ stack
 #PRODUCT_PACKAGES += \
 #    AntHalService \
@@ -455,7 +462,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 #----------------------------------------------------------------------
 # Multiple chips
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-TARGET_WLAN_CHIP := qca6174 qcn7605
+TARGET_WLAN_CHIP := qca6174 qcn7605 qca6490
 include device/qcom/wlan/$(MSMSTEPPE)_au/wlan.mk
 endif
 
