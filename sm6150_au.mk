@@ -51,6 +51,8 @@ ENABLE_CAR_POWER_MANAGER := true
 
 SHIPPING_API_LEVEL := 34
 PRODUCT_SHIPPING_API_LEVEL := 34
+BOARD_SHIPPING_API_LEVEL := $(SHIPPING_API_LEVEL)
+
 #Enable Userspace Restart
 $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 
