@@ -38,7 +38,7 @@ on early-init
     #umount /vendor_early_services/vendor/firmware_mnt
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
-    write /dev/kmsg "boot_kpi: M - INITRC Userspace Start"
+    write /sys/kernel/boot_kpi/kpi_values "M - INITRC Userspace Start"
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     #mkdir /dev/socket/camera 0770 system camera
@@ -46,7 +46,7 @@ on early-init
 
 # Start adsp here only for pure aosp build, for va_aosp it is launched from EarlyServices
 on init && property:ro.vendor.qti.va_aosp.support=0
-    write /dev/kmsg "boot_kpi: M - Start adsp"
+    write /sys/kernel/boot_kpi/kpi_values "M - Start adsp"
     write /sys/kernel/boot_adsp/boot 1
 
 on early-init && property:ro.boot.audio=audioreach
@@ -174,23 +174,23 @@ on property:vendor.wlan.driver.status="ok"
     setprop wlan.driver.status "ok"
 
 on property:init.svc.zygote=running
-    write /dev/kmsg "boot_kpi: M - USER Zygote Start"
+    write /sys/kernel/boot_kpi/kpi_values "M - USER Zygote Start"
 
 on property:service.bootanim.exit=0
-    write /dev/kmsg "boot_kpi: K - USER Boot Animation Start"
+    write /sys/kernel/boot_kpi/kpi_values "K - USER Boot Animation Start"
     setprop vendor.init.svc.bootanim "running"
 
 on property:service.bootanim.exit=1
     setprop vendor.init.svc.bootanim "stopped"
 
 on property:sys.boot_completed=1
-    write /dev/kmsg "boot_kpi: K - USER Android Boot Complete"
+    write /sys/kernel/boot_kpi/kpi_values "K - USER Android Boot Complete"
     setprop vendor.sys.boot_completed 1
     mkdir /data/vendor/fastcv 0700 media media
     start fastcv
 
 on property:init.svc.surfaceflinger=running
-    write /dev/kmsg "boot_kpi: M - USER SurfaceFlinger Start"
+    write /sys/kernel/boot_kpi/kpi_values "M - USER SurfaceFlinger Start"
 
 on boot && property:persist.vendor.usb.controller.default=*
     setprop vendor.usb.controller ${persist.vendor.usb.controller.default}
