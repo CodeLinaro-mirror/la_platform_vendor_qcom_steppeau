@@ -5,6 +5,15 @@
 
 # Disable DLKMs compilation for sm6150_au
 TARGET_KERNEL_DLKM_DISABLE := false
+
+#We are resetting BOARD_VENDOR_KERNEL_MODULES due to BoardConfig.mk invoked twice
+#   1. From vendor/qcom/proprietary/common/config/device-vendor.mk
+#   2. From build/make/core/board_config.mk
+#which impacts duplicates found in vendor_dlkm partition while building image
+ifneq ( ,$(filter Baklava 16,$(PLATFORM_VERSION)))
+BOARD_VENDOR_KERNEL_MODULES :=
+endif
+
 #Enable legacy path for ELITE
 ENABLE_AUDIO_LEGACY_TECHPACK := true
 
@@ -303,7 +312,9 @@ endif
 
 #Flag to enable System SDK Requirements.
 #All vendor APK will be compiled against system_current API set.
+ifeq ( ,$(filter Baklava 16,$(PLATFORM_VERSION)))
 BOARD_SYSTEMSDK_VERSIONS:=34
+endif
 
 #Enable VNDK Compliance
 BOARD_VNDK_VERSION:=current
@@ -316,7 +327,9 @@ BUILD_BROKEN_USES_BUILD_HOST_EXECUTABLE := true
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
 BUILD_BROKEN_CLANG_PROPERTY := true
+ifeq ( ,$(filter Baklava 16,$(PLATFORM_VERSION)))
 BUILD_BROKEN_USES_SOONG_PYTHON2_MODULES := true
+endif
 
 #Flag for Early Ethernet
 IS_EARLY_ETH_ENABLED := 1
@@ -332,3 +345,11 @@ IS_EARLY_ETH_ENABLED := 1
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 #Enable Camera2 APIs on automotive builds
 ENABLE_CAMERA_SERVICE := true
+
+#We are sorting BOARD_VENDOR_KERNEL_MODULES due to BoardConfig.mk invoked twice
+#   1. From vendor/qcom/proprietary/common/config/device-vendor.mk
+#   2. From build/make/core/board_config.mk
+#which impacts duplicates found in vendor_dlkm partition while building image
+ifneq ( ,$(filter Baklava 16,$(PLATFORM_VERSION)))
+BOARD_VENDOR_KERNEL_MODULES := $(sort $(BOARD_VENDOR_KERNEL_MODULES))
+endif
