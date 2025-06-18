@@ -120,6 +120,8 @@ TARGET_USES_RRO := true
   PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := true
 #endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
+PRODUCT_SOONG_NAMESPACES += hardware/qcom/wlan/qcwcn
+
 ###########
 #QMAA flags starts
 ###########
