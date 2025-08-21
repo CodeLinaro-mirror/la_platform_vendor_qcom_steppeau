@@ -120,6 +120,8 @@ TARGET_USES_RRO := true
   PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := true
 #endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
+PRODUCT_SOONG_NAMESPACES += hardware/qcom/wlan/qcwcn
+
 ###########
 #QMAA flags starts
 ###########
@@ -620,7 +622,6 @@ PRODUCT_VENDOR_PROPERTIES += vendor.perf.gestureflingboost.enable=true
 # Enable ULMK properties
 PRODUCT_VENDOR_PROPERTIES += ro.lmk.kill_heaviest_task=true \
                               ro.lmk.kill_timeout_ms=15 \
-                              ro.lmk.use_minfree_levels=true \
                               ro.lmk.enhance_batch_kill=true \
                               ro.lmk.enable_adaptive_lmk=true \
                               ro.lmk.vmpressure_file_min=80640
