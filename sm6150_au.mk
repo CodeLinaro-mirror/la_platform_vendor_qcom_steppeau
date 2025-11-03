@@ -312,7 +312,6 @@ endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/hiber.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hiber.sh
 PRODUCT_COPY_FILES += device/qcom/$(MSMSTEPPE)_au/hiber_restore.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hiber_restore.sh
 
-PRODUCT_COPY_FILES += hardware/interfaces/security/keymint/aidl/default/android.hardware.hardware_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.hardware_keystore.xml
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 #Copy supported features list
 ifeq ($(TARGET_USES_GAS),true)
@@ -700,8 +699,13 @@ PRODUCT_PACKAGES += canflasher \
 
 PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
-PRODUCT_PACKAGES += android.hardware.health-service.example \
-                    android.hardware.health-service.example_recovery \
+ifeq ($(PLATFORM_SDK_VERSION),36)
+    PRODUCT_PACKAGES += android.hardware.health-service.qti \
+                        android.hardware.health-service.qti_recovery
+else
+    PRODUCT_PACKAGES += android.hardware.health-service.example \
+                    android.hardware.health-service.example_recovery
+endif
 
 #sysprofiler
 PRODUCT_PACKAGES += libsysprofiler \
