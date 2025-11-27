@@ -732,6 +732,11 @@ endif
 # privapp-permissions whitelisting (To Fix CTS :privappPermissionsMustBeEnforced)
 PRODUCT_VENDOR_PROPERTIES += ro.control_privapp_permissions=enforce
 
+# Enable Car Telemetry
+ENABLE_CARTELEMETRY_SERVICE := true
+PRODUCT_PACKAGES += android.automotive.telemetryd@1.0
+PRODUCT_PACKAGES += ScriptExecutor
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
