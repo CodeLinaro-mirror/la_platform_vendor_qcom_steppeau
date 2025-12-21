@@ -737,6 +737,13 @@ ENABLE_CARTELEMETRY_SERVICE := true
 PRODUCT_PACKAGES += android.automotive.telemetryd@1.0
 PRODUCT_PACKAGES += ScriptExecutor
 
+ifneq ( , $(filter bp4a cp2a, $(TARGET_RELEASE_PLATFORM)))
+AB_OTA_POSTINSTALL_CONFIG += \
+               RUN_POSTINSTALL_vendor=true \
+               FILESYSTEM_TYPE_vendor=ext4 \
+               POSTINSTALL_OPTIONAL_vendor=true
+endif
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
