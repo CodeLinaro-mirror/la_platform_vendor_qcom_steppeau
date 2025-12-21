@@ -398,3 +398,14 @@ on property:sys.boot_completed=1 && property:ro.product.product.name="gsi_car_ar
 
 on property:vendor.camera_provider.restart=1
    restart vendor.camera-provider-2-4
+
+on property:sys.boot_completed=1
+    mkdir /data/vendor/fastcv 0700 media media
+    start fastcv
+
+#FastCV
+service fastcv /vendor/bin/fastcv.sh
+    user media
+    group media
+    disabled
+    oneshot
