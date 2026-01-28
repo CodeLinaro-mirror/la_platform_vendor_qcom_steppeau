@@ -699,14 +699,6 @@ PRODUCT_PACKAGES += canflasher \
 
 PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
-ifeq ($(PLATFORM_SDK_VERSION),36)
-    PRODUCT_PACKAGES += android.hardware.health-service.qti \
-                        android.hardware.health-service.qti_recovery
-else
-    PRODUCT_PACKAGES += android.hardware.health-service.example \
-                    android.hardware.health-service.example_recovery
-endif
-
 #sysprofiler
 PRODUCT_PACKAGES += libsysprofiler \
                     sysprofiler_app \
