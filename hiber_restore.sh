@@ -5,7 +5,7 @@
 # Post Restore
 
 if [ "$(cat /sys/class/remoteproc/remoteproc0/state)" != "running" ]; then
-    echo start > /sys/class/remoteproc/remoteproc0/state
+    echo start > /sys/class/remoteproc/remoteproc0/state && sleep 1
 fi
 
 if [ "$(cat /sys/class/remoteproc/remoteproc1/state)" != "running" ]; then
