@@ -150,7 +150,7 @@ AB_OTA_UPDATER := true
 ifeq ($(TARGET_SINGLE_TREE), true)
   AB_OTA_PARTITIONS ?= init_boot vendor vendor_dlkm system_dlkm vbmeta vendor_boot boot dtbo vbmeta_system system system_ext product
 else
-  AB_OTA_PARTITIONS ?= init_boot vendor vendor_dlkm system_dlkm vbmeta vendor_boot boot dtbo vbmeta_system
+  AB_OTA_PARTITIONS ?= init_boot vendor vendor_dlkm system_dlkm vbmeta vendor_boot boot dtbo
 endif
 BOARD_USES_METADATA_PARTITION := true
 
