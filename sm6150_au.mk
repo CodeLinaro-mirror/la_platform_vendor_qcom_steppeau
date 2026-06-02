@@ -4,6 +4,37 @@ TARGET_BOOTLOADER_BOARD_NAME := $(MSMSTEPPE)
 TARGET_BOARD_TYPE := auto
 TARGET_BOARD_SUFFIX := _au
 DEVICE_SUPPORTS_64_BIT_APPS_ONLY := true
+
+ifeq ($(TARGET_SINGLE_TREE), true)
+  PRODUCT_PRODUCT_VNDK_VERSION := current
+  #TODO(amutyala) to revert once QSSI 15 component created
+#This change requires to build super image (QSSI15 + V14)
+  ifeq (,$(filter VanillaIceCream V 35, $(PLATFORM_VNDK_VERSION)))
+    PRODUCT_EXTRA_VNDK_VERSIONS := 33
+  else
+    PRODUCT_EXTRA_VNDK_VERSIONS := 33 34
+  endif
+  PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
+
+  # Enable debugfs restrictions
+  PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
+
+  PRODUCT_SOONG_NAMESPACES += \
+      frameworks/base/boot \
+      cts/tests/signature/api-check \
+      hardware/google/av \
+      hardware/google/interfaces
+
+  TARGET_USES_NEW_ION := true
+
+  TARGET_USES_AOSP_FOR_AUDIO := false
+
+  # Audio configuration file
+  #-include $(TOPDIR)vendor/qcom/opensource/audio-hal/primary-hal/configs/qssi/qssi.mk
+  #-include $(TOPDIR)vendor/qcom/opensource/commonsys/audio/configs/qssi/qssi.mk
+  AUDIO_FEATURE_ENABLED_SVA_MULTI_STAGE := true
+endif
+
 # Skip VINTF checks for kernel configs since we do not have kernel source
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
@@ -45,6 +76,9 @@ BOARD_HAVE_QCOM_FM := false
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_FWK_SUPPORTS_AV_VALUEADDS := false
+ifeq ($(TARGET_SINGLE_TREE), true)
+  TARGET_FWK_SUPPORTS_FULL_VALUEADDS := true
+endif
 TARGET_USES_AOSP_FOR_WLAN := true
 BOARD_HAS_QCOM_WLAN := true
 ENABLE_CAR_POWER_MANAGER := true
@@ -83,6 +117,9 @@ TARGET_USES_RRO := true
 # system, system_ext and vendor.
   BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
   BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+ifeq ($(TARGET_SINGLE_TREE), true)
+  BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+endif
   BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
   BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
   BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
@@ -118,6 +155,15 @@ TARGET_USES_RRO := true
   PRODUCT_BUILD_VENDOR_BOOT_IMAGE := true
   PRODUCT_BUILD_VENDOR_DLKM_IMAGE := true
   PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := true
+ifeq ($(TARGET_SINGLE_TREE), true)
+  PRODUCT_BUILD_SYSTEM_IMAGE := true
+  PRODUCT_BUILD_SYSTEM_EXT_IMAGE := true
+  PRODUCT_BUILD_PRODUCT_IMAGE := true
+  TARGET_SKIP_OTA_PACKAGE := false
+  BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
+  PRODUCT_BUILD_SUPER_PARTITION := true
+  PRODUCT_BUILD_RAMDISK_IMAGE := true
+endif
 #endif #BOARD_DYNAMIC_PARTITION_ENABLE
 
 PRODUCT_SOONG_NAMESPACES += hardware/qcom/wlan/qcwcn
@@ -211,7 +257,15 @@ PRODUCT_VENDOR_PROPERTIES  += \
 	dalvik.vm.heaptargetutilization=0.75 \
 	dalvik.vm.heapminfree=512k \
 	dalvik.vm.heapmaxfree=8m
-$(call inherit-product, packages/services/Car/car_product/build/car.mk)
+
+ifeq (true,$(call math_gt_or_eq,$(PLATFORM_SDK_VERSION),36))
+  $(call inherit-product, device/qcom/qssi_au/qssi_au_system_generic.mk)
+  $(call inherit-product, packages/services/Car/car_product/build/car_generic_system.mk)
+  $(call inherit-product, packages/services/Car/car_product/build/car_system_ext.mk)
+  $(call inherit-product, packages/services/Car/car_product/build/car_product.mk)
+else
+  $(call inherit-product, packages/services/Car/car_product/build/car.mk)
+endif
 
 MSMSTEPPE = sm6150
 PRODUCT_NAME := $(MSMSTEPPE)_au
@@ -267,7 +321,6 @@ $(warning ****** MSMSTEPPE code name is: $(MSMSTEPPE))
 #    device/qcom/$(MSMSTEPPE)/seccomp/mediacodec-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
 #    device/qcom/$(MSMSTEPPE)/seccomp/mediaextractor-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy
 
-PRODUCT_BOOT_JARS += tcmiface
 
 ifneq ($(TARGET_NO_TELEPHONY), true)
 PRODUCT_BOOT_JARS += telephony-ext
@@ -351,6 +404,12 @@ PRODUCT_PACKAGES += update_engine \
     android.hardware.boot-service.qti.recovery \
     android.hardware.boot-service.qti
 
+ifeq ($(TARGET_SINGLE_TREE), true)
+  PRODUCT_PACKAGES += android.hardware.boot@1.0-impl \
+                    android.hardware.boot@1.0-service \
+                    update_engine_sideload
+endif
+
 PRODUCT_PACKAGES += \
     update_engine_sideload
 
@@ -375,6 +434,10 @@ DEVICE_MANIFEST_FILE := device/qcom/$(MSMSTEPPE)_au/manifest.xml
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/msmnile_au/framework_manifest.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/vendor_framework_compatibility_matrix.xml
+
+ifeq ($(TARGET_SINGLE_TREE), true)
+  DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/qssi_au/framework_manifest.xml
+endif
 
 # Enable Scoped Storage related
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
@@ -699,14 +762,6 @@ PRODUCT_PACKAGES += canflasher \
 
 PRODUCT_PACKAGES += android.hardware.dumpstate-service.example
 
-ifeq ($(PLATFORM_SDK_VERSION),36)
-    PRODUCT_PACKAGES += android.hardware.health-service.qti \
-                        android.hardware.health-service.qti_recovery
-else
-    PRODUCT_PACKAGES += android.hardware.health-service.example \
-                    android.hardware.health-service.example_recovery
-endif
-
 #sysprofiler
 PRODUCT_PACKAGES += libsysprofiler \
                     sysprofiler_app \
@@ -742,6 +797,82 @@ AB_OTA_POSTINSTALL_CONFIG += \
                RUN_POSTINSTALL_vendor=true \
                FILESYSTEM_TYPE_vendor=ext4 \
                POSTINSTALL_OPTIONAL_vendor=true
+endif
+
+ifeq ($(TARGET_SINGLE_TREE), true)
+
+  # Context hub HAL
+  PRODUCT_PACKAGES += \
+    android.hardware.contexthub@1.0-impl.generic \
+    android.hardware.contexthub@1.0-service
+
+  # system prop for enabling QFS (QTI Fingerprint Solution)
+  PRODUCT_PROPERTY_OVERRIDES += \
+    persist.vendor.qfp=true
+
+  PRODUCT_SYSTEM_PROPERTIES += \
+    persist.device_config.runtime_native_boot.iorap_perfetto_enable=true
+
+  PRODUCT_SYSTEM_PROPERTIES += ro.android.car.audio.enableaudiopatch=true
+
+  # USB default HAL
+  #PRODUCT_PACKAGES += \
+    android.hardware.usb@1.0-service
+
+  #PASR HAL and APP
+  PRODUCT_PACKAGES += \
+    vendor.qti.power.pasrmanager@1.0-service \
+    vendor.qti.power.pasrmanager@1.0-impl \
+    pasrservice
+
+  # CAN utils
+  PRODUCT_PACKAGES += candump \
+                    cansend \
+                    bcmserver \
+                    can-calc-bit-timing \
+                    canbusload \
+                    canfdtest \
+                    cangen \
+                    cangw \
+                    canlogserver \
+                    canplayer \
+                    cansniffer \
+                    isotpdump \
+                    isotprecv \
+                    isotpsend \
+                    isotpserver \
+                    isotptun \
+                    log2asc \
+                    log2long \
+                    slcan_attach \
+                    slcand \
+                    slcanpty
+
+  # copy system_ext specific whitelisted libraries to system_ext/etc
+  PRODUCT_COPY_FILES += \
+    device/qcom/qssi_au/public.libraries.system_ext-qti.txt:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/public.libraries-qti.txt
+
+  PRODUCT_PACKAGES += android.frameworks.automotive.display@1.0-service
+
+  TARGET_USES_MKE2FS := true
+
+  PRODUCT_PROPERTY_OVERRIDES += \
+    ro.crypto.volume.filenames_mode = "aes-256-cts" \
+    ro.crypto.allow_encrypt_override = true
+
+    # Include mainline components and QSSI whitelist
+  ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
+#    $(call inherit-product, device/qcom/qssi_au/qssi_au_whitelist.mk)
+#    PRODUCT_ARTIFACT_PATH_REQUIREMENT_IGNORE_PATHS := /system/system_ext/
+    ifeq (true,$(call math_lt,$(PLATFORM_SDK_VERSION),36))
+      $(call inherit-product, device/qcom/qssi_au/qssi_au_whitelist.mk)
+        PRODUCT_ARTIFACT_PATH_REQUIREMENT_IGNORE_PATHS := /system/system_ext/
+    endif
+#PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
+
+  endif
+
+  PRODUCT_PACKAGES += vendor.qti.qesdsys
 endif
 
 ###################################################################################
