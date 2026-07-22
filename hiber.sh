@@ -28,6 +28,12 @@ sync
 #drop caches
 echo "drop page caches"
 
+# In hiber.sh — add a guard before the drop_caches loop iteration
+if [ -f /sys/power/state ] && grep -q "disk" /sys/power/state; then
+    break  # Hibernation path is already active — stop evicting
+fi
+echo 3 > /proc/sys/vm/drop_caches
+
 echo "Start adsp shutdown"
 while [ "$(cat /sys/class/remoteproc/remoteproc0/state)" != "offline" ]; do
 echo "stop" > /sys/class/remoteproc/remoteproc0/state
